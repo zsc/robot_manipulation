@@ -6,83 +6,360 @@
 
 ### 20.1.1 MPC基础回顾
 
-模型预测控制是一种基于模型的优化控制方法，其核心思想是利用系统的动力学模型预测未来状态，并通过求解有限时域优化问题得到控制序列。在每个时间步，MPC求解以下优化问题：
+模型预测控制（Model Predictive Control, MPC）是一种基于模型的优化控制方法，其核心思想是利用系统的动力学模型预测未来状态轨迹，并通过求解有限时域优化问题得到最优控制序列。与传统反馈控制不同，MPC显式考虑未来预测，能够处理约束并优化长期性能。
+
+在每个时间步$t$，MPC求解以下有限时域最优控制问题：
 
 $$\min_{u_{t:t+H-1}} \sum_{k=0}^{H-1} c(x_{t+k}, u_{t+k}) + c_f(x_{t+H})$$
 
+$$\text{s.t.} \quad x_{t+k+1} = f(x_{t+k}, u_{t+k}), \quad k = 0, ..., H-1$$
+$$\quad \quad x_{t+k} \in \mathcal{X}, \quad u_{t+k} \in \mathcal{U}$$
+
 其中：
-- $H$ 是预测时域
-- $c(x, u)$ 是阶段成本函数
-- $c_f(x)$ 是终端成本
-- 约束条件：$x_{t+k+1} = f(x_{t+k}, u_{t+k})$（动力学约束）
+- $H$ 是预测时域（prediction horizon），典型值为10-50步
+- $c(x, u)$ 是阶段成本函数（stage cost），衡量单步性能
+- $c_f(x)$ 是终端成本（terminal cost），确保稳定性
+- $\mathcal{X}, \mathcal{U}$ 分别是状态和控制约束集
+- $f$ 是系统动力学模型
+
+**滚动时域原理**（Receding Horizon）：
+MPC采用滚动优化策略——虽然计算整个控制序列$\{u_t, ..., u_{t+H-1}\}$，但只执行第一个控制$u_t$，然后在下一时刻重新求解。这种策略提供了反馈机制，能够补偿模型误差和外部扰动。
+
+**MPC的优势**：
+- 前瞻性：考虑未来影响，避免短视决策
+- 约束处理：显式满足安全和物理约束
+- 多目标优化：通过成本函数权衡多个目标
+- 模型利用：充分利用系统知识
 
 ### 20.1.2 学习型MPC的挑战
 
-将MPC应用于学习系统面临独特挑战：
+将MPC应用于基于学习的系统面临独特挑战，这些挑战源于学习模型的特性和机器人任务的复杂性：
 
-1. **模型不确定性**：学习得到的模型存在预测误差，尤其在数据稀疏区域
-2. **计算复杂度**：神经网络模型的非凸性使优化求解困难
-3. **长期预测退化**：误差随预测步数累积，导致长期规划不可靠
-4. **分布偏移**：执行过程中可能遇到训练分布外的状态
+**1. 模型不确定性与误差传播**
+
+学习得到的模型（如神经网络）存在多种不确定性来源：
+- **认知不确定性**（Epistemic Uncertainty）：由于训练数据不足导致的模型参数不确定性
+- **偶然不确定性**（Aleatoric Uncertainty）：系统固有的随机性和观测噪声
+- **分布外泛化**：在训练数据分布之外的区域，模型预测可能完全不可靠
+
+误差传播问题尤其严重。设单步预测误差为$\epsilon$，在最坏情况下，$H$步预测的累积误差可达$O(\epsilon^H)$，呈指数增长。这限制了可用的预测时域长度。
+
+**2. 计算复杂度与实时性**
+
+神经网络模型带来的计算挑战：
+- **非凸优化**：神经网络的非线性导致MPC优化问题非凸，可能存在多个局部最优
+- **梯度计算**：深度网络的反向传播计算成本高，尤其是展开多步预测时
+- **实时约束**：机器人控制通常要求毫秒级响应，限制了可用的计算预算
+
+对于一个$L$层深度的网络，$H$步展开的计算复杂度为$O(H \cdot L \cdot N^2)$，其中$N$是网络宽度。
+
+**3. 长期预测退化**
+
+长期预测面临的挑战：
+- **复合误差**：多步预测时，每步的小误差会复合累积
+- **模式崩塌**：神经网络倾向于预测平均行为，长期预测趋向模糊
+- **协变量偏移**：使用自己的预测作为输入导致输入分布偏移
+
+实验表明，典型的神经网络动力学模型在10-20步后预测质量显著下降。
+
+**4. 分布偏移与安全性**
+
+执行过程中的分布偏移问题：
+- **探索-利用困境**：需要探索新区域但又要保证安全
+- **对抗样本**：某些状态可能触发模型的异常预测
+- **环境变化**：真实环境的非平稳性导致训练时的假设失效
 
 ### 20.1.3 鲁棒MPC设计
 
-为应对模型不确定性，鲁棒MPC引入了几种策略：
+为应对模型不确定性，鲁棒MPC引入了多种策略来保证控制性能和系统安全性。这些方法的核心思想是显式考虑不确定性，设计在最坏情况或期望意义下最优的控制策略。
 
 **1. 管道MPC (Tube MPC)**
-构建状态管道来包含所有可能的轨迹：
-$$\mathcal{X}_k = \{x : \|x - \bar{x}_k\| \leq \epsilon_k\}$$
 
-其中$\epsilon_k$根据模型不确定性估计确定。
+管道MPC通过构建包含所有可能轨迹的"管道"来处理有界不确定性。其核心思想是将鲁棒控制问题分解为标称轨迹优化和局部反馈控制。
+
+状态管道定义：
+$$\mathcal{X}_k = \{x : \|x - \bar{x}_k\|_Q \leq \epsilon_k\}$$
+
+其中：
+- $\bar{x}_k$ 是标称轨迹
+- $\epsilon_k$ 是管道半径，根据不确定性传播计算
+- $Q$ 是加权矩阵
+
+管道半径的递推计算：
+$$\epsilon_{k+1} = \|(A + BK)\epsilon_k\| + w_{max}$$
+
+其中$K$是局部反馈增益，$w_{max}$是扰动界。
+
+实际控制律：
+$$u(x) = \bar{u} + K(x - \bar{x})$$
+
+这种分解允许在线只优化标称轨迹，大大降低计算复杂度。
 
 **2. 随机MPC (Stochastic MPC)**
-将不确定性建模为概率分布，优化期望成本：
-$$\min_{\pi} \mathbb{E}_{p(x_{t+1}|x_t,u_t)}\left[\sum_{k=0}^{H-1} c(x_{t+k}, \pi(x_{t+k}))\right]$$
 
-**3. 分布鲁棒MPC**
-考虑最坏情况下的分布：
+随机MPC将不确定性建模为概率分布，优化期望性能同时满足概率约束。
+
+优化问题形式：
+$$\min_{\pi} \mathbb{E}_{w_k \sim p_w}\left[\sum_{k=0}^{H-1} c(x_{t+k}, \pi(x_{t+k})) + c_f(x_{t+H})\right]$$
+
+$$\text{s.t.} \quad \Pr(x_{t+k} \in \mathcal{X}_{safe}) \geq 1 - \alpha$$
+
+其中$\alpha$是违反约束的容许概率。
+
+**场景树方法**：
+通过采样生成场景树近似随机优化：
+- 在每个分支点采样$N_s$个扰动实现
+- 构建多阶段决策树
+- 优化所有场景的加权平均成本
+
+**确定性等价近似**：
+对于高斯不确定性，可使用确定性等价：
+$$J = \sum_{k=0}^{H-1} \left( \mathbb{E}[c(x_k, u_k)] + \lambda \cdot \text{Var}[c(x_k, u_k)] \right)$$
+
+其中$\lambda$是风险规避参数。
+
+**3. 分布鲁棒MPC (Distributionally Robust MPC)**
+
+当不确定性分布本身不确定时，分布鲁棒方法考虑最坏情况分布：
+
 $$\min_{u} \max_{p \in \mathcal{P}} \mathbb{E}_p[J(x, u)]$$
 
-其中$\mathcal{P}$是包含真实分布的不确定集。
+不确定集$\mathcal{P}$的构造方法：
+- **矩约束**：$\mathcal{P} = \{p : \mathbb{E}_p[w] = \mu, \text{Cov}_p[w] \preceq \Sigma\}$
+- **Wasserstein球**：$\mathcal{P} = \{p : W(p, p_0) \leq \epsilon\}$
+- **KL散度约束**：$\mathcal{P} = \{p : D_{KL}(p \| p_0) \leq \delta\}$
+
+通过对偶理论，可将min-max问题转化为可解的凸优化。
+
+**4. 学习增强的鲁棒MPC**
+
+结合机器学习改进不确定性建模：
+
+**高斯过程MPC**：
+使用GP建模残差动力学：
+$$x_{t+1} = f_{nom}(x_t, u_t) + \delta(x_t, u_t)$$
+$$\delta \sim \mathcal{GP}(0, k(x, x'))$$
+
+GP提供预测均值和方差，可用于管道半径计算：
+$$\epsilon_k = \beta \sqrt{\sigma^2_k(x_k, u_k)}$$
+
+其中$\beta$根据所需置信水平选择。
+
+**集成模型不确定性**：
+使用模型集成量化认知不确定性：
+$$\sigma^2_{epistemic} = \text{Var}_{i \in ensemble}[f_i(x, u)]$$
 
 ### 20.1.4 神经网络MPC实现
 
-使用神经网络作为动力学模型时，MPC优化可通过以下方法求解：
+使用神经网络作为动力学模型时，MPC优化面临独特的实现挑战。以下介绍实用的求解方法和优化技巧。
 
 **1. 基于梯度的优化**
-利用自动微分计算成本对控制的梯度：
-```
-for iteration in range(max_iters):
-    states = rollout(x0, controls, dynamics_model)
-    cost = compute_cost(states, controls)
-    grad = autograd(cost, controls)
-    controls = controls - lr * grad
+
+利用自动微分直接优化控制序列：
+
+```python
+def gradient_based_mpc(x0, dynamics_model, horizon, lr=0.01, iterations=100):
+    # 初始化控制序列
+    controls = torch.zeros(horizon, action_dim, requires_grad=True)
+    optimizer = torch.optim.Adam([controls], lr=lr)
+    
+    for iteration in range(iterations):
+        # 前向展开轨迹
+        states = [x0]
+        for t in range(horizon):
+            x_next = dynamics_model(states[-1], controls[t])
+            states.append(x_next)
+        
+        # 计算成本
+        cost = 0
+        for t in range(horizon):
+            cost += stage_cost(states[t], controls[t])
+        cost += terminal_cost(states[-1])
+        
+        # 反向传播和更新
+        optimizer.zero_grad()
+        cost.backward()
+        optimizer.step()
+        
+        # 投影到可行域
+        with torch.no_grad():
+            controls.clamp_(u_min, u_max)
+    
+    return controls.detach()
 ```
 
+**优化技巧**：
+- **学习率调度**：使用余弦退火或指数衰减
+- **动量方法**：Adam或RMSprop处理病态曲率
+- **二阶方法**：L-BFGS用于最后精细化
+- **正则化**：添加控制平滑项$\sum_t \|u_{t+1} - u_t\|^2$
+
 **2. 采样优化方法**
-- 交叉熵方法(CEM)：迭代采样和精英选择
-- MPPI：基于路径积分的重要性采样
-- 随机打靶法：并行评估多个轨迹
+
+基于采样的方法避免了梯度计算，更适合非平滑或离散控制空间。
+
+**交叉熵方法(CEM)**：
+```python
+def cem_mpc(x0, dynamics_model, horizon, num_samples=100, elite_frac=0.1):
+    dim = horizon * action_dim
+    mean = np.zeros(dim)
+    cov = np.eye(dim)
+    
+    for iteration in range(max_iterations):
+        # 采样控制序列
+        samples = np.random.multivariate_normal(mean, cov, num_samples)
+        samples = samples.reshape(num_samples, horizon, action_dim)
+        
+        # 评估每个样本
+        costs = []
+        for i in range(num_samples):
+            cost = evaluate_trajectory(x0, samples[i], dynamics_model)
+            costs.append(cost)
+        
+        # 选择精英样本
+        elite_idx = np.argsort(costs)[:int(num_samples * elite_frac)]
+        elite_samples = samples[elite_idx]
+        
+        # 更新分布
+        mean = np.mean(elite_samples, axis=0).flatten()
+        cov = np.cov(elite_samples.reshape(len(elite_idx), -1).T)
+        # 添加噪声防止过早收敛
+        cov += 0.01 * np.eye(dim)
+    
+    return mean.reshape(horizon, action_dim)
+```
+
+**MPPI (Model Predictive Path Integral)**：
+```python
+def mppi_mpc(x0, dynamics_model, horizon, num_samples=100, temperature=1.0):
+    # 初始控制序列
+    u_mean = torch.zeros(horizon, action_dim)
+    sigma = 0.1 * torch.ones_like(u_mean)
+    
+    # 采样扰动
+    eps = torch.randn(num_samples, horizon, action_dim) * sigma
+    u_samples = u_mean + eps
+    
+    # 评估轨迹
+    costs = torch.zeros(num_samples)
+    for i in range(num_samples):
+        costs[i] = evaluate_trajectory(x0, u_samples[i], dynamics_model)
+    
+    # 计算权重（路径积分）
+    weights = torch.softmax(-costs / temperature, dim=0)
+    
+    # 更新控制
+    u_mean = torch.sum(weights.unsqueeze(1).unsqueeze(2) * u_samples, dim=0)
+    
+    return u_mean
+```
+
+**3. 混合方法**
+
+结合梯度和采样的优势：
+
+**CEM-梯度混合**：
+1. 使用CEM获得粗略解
+2. 以CEM解为初始值运行梯度优化
+3. 结合全局探索和局部精细化
+
+**微分动态规划(DDP)初始化**：
+1. 使用线性化模型运行DDP/iLQG
+2. 将DDP解作为神经网络MPC的warm start
+3. 少量梯度步精细调整
 
 ## 20.2 规划算法详解
 
+本节深入介绍三种主流的基于模型的规划算法：交叉熵方法(CEM)、模型预测路径积分控制(MPPI)和迭代线性二次高斯(iLQG)。这些算法各有特点，适用于不同的问题场景。
+
 ### 20.2.1 交叉熵方法(CEM)
 
-CEM是一种基于采样的优化算法，特别适合处理非凸优化问题。算法流程：
+交叉熵方法是一种基于重要性采样的随机优化算法，最初用于稀有事件仿真，后被广泛应用于机器人规划。CEM的核心思想是迭代地改进采样分布，使其集中在高质量解的区域。
 
-1. **初始化分布**：$\mathcal{N}(\mu_0, \Sigma_0)$
-2. **采样动作序列**：$U^{(i)} \sim \mathcal{N}(\mu, \Sigma)$
-3. **评估轨迹**：计算每个样本的累积奖励
-4. **选择精英样本**：保留top-K个最优轨迹
-5. **更新分布**：
-   $$\mu_{new} = \frac{1}{K}\sum_{i \in \text{elite}} U^{(i)}$$
-   $$\Sigma_{new} = \frac{1}{K}\sum_{i \in \text{elite}} (U^{(i)} - \mu_{new})(U^{(i)} - \mu_{new})^T$$
+**理论基础**
 
-**CEM的关键超参数**：
-- 样本数N：典型值100-1000
-- 精英比例：通常10-20%
-- 迭代次数：3-10次
-- 平滑系数：$\mu = \alpha \mu_{new} + (1-\alpha)\mu_{old}$
+CEM源于信息论中的交叉熵最小化原理。给定目标分布$p^*$（集中在最优解），我们寻找参数化分布$q_\theta$使得：
+
+$$\theta^* = \arg\min_\theta D_{KL}(p^* \| q_\theta) = \arg\min_\theta -\mathbb{E}_{p^*}[\log q_\theta]$$
+
+由于$p^*$未知，CEM使用精英样本近似：将成本低于阈值$\gamma$的样本视为来自$p^*$的样本。
+
+**算法流程**
+
+CEM通过以下迭代过程优化控制序列：
+
+1. **初始化分布**：
+   $$\mathcal{U} \sim \mathcal{N}(\mu_0, \Sigma_0)$$
+   其中$\mu_0 \in \mathbb{R}^{H \times d_u}$是均值，$\Sigma_0$是协方差矩阵
+   
+2. **采样动作序列**：
+   $$U^{(i)} \sim \mathcal{N}(\mu, \Sigma), \quad i = 1, ..., N$$
+   
+3. **评估轨迹**：
+   对每个样本，展开动力学并计算成本：
+   $$J^{(i)} = \sum_{t=0}^{H-1} c(x_t^{(i)}, u_t^{(i)}) + c_f(x_H^{(i)})$$
+   
+4. **选择精英样本**：
+   排序并选择成本最低的$K = \lceil \rho N \rceil$个样本：
+   $$\mathcal{E} = \{i : J^{(i)} \leq J^{(K)}\}$$
+   
+5. **更新分布参数**：
+   $$\mu_{new} = \frac{1}{K}\sum_{i \in \mathcal{E}} U^{(i)}$$
+   $$\Sigma_{new} = \frac{1}{K}\sum_{i \in \mathcal{E}} (U^{(i)} - \mu_{new})(U^{(i)} - \mu_{new})^T + \epsilon I$$
+   
+   其中$\epsilon I$是正则化项，防止协方差退化。
+
+6. **参数平滑**（可选）：
+   $$\mu \leftarrow \alpha \mu_{new} + (1-\alpha)\mu_{old}$$
+   $$\Sigma \leftarrow \alpha \Sigma_{new} + (1-\alpha)\Sigma_{old}$$
+
+**关键超参数选择**
+
+CEM的性能高度依赖于超参数设置：
+
+- **样本数$N$**：
+  - 理论建议：$N \geq \frac{d}{\rho}$，其中$d$是问题维度
+  - 实践值：100-1000，取决于计算预算
+  - 权衡：更多样本提高解质量但增加计算成本
+
+- **精英比例$\rho$**：
+  - 典型值：0.1-0.2（10%-20%）
+  - 过小：容易过早收敛到局部最优
+  - 过大：收敛速度慢
+
+- **迭代次数$T_{iter}$**：
+  - 典型值：3-10次
+  - 可使用自适应停止准则：$\|\mu_{t+1} - \mu_t\| < \epsilon_{tol}$
+
+- **平滑系数$\alpha$**：
+  - 范围：[0.5, 1.0]
+  - 作用：防止分布变化过激，提高稳定性
+
+**高级变体**
+
+1. **自适应协方差CEM**：
+   动态调整协方差以平衡探索和利用：
+   $$\Sigma_t = \beta_t \Sigma_{elite} + (1-\beta_t) \Sigma_{init}$$
+   其中$\beta_t$随迭代递增。
+
+2. **混合整数CEM**：
+   处理离散和连续混合控制空间：
+   - 对离散变量使用分类分布
+   - 对连续变量使用高斯分布
+   - 联合优化两类变量
+
+3. **并行CEM**：
+   ```python
+   def parallel_cem(x0, dynamics_model, horizon):
+       # GPU批处理评估
+       samples = torch.randn(N, horizon, action_dim).cuda()
+       # 并行展开所有轨迹
+       trajectories = batch_rollout(x0, samples, dynamics_model)
+       costs = batch_evaluate(trajectories)
+       # 选择精英并更新
+       elite_idx = torch.topk(-costs, K).indices
+       return update_distribution(samples[elite_idx])
+   ```
 
 ### 20.2.2 模型预测路径积分控制(MPPI)
 
