@@ -229,30 +229,114 @@ echo "MB:0=70" > /sys/fs/resctrl/group1/schemata  // 限制为70%带宽
 ### 21.2.2 边缘AI芯片
 
 **NVIDIA Jetson系列**：
-- Orin NX: 100 TOPS，适合复杂感知
-- Xavier NX: 21 TOPS，平衡性能功耗
-- 统一内存架构，CPU/GPU共享内存
+- **Orin NX**: 100 TOPS (INT8)，70 TOPS (FP16)
+  - 1024核 CUDA + 32核 Tensor Core
+  - 功耗：10-25W可配置
+  - 适用：复杂感知、多模态融合、实时SLAM
+  
+- **Xavier NX**: 21 TOPS，平衡性能功耗
+  - 384核 CUDA + 48核 Tensor Core  
+  - 功耗：10-15W
+  - 适用：中等复杂度视觉任务、小型机器人
+  
+- **Orin Nano**: 40 TOPS，入门级
+  - 功耗：5-15W
+  - 适用：单目视觉、简单检测任务
 
-**专用推理芯片**：
-- Google Edge TPU: INT8量化，4 TOPS
-- Intel Movidius: 视觉专用，低功耗
-- 华为昇腾310: 支持多精度，22 TOPS
+架构特点：
+- 统一内存架构（UMA）：CPU/GPU零拷贝共享
+- 硬件编解码器：H.264/H.265，减轻CPU负担
+- 多传感器支持：MIPI CSI-2接口，直连相机
+
+**专用推理芯片对比**：
+
+| 芯片 | 算力 | 功耗 | 精度支持 | 特点 |
+|------|------|------|----------|------|
+| Google Edge TPU | 4 TOPS | 2W | INT8 | 编译器优化激进 |
+| Intel Movidius VPU | 1 TOPS | 1W | FP16 | 视觉专用指令集 |
+| 华为昇腾310 | 22 TOPS | 8W | INT8/FP16 | 自研达芬奇架构 |
+| 高通 Cloud AI 100 | 400 TOPS | 75W | INT8/FP16 | 数据中心边缘 |
+| 地平线征程5 | 128 TOPS | 30W | INT8 | 车规级，BPU架构 |
+| 寒武纪MLU220 | 16 TOPS | 8W | INT8/FP16 | 支持稀疏计算 |
+
+**选型考虑因素**：
+- **算力密度**：TOPS/Watt，决定续航和散热
+- **软件生态**：SDK成熟度、模型转换工具链
+- **实时性**：推理延迟、延迟抖动
+- **接口丰富度**：PCIe、USB、MIPI等
+- **价格**：芯片成本 + 开发成本
 
 ### 21.2.3 模型优化技术
 
 **量化（Quantization）**：
-- INT8量化：8倍内存节省，2-4倍加速
-- 量化感知训练（QAT）vs 训练后量化（PTQ）
-- 混合精度：关键层保持FP16/FP32
+
+量化原理 - 将浮点数映射到低比特整数：
+$$q = \text{round}(\frac{x - z}{s}), \quad x = s \cdot q + z$$
+其中s为缩放因子，z为零点。
+
+- **INT8量化**：8倍内存节省，2-4倍加速
+  - 对称量化：z=0，范围[-127, 127]
+  - 非对称量化：z可调，范围[0, 255]
+  
+- **量化感知训练（QAT）vs 训练后量化（PTQ）**：
+  ```python
+  # QAT：训练时模拟量化
+  class QATConv2d(nn.Module):
+      def forward(self, x):
+          x = fake_quantize(x, self.input_scale, self.input_zero)
+          weight = fake_quantize(self.weight, self.weight_scale, self.weight_zero)
+          return F.conv2d(x, weight)
+  
+  # PTQ：训练后校准
+  def calibrate_model(model, calibration_data):
+      for data in calibration_data:
+          model(data)  # 收集激活值统计
+      compute_quantization_params()  # 计算量化参数
+  ```
+
+- **混合精度策略**：
+  - 敏感层（如第一层、最后一层）保持FP16/FP32
+  - 计算密集层（如中间卷积层）使用INT8
+  - 动态范围大的层使用更高精度
 
 **剪枝（Pruning）**：
-- 结构化剪枝：整个通道/层删除
-- 非结构化剪枝：单个权重置零
-- 稀疏度50-90%，精度损失<1%
+
+- **结构化剪枝**：整个通道/滤波器/层删除
+  ```python
+  # 通道剪枝示例
+  importance = compute_channel_importance(conv_layer)
+  channels_to_prune = importance.argsort()[:n_prune]
+  conv_layer.weight.data = torch.delete(conv_layer.weight, channels_to_prune, dim=0)
+  ```
+  - 优点：硬件友好，无需特殊支持
+  - 缺点：精度损失相对较大
+
+- **非结构化剪枝**：单个权重置零
+  - 幅度剪枝：删除绝对值小的权重
+  - 梯度剪枝：删除梯度小的权重
+  - 迭代剪枝：逐步增加稀疏度
+  - 稀疏度50-90%，精度损失<1%
+  - 需要硬件支持稀疏计算（如NVIDIA A100的稀疏Tensor Core）
+
+- **动态稀疏**：运行时激活稀疏
+  ```python
+  # Top-K稀疏激活
+  def sparse_activation(x, sparsity=0.9):
+      k = int(x.numel() * (1 - sparsity))
+      values, indices = torch.topk(x.abs().flatten(), k)
+      mask = torch.zeros_like(x.flatten())
+      mask[indices] = 1
+      return x * mask.reshape(x.shape)
+  ```
 
 **知识蒸馏（Distillation）**：
 - 教师模型指导学生模型
-- 保持关键特征，压缩冗余信息
+  $$L = \alpha L_{CE}(y_s, y_{true}) + (1-\alpha) L_{KL}(y_s/T, y_t/T)$$
+  其中T为温度参数，控制软标签的平滑程度
+
+- **特征蒸馏**：中间层特征对齐
+- **注意力蒸馏**：注意力图匹配
+- **关系蒸馏**：样本间关系保持
 
 ### 21.2.4 FPGA定制加速
 
