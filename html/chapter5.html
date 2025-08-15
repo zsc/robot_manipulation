@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第5章：坐标系与姿态表示</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="5">第5章：坐标系与姿态表示</h1>
+<p>机器人系统的精确控制依赖于对空间位置和姿态的准确描述。本章深入探讨机器人学中的坐标系建立、姿态表示方法及其工程权衡。我们将对比传统的DH参数法与现代的指数积方法，分析四元数、旋转矩阵、欧拉角在不同场景下的优劣，并介绍李群/李代数这一强大的数学工具。通过NASA瓦尔基里机器人的实例，我们将看到这些理论如何应用于复杂系统的设计中。</p>
+<h2 id="51">5.1 坐标系建立方法</h2>
+<h3 id="511-denavit-hartenberg-dh">5.1.1 Denavit-Hartenberg (DH) 参数法</h3>
+<p>DH参数法是1955年提出的经典方法，通过四个参数完整描述相邻关节间的坐标变换。其核心思想是通过系统化的坐标系分配，将任意复杂的关节用最少的参数表示。</p>
+<p><strong>标准DH参数定义：</strong></p>
+<ul>
+<li>$a_i$：连杆长度（沿$x_i$轴从$z_{i-1}$到$z_i$的距离）</li>
+<li>$\alpha_i$：连杆扭转（绕$x_i$轴从$z_{i-1}$到$z_i$的角度）</li>
+<li>$d_i$：连杆偏移（沿$z_{i-1}$轴从$x_{i-1}$到$x_i$的距离）</li>
+<li>$\theta_i$：关节角（绕$z_{i-1}$轴从$x_{i-1}$到$x_i$的角度）</li>
+</ul>
+<p>变换矩阵：
+$$T_i^{i-1} = \begin{bmatrix}
+\cos\theta_i &amp; -\sin\theta_i\cos\alpha_i &amp; \sin\theta_i\sin\alpha_i &amp; a_i\cos\theta_i \\
+\sin\theta_i &amp; \cos\theta_i\cos\alpha_i &amp; -\cos\theta_i\sin\alpha_i &amp; a_i\sin\theta_i \\
+0 &amp; \sin\alpha_i &amp; \cos\alpha_i &amp; d_i \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}$$
+<strong>DH参数的工程优势：</strong></p>
+<ol>
+<li>参数最少（每个关节仅4个参数）</li>
+<li>系统化流程，易于教学和实施</li>
+<li>大量机器人制造商采用，工业标准成熟</li>
+</ol>
+<p><strong>DH参数的局限性：</strong></p>
+<ol>
+<li>坐标系分配规则复杂，初学者易出错</li>
+<li>存在奇异性配置（如连续平行轴）</li>
+<li>不同DH约定（标准vs修改）导致混淆</li>
+<li>数值稳定性问题：小角度近似时精度损失</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="err">标准</span><span class="n">DH坐标系建立流程</span><span class="err">：</span>
+<span class="w">      </span><span class="n">z_</span><span class="p">{</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="w">        </span><span class="o">|</span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">d_i</span>
+<span class="w">        </span><span class="o">|</span>
+<span class="w">  </span><span class="n">x_</span><span class="p">{</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span><span class="o">----&gt;</span><span class="w"> </span><span class="n">x_i</span><span class="w"> </span><span class="p">(</span><span class="err">沿公垂线</span><span class="p">)</span>
+<span class="w">       </span><span class="o">/|</span>
+<span class="w">      </span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="n">a_i</span>
+<span class="w">     </span><span class="o">/</span><span class="w">  </span><span class="o">|</span>
+<span class="w">    </span><span class="n">z_i</span><span class="w"> </span><span class="o">|</span>
+</code></pre></div>
+
+<h3 id="512-product-of-exponentials-poe">5.1.2 Product of Exponentials (PoE) 方法</h3>
+<p>PoE方法基于螺旋理论，将刚体运动表示为绕螺旋轴的指数映射。这种方法在现代机器人学中越来越受欢迎，特别是在需要优雅处理奇异性和进行几何直觉分析时。</p>
+<p><strong>螺旋轴表示：</strong>
+对于旋转关节，螺旋轴$\xi_i$定义为：
+$$\xi_i = \begin{bmatrix} \omega_i \\ v_i \end{bmatrix} = \begin{bmatrix} \omega_i \\ -\omega_i \times q_i \end{bmatrix}$$
+其中$\omega_i$是旋转轴方向，$q_i$是轴上任意一点。</p>
+<p><strong>指数映射：</strong>
+$$T(\theta) = e^{\hat{\xi}\theta} = I + \hat{\xi}\theta + \frac{(\hat{\xi}\theta)^2}{2!} + \frac{(\hat{\xi}\theta)^3}{3!} + ...$$
+对于纯旋转，Rodrigues公式给出闭式解：
+$$e^{[\omega]\theta} = I + [\omega]\sin\theta + [\omega]^2(1-\cos\theta)$$
+<strong>PoE的工程优势：</strong></p>
+<ol>
+<li>全局坐标系，避免累积误差</li>
+<li>奇异性处理优雅，无需特殊案例</li>
+<li>与现代优化算法（如梯度下降）兼容性好</li>
+<li>几何直觉清晰，便于可视化</li>
+</ol>
+<p><strong>PoE的实施考虑：</strong></p>
+<ol>
+<li>需要更强的数学背景（李代数）</li>
+<li>工业支持相对较少</li>
+<li>参数识别需要专门工具</li>
+</ol>
+<h3 id="513-dh-vs-poe">5.1.3 DH vs PoE 工程选择指南</h3>
+<p>| 场景 | 推荐方法 | 原因 |</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方法</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工业机器人编程</td>
+<td>DH</td>
+<td>制造商支持，标准接口</td>
+</tr>
+<tr>
+<td>研究原型开发</td>
+<td>PoE</td>
+<td>灵活性高，数值稳定</td>
+</tr>
+<tr>
+<td>并联机构</td>
+<td>PoE</td>
+<td>自然处理闭链约束</td>
+</tr>
+<tr>
+<td>教育入门</td>
+<td>DH</td>
+<td>系统化流程，资料丰富</td>
+</tr>
+<tr>
+<td>轨迹优化</td>
+<td>PoE</td>
+<td>梯度计算简洁</td>
+</tr>
+<tr>
+<td>实时控制</td>
+<td>DH</td>
+<td>计算效率略高</td>
+</tr>
+</tbody>
+</table>
+<h2 id="52">5.2 姿态表示方法对比</h2>
+<h3 id="521">5.2.1 旋转矩阵</h3>
+<p>旋转矩阵$R \in SO(3)$是最直接的姿态表示，保持向量长度和夹角不变。</p>
+<p><strong>性质：</strong></p>
+<ul>
+<li>正交性：$R^TR = RR^T = I$</li>
+<li>行列式：$\det(R) = 1$</li>
+<li>群结构：旋转复合通过矩阵乘法</li>
+</ul>
+<p><strong>工程优势：</strong></p>
+<ol>
+<li>无奇异性，全局唯一</li>
+<li>直接用于坐标变换</li>
+<li>数值稳定性好（配合正交化）</li>
+</ol>
+<p><strong>工程劣势：</strong></p>
+<ol>
+<li>9个参数表示3个自由度，冗余度高</li>
+<li>存储开销大</li>
+<li>插值困难（不在线性空间）</li>
+<li>需要定期正交化以维持约束</li>
+</ol>
+<p><strong>正交化算法（Gram-Schmidt）：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 伪代码</span>
+<span class="k">def</span> <span class="nf">orthogonalize</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">/</span> <span class="o">||</span><span class="n">c1</span><span class="o">||</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">c1</span> <span class="err">·</span> <span class="n">R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">c1</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">/</span> <span class="o">||</span><span class="n">c2</span><span class="o">||</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span> <span class="err">×</span> <span class="n">c2</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+</code></pre></div>
+
+<h3 id="522">5.2.2 欧拉角</h3>
+<p>欧拉角用三个连续旋转表示任意姿态，常见约定包括ZYX（航空）、ZYZ（机械臂）等。</p>
+<p><strong>ZYX欧拉角（Roll-Pitch-Yaw）：</strong>
+$$R_{ZYX}(\phi, \theta, \psi) = R_z(\psi)R_y(\theta)R_x(\phi)$$
+<strong>工程优势：</strong></p>
+<ol>
+<li>最小参数表示（3个角度）</li>
+<li>直观易懂，便于人机交互</li>
+<li>存储效率高</li>
+</ol>
+<p><strong>工程劣势：</strong></p>
+<ol>
+<li>万向节锁（Gimbal Lock）：当pitch接近±90°时，roll和yaw退化</li>
+<li>不连续性：同一姿态多种表示</li>
+<li>插值路径不直观</li>
+<li>数值微分在奇异点附近不稳定</li>
+</ol>
+<p><strong>万向节锁检测与处理：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 检测万向节锁</span>
+<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">85</span> <span class="o">*</span> <span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">:</span>  <span class="c1"># 接近±90度</span>
+    <span class="c1"># 切换到四元数表示</span>
+    <span class="n">use_quaternion_control</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># 安全使用欧拉角</span>
+    <span class="n">use_euler_control</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="523">5.2.3 四元数</h3>
+<p>四元数$q = [q_w, q_x, q_y, q_z]$提供了紧凑且无奇异性的姿态表示。</p>
+<p><strong>基本运算：</strong></p>
+<ul>
+<li>单位约束：$||q|| = 1$</li>
+<li>旋转复合：$q_3 = q_1 \otimes q_2$（Hamilton乘积）</li>
+<li>逆旋转：$q^{-1} = q^* = [q_w, -q_x, -q_y, -q_z]$</li>
+<li>向量旋转：$v' = q \otimes v \otimes q^*$</li>
+</ul>
+<p><strong>工程优势：</strong></p>
+<ol>
+<li>无奇异性，全局表示</li>
+<li>紧凑（4参数，1约束）</li>
+<li>插值简单（SLERP算法）</li>
+<li>计算效率高于矩阵</li>
+</ol>
+<p><strong>工程劣势：</strong></p>
+<ol>
+<li>不直观，调试困难</li>
+<li>双覆盖问题：$q$和$-q$表示同一旋转</li>
+<li>需要归一化维护</li>
+<li>与经典控制理论接口复杂</li>
+</ol>
+<p><strong>SLERP插值实现：</strong>
+$$q_t = \frac{\sin((1-t)\theta)}{\sin\theta}q_0 + \frac{\sin(t\theta)}{\sin\theta}q_1$$
+其中$\cos\theta = q_0 \cdot q_1$</p>
+<h3 id="524">5.2.4 工程选择决策树</h3>
+<div class="codehilite"><pre><span></span><code><span class="err">开始</span>
+<span class="w">  </span><span class="o">|</span>
+<span class="w">  </span><span class="n">v</span>
+<span class="err">需要人机交互？</span><span class="w"> </span><span class="o">--</span><span class="err">是</span><span class="o">--&gt;</span><span class="w"> </span><span class="err">欧拉角（配合范围限制）</span>
+<span class="w">  </span><span class="o">|</span>
+<span class="w">  </span><span class="err">否</span>
+<span class="w">  </span><span class="n">v</span>
+<span class="err">需要优化</span><span class="o">/</span><span class="err">插值？</span><span class="w"> </span><span class="o">--</span><span class="err">是</span><span class="o">--&gt;</span><span class="w"> </span><span class="err">四元数（</span><span class="n">SLERP</span><span class="err">）</span>
+<span class="w">  </span><span class="o">|</span>
+<span class="w">  </span><span class="err">否</span>
+<span class="w">  </span><span class="n">v</span>
+<span class="err">需要直接变换？</span><span class="w"> </span><span class="o">--</span><span class="err">是</span><span class="o">--&gt;</span><span class="w"> </span><span class="err">旋转矩阵</span>
+<span class="w">  </span><span class="o">|</span>
+<span class="w">  </span><span class="err">否</span>
+<span class="w">  </span><span class="n">v</span>
+<span class="err">存储受限？</span><span class="w"> </span><span class="o">--</span><span class="err">是</span><span class="o">--&gt;</span><span class="w"> </span><span class="err">轴角表示</span>
+<span class="w">  </span><span class="o">|</span>
+<span class="w">  </span><span class="err">否</span>
+<span class="w">  </span><span class="n">v</span>
+<span class="err">默认：四元数（通用性最好）</span>
+</code></pre></div>
+
+<h2 id="53">5.3 李群与李代数在机器人学中的应用</h2>
+<h3 id="531">5.3.1 李群基础</h3>
+<p>李群是既具有群结构又具有流形结构的数学对象，在机器人学中主要涉及：</p>
+<ul>
+<li>$SO(3)$：特殊正交群，表示3D旋转</li>
+<li>$SE(3)$：特殊欧氏群，表示3D刚体运动</li>
+<li>$SO(2)$、$SE(2)$：平面运动的对应群</li>
+</ul>
+<p><strong>$SE(3)$群元素：</strong>
+$$T = \begin{bmatrix} R &amp; p \\ 0 &amp; 1 \end{bmatrix} \in SE(3)$$
+其中$R \in SO(3)$，$p \in \mathbb{R}^3$</p>
+<p><strong>群运算性质：</strong></p>
+<ol>
+<li>封闭性：$T_1 \cdot T_2 \in SE(3)$</li>
+<li>结合律：$(T_1 \cdot T_2) \cdot T_3 = T_1 \cdot (T_2 \cdot T_3)$</li>
+<li>单位元：$I = \begin{bmatrix} I_3 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}$</li>
+<li>逆元素：$T^{-1} = \begin{bmatrix} R^T &amp; -R^Tp \\ 0 &amp; 1 \end{bmatrix}$</li>
+</ol>
+<h3 id="532">5.3.2 李代数表示</h3>
+<p>李代数是李群在单位元处的切空间，提供了李群的线性化表示：</p>
+<ul>
+<li>$\mathfrak{so}(3)$：$SO(3)$的李代数，3维反对称矩阵空间</li>
+<li>$\mathfrak{se}(3)$：$SE(3)$的李代数，螺旋运动空间</li>
+</ul>
+<p><strong>$\mathfrak{se}(3)$元素（螺旋）：</strong>
+$$\xi^{\wedge} = \begin{bmatrix} [\omega]_{\times} &amp; v \\ 0 &amp; 0 \end{bmatrix} \in \mathfrak{se}(3)$$
+其中$[\omega]_{\times}$是反对称矩阵：
+$$[\omega]_{\times} = \begin{bmatrix} 0 &amp; -\omega_z &amp; \omega_y \\ \omega_z &amp; 0 &amp; -\omega_x \\ -\omega_y &amp; \omega_x &amp; 0 \end{bmatrix}$$</p>
+<h3 id="533">5.3.3 指数映射与对数映射</h3>
+<p><strong>指数映射（李代数→李群）：</strong>
+$$\exp: \mathfrak{se}(3) \rightarrow SE(3)$$
+对于纯旋转（$v=0$）：
+$$e^{[\omega]_{\times}\theta} = I + \frac{\sin\theta}{\theta}[\omega]_{\times} + \frac{1-\cos\theta}{\theta^2}[\omega]_{\times}^2$$
+对于一般螺旋运动：
+$$e^{\xi^{\wedge}\theta} = \begin{bmatrix} e^{[\omega]_{\times}\theta} &amp; J(\theta)v \\ 0 &amp; 1 \end{bmatrix}$$
+其中$J(\theta)$是左雅可比：
+$$J(\theta) = I\theta + \frac{1-\cos\theta}{\theta}[\omega]_{\times} + \frac{\theta-\sin\theta}{\theta}[\omega]_{\times}^2$$
+<strong>对数映射（李群→李代数）：</strong>
+$$\log: SE(3) \rightarrow \mathfrak{se}(3)$$
+给定$T = \begin{bmatrix} R &amp; p \\ 0 &amp; 1 \end{bmatrix}$：</p>
+<ol>
+<li>计算旋转角：$\theta = \arccos\left(\frac{\text{tr}(R)-1}{2}\right)$</li>
+<li>提取旋转轴：$\omega = \frac{1}{2\sin\theta}\begin{bmatrix} R_{32}-R_{23} \\ R_{13}-R_{31} \\ R_{21}-R_{12} \end{bmatrix}$</li>
+<li>计算线速度：$v = J^{-1}(\theta)p$</li>
+</ol>
+<h3 id="534">5.3.4 工程应用</h3>
+<ol>
+<li><strong>轨迹优化中的应用：</strong>
+李代数提供了无约束优化空间，避免了旋转矩阵的正交约束：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>优化问题：
+min_{ξ} ||f(exp(ξ^∧)T_0) - T_target||²
+
+梯度计算：
+∂f/∂ξ = ∂f/∂T · ∂exp(ξ^∧)/∂ξ
+</code></pre></div>
+
+<ol start="2">
+<li><strong>滤波器设计：</strong>
+扩展卡尔曼滤波在$SE(3)$上的实现：</li>
+</ol>
+<ul>
+<li>状态预测：$T_{k+1|k} = T_{k|k} \cdot \exp(\xi^{\wedge}_k \Delta t)$</li>
+<li>误差状态：$\delta\xi \in \mathfrak{se}(3)$（6维向量）</li>
+<li>协方差更新：在李代数空间进行</li>
+</ul>
+<ol start="3">
+<li><strong>插值与平滑：</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># SE(3)测地线插值</span>
+<span class="k">def</span> <span class="nf">geodesic_interp</span><span class="p">(</span><span class="n">T1</span><span class="p">,</span> <span class="n">T2</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="n">T_rel</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span> <span class="o">@</span> <span class="n">T2</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">T_rel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">T1</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">xi</span><span class="p">)</span>
+</code></pre></div>
+
+<ol start="4">
+<li><strong>速度与加速度计算：</strong>
+空间速度（Body Velocity）：
+$$V^b = T^{-1}\dot{T} = \begin{bmatrix} [\omega^b]_{\times} &amp; v^b \\ 0 &amp; 0 \end{bmatrix}$$
+空间加速度需要考虑科里奥利项：
+$$\dot{V}^b = \text{ad}_{V^b}V^b + T^{-1}\ddot{T}$$</li>
+</ol>
+<h3 id="535">5.3.5 数值实现注意事项</h3>
+<ol>
+<li>
+<p><strong>小角度处理：</strong>
+   当$\theta &lt; \epsilon$时，使用泰勒展开避免数值不稳定：
+$$\frac{\sin\theta}{\theta} \approx 1 - \frac{\theta^2}{6}$$
+   $$\frac{1-\cos\theta}{\theta^2} \approx \frac{1}{2} - \frac{\theta^2}{24}$$</p>
+</li>
+<li>
+<p><strong>归一化策略：</strong>
+   定期将$SO(3)$元素正交化，$SE(3)$保持最后一行为$[0,0,0,1]$</p>
+</li>
+<li>
+<p><strong>计算效率优化：</strong>
+   - 预计算常用的指数映射
+   - 使用闭式解而非级数展开
+   - 利用对称性减少计算量</p>
+</li>
+</ol>
+<h2 id="54">5.4 奇异性分析与规避策略</h2>
+<h3 id="541">5.4.1 奇异性类型</h3>
+<p>机器人系统中的奇异性主要分为三类：</p>
+<ol>
+<li>
+<p><strong>运动学奇异性：</strong>
+- 边界奇异性：机械臂完全伸展或收缩
+- 内部奇异性：多个关节轴共线
+- 腕部奇异性：腕部关节轴相交于一点</p>
+</li>
+<li>
+<p><strong>表示奇异性：</strong>
+- 欧拉角万向节锁
+- DH参数的平行轴问题
+- 四元数的双覆盖</p>
+</li>
+<li>
+<p><strong>算法奇异性：</strong>
+- 雅可比矩阵秩降
+- 优化问题的鞍点
+- 数值积分的刚性问题</p>
+</li>
+</ol>
+<h3 id="542">5.4.2 奇异性检测</h3>
+<p><strong>雅可比奇异性检测：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">detect_singularity</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="c1"># 方法1：条件数</span>
+    <span class="n">cond_num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cond_num</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">/</span><span class="n">threshold</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;High condition number&quot;</span>
+
+    <span class="c1"># 方法2：最小奇异值</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Small singular value&quot;</span>
+
+    <span class="c1"># 方法3：可操作度</span>
+    <span class="n">manipulability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span> <span class="o">@</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">manipulability</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Low manipulability&quot;</span>
+
+    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Non-singular&quot;</span>
+</code></pre></div>
+
+<p><strong>几何奇异性检测：</strong></p>
+<ul>
+<li>监测关节角接近极限</li>
+<li>检查连杆是否共线</li>
+<li>分析工作空间边界</li>
+</ul>
+<h3 id="543">5.4.3 奇异性规避策略</h3>
+<ol>
+<li>
+<p><strong>阻尼最小二乘（DLS）：</strong>
+$$\dot{q} = J^T(JJ^T + \lambda^2I)^{-1}\dot{x}$$
+其中$\lambda$是阻尼因子，可自适应调整：
+$$\lambda = \begin{cases}
+0 &amp; \text{if } \sigma_{min} \geq \epsilon \\
+\lambda_{max}\left(1 - \left(\frac{\sigma_{min}}{\epsilon}\right)^2\right) &amp; \text{if } \sigma_{min} &lt; \epsilon
+\end{cases}$$</p>
+</li>
+<li>
+<p><strong>梯度投影法：</strong>
+利用零空间进行二次任务优化：
+$$\dot{q} = J^+\dot{x} + (I - J^+J)\nabla H$$
+其中$H$是避奇异性的势函数：
+$$H = -\frac{1}{2}\log(\det(JJ^T))$$</p>
+</li>
+<li>
+<p><strong>路径规划层面：</strong>
+- 添加奇异性约束到轨迹优化
+- 使用RRT*等采样方法绕过奇异区域
+- 预计算奇异性地图</p>
+</li>
+<li>
+<p><strong>冗余度利用：</strong></p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 7自由度机械臂的肘部角优化</span>
+<span class="k">def</span> <span class="nf">optimize_elbow_angle</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">task_vel</span><span class="p">):</span>
+    <span class="c1"># 主任务</span>
+    <span class="n">q_dot_task</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">@</span> <span class="n">task_vel</span>
+
+    <span class="c1"># 零空间基</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">-</span> <span class="n">pinv</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">@</span> <span class="n">J</span>
+
+    <span class="c1"># 肘部角梯度</span>
+    <span class="n">elbow_gradient</span> <span class="o">=</span> <span class="n">compute_elbow_gradient</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="c1"># 综合速度</span>
+    <span class="n">q_dot</span> <span class="o">=</span> <span class="n">q_dot_task</span> <span class="o">+</span> <span class="n">N</span> <span class="o">@</span> <span class="n">elbow_gradient</span>
+    <span class="k">return</span> <span class="n">q_dot</span>
+</code></pre></div>
+
+<h3 id="544">5.4.4 实时奇异性处理</h3>
+<p><strong>分层控制架构：</strong></p>
+<div class="codehilite"><pre><span></span><code>层级1：任务空间控制器
+  ↓ (检测奇异性)
+层级2：奇异性处理器
+
+  - 切换到关节空间控制
+  - 激活阻尼项
+  - 调整任务优先级
+  ↓
+层级3：关节控制器
+</code></pre></div>
+
+<p><strong>状态机设计：</strong></p>
+<div class="codehilite"><pre><span></span><code>正常模式 ←→ 近奇异模式 ←→ 奇异模式
+   |            |              |
+   ↓            ↓              ↓
+笛卡尔控制   混合控制      关节控制
+</code></pre></div>
+
+<h2 id="55-nasa">5.5 案例研究：NASA瓦尔基里机器人的坐标系设计</h2>
+<h3 id="551">5.5.1 背景介绍</h3>
+<p>NASA瓦尔基里（Valkyrie/R5）是为火星探索任务设计的类人机器人，高1.8米，重125公斤，具有44个自由度。其坐标系设计需要满足：</p>
+<ul>
+<li>太空环境的极端可靠性要求</li>
+<li>与NASA任务控制系统的兼容性</li>
+<li>遥操作时的直观性</li>
+<li>多传感器融合的精确性</li>
+</ul>
+<h3 id="552">5.5.2 坐标系架构</h3>
+<p><strong>基础坐标系定义：</strong></p>
+<ol>
+<li><strong>世界坐标系</strong>：北东地（NED）航空标准</li>
+<li><strong>基座坐标系</strong>：位于骨盆中心，Z轴向上</li>
+<li><strong>关节坐标系</strong>：修改DH参数，优化数值稳定性</li>
+<li><strong>传感器坐标系</strong>：
+   - IMU：与基座对齐，考虑振动隔离
+   - 相机：前视坐标系，Z轴向前
+   - 力传感器：腕部和踝部，局部坐标系</li>
+</ol>
+<p><strong>坐标系层级：</strong></p>
+<div class="codehilite"><pre><span></span><code>世界坐标系
+    ↓
+基座坐标系（骨盆）
+    ├── 躯干链
+    │   ├── 腰部（3 DOF）
+    │   └── 头部（2 DOF + 相机）
+    ├── 左臂链（7 DOF + 手）
+    ├── 右臂链（7 DOF + 手）
+    ├── 左腿链（6 DOF）
+    └── 右腿链（6 DOF）
+</code></pre></div>
+
+<h3 id="553">5.5.3 姿态表示选择</h3>
+<p><strong>四元数为主，欧拉角为辅：</strong></p>
+<ul>
+<li><strong>内部计算</strong>：全部使用四元数，避免奇异性</li>
+<li><strong>人机接口</strong>：显示RPY欧拉角，限制pitch在±85°</li>
+<li><strong>通信协议</strong>：四元数传输，减少带宽需求</li>
+<li><strong>日志记录</strong>：同时保存四元数和欧拉角</li>
+</ul>
+<p><strong>实现细节：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ValkyriePose</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quat</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># w, x, y, z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">euler_display</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 仅用于显示</span>
+
+    <span class="k">def</span> <span class="nf">update_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quat_new</span><span class="p">):</span>
+        <span class="c1"># 主更新路径</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quat</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">quat_new</span><span class="p">)</span>
+
+        <span class="c1"># 辅助显示更新</span>
+        <span class="k">if</span> <span class="n">needs_display</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">euler_display</span> <span class="o">=</span> <span class="n">quat_to_euler_safe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quat</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">quat_to_euler_safe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="c1"># 检测万向节锁</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">q</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">q</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.4999</span><span class="p">:</span>  <span class="c1"># 接近±90度</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># 返回警告</span>
+        <span class="k">return</span> <span class="n">quat_to_euler</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="554">5.5.4 多传感器融合策略</h3>
+<p><strong>扩展卡尔曼滤波（EKF）设计：</strong></p>
+<ul>
+<li>状态向量：$[p, v, q, b_g, b_a]$（位置、速度、四元数、陀螺仪偏差、加速度计偏差）</li>
+<li>误差状态：$[\delta p, \delta v, \delta \theta, \delta b_g, \delta b_a]$（使用李代数）</li>
+</ul>
+<p><strong>传感器同步：</strong></p>
+<div class="codehilite"><pre><span></span><code>IMU (1000Hz) ──┐
+                ├─→ 时间同步器 ──→ EKF (200Hz)
+相机 (30Hz) ────┤      │
+                │      ↓
+力传感器 (500Hz)┘   状态估计
+</code></pre></div>
+
+<h3 id="555">5.5.5 遥操作坐标系映射</h3>
+<p><strong>操作员视角到机器人视角：</strong></p>
+<ol>
+<li>操作员使用VR头显，自然坐标系</li>
+<li>映射到机器人基座坐标系</li>
+<li>考虑通信延迟（地火通信14-24分钟）</li>
+<li>预测显示补偿延迟</li>
+</ol>
+<p><strong>坐标变换链：</strong>
+$$T_{robot}^{world} = T_{base}^{world} \cdot T_{link}^{base} \cdot T_{tool}^{link}$$</p>
+<h3 id="556">5.5.6 经验教训</h3>
+<ol>
+<li><strong>坐标系文档的重要性</strong>：NASA要求每个坐标系都有详细的定义文档和可视化</li>
+<li><strong>冗余表示的价值</strong>：关键姿态同时用四元数和旋转矩阵存储，用于交叉验证</li>
+<li><strong>坐标系可视化工具</strong>：开发专门的RViz插件显示所有坐标系</li>
+<li><strong>单元测试覆盖</strong>：所有坐标变换函数100%测试覆盖</li>
+<li><strong>故障恢复机制</strong>：当检测到数值错误时，自动切换到备份表示法</li>
+</ol>
+<h2 id="56">5.6 高级话题：双四元数与螺旋理论</h2>
+<h3 id="561">5.6.1 双四元数基础</h3>
+<p>双四元数提供了统一表示旋转和平移的优雅框架：
+$$\hat{q} = q_r + \epsilon q_d$$
+其中$q_r$是旋转四元数，$q_d$是对偶部分，$\epsilon^2 = 0$。</p>
+<p><strong>优势：</strong></p>
+<ul>
+<li>8参数表示6自由度刚体运动</li>
+<li>插值路径是螺旋运动</li>
+<li>避免了$SE(3)$矩阵的16个元素</li>
+</ul>
+<h3 id="562">5.6.2 螺旋理论应用</h3>
+<p><strong>瞬时螺旋轴：</strong>
+任何刚体运动都可分解为绕某轴的旋转加沿该轴的平移：
+$$\mathcal{S} = \{\mathbf{s}; \mathbf{s}_0\}$$
+其中$\mathbf{s}$是轴方向，$\mathbf{s}_0$是轴上一点。</p>
+<p><strong>Plücker坐标：</strong>
+用6维向量表示空间直线：
+$$\mathcal{L} = (\mathbf{l}; \mathbf{m})$$
+其中$\mathbf{l}$是方向向量，$\mathbf{m} = \mathbf{p} \times \mathbf{l}$是力矩。</p>
+<h3 id="563">5.6.3 工程应用实例</h3>
+<p><strong>并联机构分析：</strong>
+Stewart平台的运动学用螺旋理论更简洁：</p>
+<ul>
+<li>6个支链提供6个约束螺旋</li>
+<li>动平台的可行运动是约束螺旋的零空间</li>
+<li>奇异性对应约束螺旋线性相关</li>
+</ul>
+<p><strong>抓取分析：</strong>
+接触点的约束用旋量表示：</p>
+<ul>
+<li>点接触：3个约束（限制平移）</li>
+<li>线接触：4个约束  </li>
+<li>面接触：5个约束</li>
+</ul>
+<h2 id="_1">本章小结</h2>
+<p>本章系统介绍了机器人学中的坐标系建立和姿态表示方法：</p>
+<p><strong>关键概念：</strong></p>
+<ol>
+<li>DH参数提供系统化但可能遇到奇异性，PoE基于螺旋理论更现代</li>
+<li>旋转矩阵无奇异但冗余，欧拉角直观但有万向节锁，四元数紧凑无奇异</li>
+<li>李群/李代数为优化和滤波提供优雅框架</li>
+<li>奇异性需要多层次检测和规避策略</li>
+<li>实际系统常需多种表示法协同工作</li>
+</ol>
+<p><strong>关键公式：</strong></p>
+<ul>
+<li>DH变换：$T = \text{Trans}_z(d) \cdot \text{Rot}_z(\theta) \cdot \text{Trans}_x(a) \cdot \text{Rot}_x(\alpha)$</li>
+<li>Rodrigues公式：$e^{[\omega]\theta} = I + [\omega]\sin\theta + [\omega]^2(1-\cos\theta)$</li>
+<li>四元数SLERP：$q_t = \frac{\sin((1-t)\theta)}{\sin\theta}q_0 + \frac{\sin(t\theta)}{\sin\theta}q_1$</li>
+<li>阻尼伪逆：$J^{\dagger} = J^T(JJ^T + \lambda^2I)^{-1}$</li>
+</ul>
+<h2 id="_2">练习题</h2>
+<h3 id="_3">基础题</h3>
+<p><strong>习题5.1</strong> 给定DH参数表：
+| i | $a_i$ | $\alpha_i$ | $d_i$ | $\theta_i$ |</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>$a_i$</th>
+<th>$\alpha_i$</th>
+<th>$d_i$</th>
+<th>$\theta_i$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>90°</td>
+<td>0.1</td>
+<td>$\theta_1$</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.5</td>
+<td>0°</td>
+<td>0</td>
+<td>$\theta_2$</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.3</td>
+<td>0°</td>
+<td>0</td>
+<td>$\theta_3$</td>
+</tr>
+</tbody>
+</table>
+<p>计算当$\theta_1 = 30°$，$\theta_2 = 45°$，$\theta_3 = -60°$时末端执行器的位姿。</p>
+<p><em>Hint: 逐个计算变换矩阵，然后连乘。</em></p>
+<details>
+<summary>答案</summary>
+<p>通过连乘三个变换矩阵$T_0^3 = T_0^1 T_1^2 T_2^3$，得到末端位姿。
+最终位置约为$[0.324, 0.187, 0.459]$，姿态需要从旋转矩阵提取。</p>
+</details>
+<p><strong>习题5.2</strong> 证明旋转矩阵的行列式必须为1，并解释为什么-1的情况对应反射而非旋转。</p>
+<p><em>Hint: 考虑旋转保持手性（chirality）。</em></p>
+<details>
+<summary>答案</summary>
+<p>旋转保持向量长度和夹角，因此$\det(R) = \pm 1$。由于旋转必须保持右手坐标系为右手系（连续性），所以$\det(R) = 1$。$\det(R) = -1$会改变手性，对应反射变换。</p>
+</details>
+<p><strong>习题5.3</strong> 实现四元数到旋转矩阵的转换函数，并验证单位四元数$q = [0.5, 0.5, 0.5, 0.5]$对应的旋转矩阵。</p>
+<p><em>Hint: 使用公式$R = I + 2q_w[\mathbf{q}_v]_{\times} + 2[\mathbf{q}_v]_{\times}^2$</em></p>
+<details>
+<summary>答案</summary>
+<p>$q = [0.5, 0.5, 0.5, 0.5]$对应120°绕轴$[1,1,1]$的旋转。
+旋转矩阵为：
+$$R = \begin{bmatrix} 0 &amp; 0 &amp; 1 \\ 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \end{bmatrix}$$
+这是一个循环置换矩阵。</p>
+</details>
+<p><strong>习题5.4</strong> 某机械臂在工作时检测到雅可比矩阵的条件数为1000，这意味着什么？应该采取什么措施？</p>
+<p><em>Hint: 条件数反映矩阵的"病态"程度。</em></p>
+<details>
+<summary>答案</summary>
+<p>条件数1000表示接近奇异配置，输入误差会被放大1000倍。措施包括：</p>
+<ol>
+<li>激活阻尼项，使用DLS方法</li>
+<li>降低运动速度</li>
+<li>考虑重新规划路径避开奇异区域</li>
+<li>如有冗余自由度，调整零空间配置</li>
+</ol>
+</details>
+<h3 id="_4">挑战题</h3>
+<p><strong>习题5.5</strong> 设计一个算法，检测6自由度机械臂的所有奇异配置，并生成奇异性地图。考虑如何在实时控制中使用这个地图。</p>
+<p><em>Hint: 考虑采样关节空间，计算雅可比行列式。</em></p>
+<details>
+<summary>答案</summary>
+<p>算法步骤：</p>
+<ol>
+<li>均匀采样关节空间（如每个关节10°）</li>
+<li>计算每个配置的雅可比矩阵</li>
+<li>计算可操作度$w = \sqrt{\det(JJ^T)}$</li>
+<li>标记$w &lt; \epsilon$的配置为奇异</li>
+<li>使用k-d树或八叉树存储奇异区域</li>
+<li>实时控制时查询最近奇异点，计算"安全距离"</li>
+<li>在路径规划时添加奇异性势场</li>
+</ol>
+</details>
+<p><strong>习题5.6</strong> 推导并实现SE(3)上的B样条插值算法，使其能生成$C^2$连续的轨迹。与线性插值和SLERP对比。</p>
+<p><em>Hint: 在李代数空间进行B样条，然后指数映射回李群。</em></p>
+<details>
+<summary>答案</summary>
+<p>SE(3) B样条算法：</p>
+<ol>
+<li>将控制点$T_i$映射到李代数：$\xi_i = \log(T_0^{-1}T_i)$</li>
+<li>在$\mathfrak{se}(3)$中计算B样条：$\xi(t) = \sum_i B_i(t)\xi_i$</li>
+<li>映射回SE(3)：$T(t) = T_0 \exp(\xi(t))$</li>
+</ol>
+<p>优势：$C^2$连续，曲率变化平滑
+劣势：计算量大于SLERP，需要对数映射</p>
+</details>
+<p><strong>习题5.7</strong> 某火星探测机器人使用IMU和视觉进行状态估计。由于火星重力（3.71 m/s²）与地球不同，如何修改EKF？考虑IMU标定误差的影响。</p>
+<p><em>Hint: 重力向量影响加速度计测量模型。</em></p>
+<details>
+<summary>答案</summary>
+<p>修改方案：</p>
+<ol>
+<li>更新重力常数：$g_{Mars} = 3.71$ m/s²</li>
+<li>加速度计模型：$a_m = R^T(a - g_{Mars}) + b_a + n_a$</li>
+<li>添加重力标定参数到状态向量：$x = [..., g_{est}]$</li>
+<li>在线估计重力大小，补偿IMU标定误差</li>
+<li>使用视觉SLAM提供的垂直方向约束更新重力方向</li>
+<li>考虑火星大气和尘暴对视觉的影响，动态调整传感器权重</li>
+</ol>
+</details>
+<p><strong>习题5.8</strong> 分析并联机器人Stewart平台在接近奇异配置时的坐标系选择策略。如何设计坐标系使奇异性分析更简单？</p>
+<p><em>Hint: 考虑动平台中心vs关节空间表示。</em></p>
+<details>
+<summary>答案</summary>
+<p>坐标系策略：</p>
+<ol>
+<li>基座中心坐标系：分析工作空间边界</li>
+<li>动平台质心坐标系：惯性矩阵对角化</li>
+<li>主螺旋坐标系：沿主要约束方向</li>
+<li>使用Grassmann坐标分析6条支链的线性相关性</li>
+<li>奇异配置时切换到约束流形的切空间坐标</li>
+<li>实时计算最小奇异值对应的方向，沿该方向建立"逃逸坐标系"</li>
+</ol>
+</details>
+<h2 id="gotchas">常见陷阱与错误 (Gotchas)</h2>
+<ol>
+<li>
+<p><strong>DH参数符号混淆</strong>
+   - 错误：混用标准DH和修改DH参数
+   - 正确：明确声明使用的约定，保持一致性</p>
+</li>
+<li>
+<p><strong>四元数归一化遗忘</strong>
+   - 错误：累积运算后不归一化
+   - 正确：每次运算后检查模长，必要时归一化</p>
+</li>
+<li>
+<p><strong>欧拉角顺序错误</strong>
+   - 错误：假设所有系统都用ZYX顺序
+   - 正确：查阅文档确认旋转顺序，编写转换函数时明确标注</p>
+</li>
+<li>
+<p><strong>奇异性处理不当</strong>
+   - 错误：使用固定阈值检测所有奇异性
+   - 正确：根据机构特点设计自适应阈值</p>
+</li>
+<li>
+<p><strong>坐标系方向假设</strong>
+   - 错误：假设Z轴总是向上
+   - 正确：明确定义每个坐标系的方向约定</p>
+</li>
+<li>
+<p><strong>数值精度问题</strong>
+   - 错误：直接比较浮点数是否相等
+   - 正确：使用容差范围，如<code>abs(a - b) &lt; epsilon</code></p>
+</li>
+<li>
+<p><strong>插值路径选择</strong>
+   - 错误：对旋转矩阵元素直接线性插值
+   - 正确：转换到四元数或李代数进行插值</p>
+</li>
+<li>
+<p><strong>时间同步忽视</strong>
+   - 错误：假设所有传感器数据时间戳对齐
+   - 正确：实现时间同步机制，考虑传感器延迟</p>
+</li>
+</ol>
+<h2 id="_5">最佳实践检查清单</h2>
+<h3 id="_6">设计阶段</h3>
+<ul>
+<li>[ ] 明确定义所有坐标系的原点和轴方向</li>
+<li>[ ] 选择合适的姿态表示方法（考虑应用需求）</li>
+<li>[ ] 设计坐标系时考虑制造和装配公差</li>
+<li>[ ] 为每个坐标系创建可视化工具</li>
+<li>[ ] 编写坐标系定义文档</li>
+</ul>
+<h3 id="_7">实现阶段</h3>
+<ul>
+<li>[ ] 实现多种姿态表示的相互转换函数</li>
+<li>[ ] 添加数值稳定性检查（正交性、归一化）</li>
+<li>[ ] 实现奇异性检测和处理机制</li>
+<li>[ ] 设计单元测试覆盖所有变换函数</li>
+<li>[ ] 实现坐标系标定程序</li>
+</ul>
+<h3 id="_8">调试阶段</h3>
+<ul>
+<li>[ ] 使用可视化工具验证坐标变换</li>
+<li>[ ] 记录关键位姿的多种表示用于交叉验证</li>
+<li>[ ] 监控数值健康指标（条件数、正交性误差）</li>
+<li>[ ] 实现坐标系一致性检查</li>
+<li>[ ] 准备奇异配置的测试案例</li>
+</ul>
+<h3 id="_9">运行阶段</h3>
+<ul>
+<li>[ ] 定期检查和修正数值漂移</li>
+<li>[ ] 监控接近奇异性的预警</li>
+<li>[ ] 记录异常姿态用于事后分析</li>
+<li>[ ] 实现紧急情况下的坐标系重置</li>
+<li>[ ] 保持坐标系文档与代码同步更新</li>
+</ul>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter4.html" class="nav-link prev">← 第4章：传感器系统与数据融合</a><a href="chapter6.html" class="nav-link next">第6章：正逆运动学与工作空间 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

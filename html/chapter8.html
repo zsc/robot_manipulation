@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第8章：轨迹规划与优化</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="8">第8章：轨迹规划与优化</h1>
+<h2 id="_1">本章概览</h2>
+<p>轨迹规划是机器人运动控制的核心问题之一，它决定了机器人如何从初始状态平滑、高效地运动到目标状态。对于轮足机械臂系统，轨迹规划不仅要考虑运动学约束，还必须满足动力学限制、避障需求以及任务特定的优化目标。本章将深入探讨关节空间与笛卡尔空间规划的权衡、时间与能量优化的数学基础、动力学约束的处理方法，以及实时系统中的轨迹修正策略。通过学习本章内容，读者将掌握现代轨迹规划算法的理论基础和工程实现技巧。</p>
+<h2 id="81-vs">8.1 关节空间vs笛卡尔空间规划</h2>
+<h3 id="811">8.1.1 规划空间的选择依据</h3>
+<p>轨迹规划的第一个关键决策是选择在哪个空间进行规划。关节空间规划直接在机器人的配置空间中工作，而笛卡尔空间规划则在任务空间（通常是3D位置和姿态）中进行。这个选择深刻影响着算法复杂度、计算效率和轨迹质量。</p>
+<p><strong>关节空间规划的优势：</strong></p>
+<ul>
+<li>直接对应电机控制指令，无需逆运动学求解</li>
+<li>关节限位约束表达简单：$q_{min} \leq q(t) \leq q_{max}$</li>
+<li>速度和加速度约束易于施加：$|\dot{q}_i| \leq \dot{q}_{max,i}$，$|\ddot{q}_i| \leq \ddot{q}_{max,i}$</li>
+<li>避免奇异性问题，因为不涉及雅可比矩阵求逆</li>
+<li>计算效率高，适合实时应用</li>
+</ul>
+<p><strong>笛卡尔空间规划的优势：</strong></p>
+<ul>
+<li>任务描述直观，如"沿直线移动"、"保持水平姿态"</li>
+<li>路径几何特性明确，便于避障规划</li>
+<li>末端执行器速度控制精确</li>
+<li>适合人机协作场景，运动可预测</li>
+</ul>
+<h3 id="812">8.1.2 数学表述与转换</h3>
+<p>设机器人有$n$个自由度，关节空间轨迹表示为$q(t) \in \mathbb{R}^n$，笛卡尔空间轨迹表示为$x(t) \in SE(3)$。两者通过正运动学映射关联：</p>
+<p>$$x(t) = f_{kin}(q(t))$$
+笛卡尔速度与关节速度的关系由雅可比矩阵描述：
+$$\dot{x} = J(q)\dot{q}$$
+其中$J(q) = \frac{\partial f_{kin}}{\partial q}$是位置依赖的雅可比矩阵。</p>
+<p>在笛卡尔空间规划时，需要通过逆运动学或雅可比伪逆计算关节空间轨迹：
+$$\dot{q} = J^{\dagger}(q)\dot{x} + (I - J^{\dagger}J)z$$
+这里$J^{\dagger} = J^T(JJ^T)^{-1}$是Moore-Penrose伪逆，$z$是零空间速度，可用于优化次要目标。</p>
+<h3 id="813">8.1.3 混合规划策略</h3>
+<p>实践中常采用混合策略：在笛卡尔空间定义关键路径点，然后在关节空间进行插值。这种方法结合了两者优势：</p>
+<div class="codehilite"><pre><span></span><code>笛卡尔空间路径点：x₀ → x₁ → x₂ → ... → xₙ
+        ↓ IK
+关节空间配置：q₀ → q₁ → q₂ → ... → qₙ
+        ↓ 插值
+连续轨迹：q(t), t ∈ [0, T]
+</code></pre></div>
+
+<h2 id="82-vs">8.2 时间最优vs能量最优轨迹</h2>
+<h3 id="821">8.2.1 时间最优轨迹规划</h3>
+<p>时间最优问题可表述为：
+$$\min_{q(t)} T$$
+subject to:
+$$q(0) = q_{start}, \quad q(T) = q_{goal}$$
+$$|\dot{q}_i(t)| \leq v_{max,i}, \quad \forall i, t$$
+$$|\ddot{q}_i(t)| \leq a_{max,i}, \quad \forall i, t$$
+经典的解决方法是<strong>时间缩放法</strong>。首先规划几何路径$s \mapsto q(s)$，$s \in [0,1]$，然后优化时间参数化$s(t)$：
+$$q(t) = q(s(t))$$
+$$\dot{q} = \frac{dq}{ds}\dot{s}$$
+$$\ddot{q} = \frac{dq}{ds}\ddot{s} + \frac{d^2q}{ds^2}\dot{s}^2$$
+速度约束转化为：
+$$|\frac{dq_i}{ds}|\dot{s} \leq v_{max,i}$$
+这导出最大允许速度：
+$$\dot{s}_{max}(s) = \min_i \frac{v_{max,i}}{|\frac{dq_i}{ds}|}$$</p>
+<h3 id="822">8.2.2 能量最优轨迹</h3>
+<p>能量优化目标通常包括机械功和电能消耗：
+$$E = \int_0^T \sum_i \tau_i(t)\dot{q}_i(t) dt$$
+其中$\tau_i$是关节扭矩，由动力学方程确定：
+$$\tau = M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q)$$
+能量最优问题的拉格朗日函数：
+$$L = \dot{q}^T\tau + \lambda^T(constraints)$$
+通过变分法可得出最优性条件（Euler-Lagrange方程）。实践中常用的简化目标是最小化加速度平方和：
+$$\min \int_0^T ||\ddot{q}(t)||^2 dt$$
+这产生平滑的轨迹，间接降低能耗。</p>
+<h3 id="823">8.2.3 多目标优化</h3>
+<p>实际应用中常需平衡时间和能量：
+$$J = \alpha T + \beta \int_0^T ||\tau||^2 dt + \gamma \int_0^T ||\dddot{q}||^2 dt$$
+其中第三项（jerk）用于限制轨迹平滑度，减少机械冲击。</p>
+<h2 id="83">8.3 动力学约束下的轨迹优化</h2>
+<h3 id="831">8.3.1 完整动力学模型集成</h3>
+<p>在高速运动或重载操作中，必须考虑完整的动力学约束。机器人动力学方程：
+$$M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) + F_{friction}(\dot{q}) = \tau$$
+其中：</p>
+<ul>
+<li>$M(q)$：惯性矩阵（正定对称）</li>
+<li>$C(q,\dot{q})$：科氏力和离心力矩阵</li>
+<li>$G(q)$：重力项</li>
+<li>$F_{friction}$：摩擦力模型</li>
+<li>$\tau$：关节扭矩</li>
+</ul>
+<p>扭矩约束：
+$$\tau_{min} \leq \tau(t) \leq \tau_{max}$$
+功率约束（考虑电机特性）：
+$$|\tau_i \cdot \dot{q}_i| \leq P_{max,i}$$</p>
+<h3 id="832-direct-collocation">8.3.2 直接配点法（Direct Collocation）</h3>
+<p>将连续轨迹离散化为N个配点：
+$$q_k = q(t_k), \quad k = 0, 1, ..., N$$
+动力学约束在每个配点处强制满足：
+$$M(q_k)\frac{q_{k+1} - 2q_k + q_{k-1}}{\Delta t^2} + C(q_k, \frac{q_{k+1} - q_{k-1}}{2\Delta t})\frac{q_{k+1} - q_{k-1}}{2\Delta t} + G(q_k) = \tau_k$$
+优化问题变为：
+$$\min_{q_0,...,q_N, \tau_0,...,\tau_N} \sum_{k=0}^{N} L(q_k, \dot{q}_k, \tau_k)$$
+这是一个大规模非线性规划(NLP)问题，可用IPOPT、SNOPT等求解器处理。</p>
+<h3 id="833-multiple-shooting">8.3.3 多重打靶法（Multiple Shooting）</h3>
+<p>将轨迹分段，每段内进行前向积分：</p>
+<div class="codehilite"><pre><span></span><code><span class="err">段</span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">q₀</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">integrate</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">q₁</span><span class="s1">&#39;</span>
+<span class="s1">段2: q₁ → integrate → q₂&#39;</span>
+<span class="o">...</span>
+</code></pre></div>
+
+<p>添加连续性约束：
+$$q_{i+1} = q_i', \quad i = 0, ..., N-1$$
+相比直接配点法，多重打靶法：</p>
+<ul>
+<li>动力学满足更精确（通过数值积分）</li>
+<li>问题规模更小</li>
+<li>但雅可比矩阵计算更复杂</li>
+</ul>
+<h3 id="834">8.3.4 轨迹优化的凸化技术</h3>
+<p>原始的非凸问题可通过以下技术部分凸化：</p>
+<ol>
+<li>
+<p><strong>序列凸规划(SCP)：</strong>
+在当前轨迹$q^{(i)}$附近线性化：
+$$M(q) \approx M(q^{(i)}) + \sum_j \frac{\partial M}{\partial q_j}|_{q^{(i)}}(q_j - q_j^{(i)})$$</p>
+</li>
+<li>
+<p><strong>信赖域方法：</strong>
+添加信赖域约束确保线性化有效：
+$$||q - q^{(i)}||_{\infty} \leq \delta$$</p>
+</li>
+<li>
+<p><strong>凸松弛：</strong>
+将非凸约束松弛为凸约束。例如，碰撞避免约束：
+$$d(q) \geq d_{safe}$$
+可松弛为：
+$$d(q^{(i)}) + \nabla d(q^{(i)})^T(q - q^{(i)}) \geq d_{safe}$$</p>
+</li>
+</ol>
+<h2 id="84">8.4 实时轨迹修正与重规划</h2>
+<h3 id="841">8.4.1 模型预测控制框架</h3>
+<p>实时轨迹修正常采用模型预测控制(MPC)框架：</p>
+<ol>
+<li>在时刻$t$，测量当前状态$(q_t, \dot{q}_t)$</li>
+<li>
+<p>求解有限时域优化问题：
+$$\min_{u_{t:t+H}} \sum_{k=0}^{H} L(x_{t+k}, u_{t+k})$$</p>
+</li>
+<li>
+<p>执行第一个控制动作$u_t$</p>
+</li>
+<li>在下一时刻重复</li>
+</ol>
+<p>预测时域$H$的选择需要平衡：</p>
+<ul>
+<li>太短：缺乏前瞻性，可能陷入局部最优</li>
+<li>太长：计算负担大，模型误差累积</li>
+</ul>
+<h3 id="842">8.4.2 轨迹修正的触发机制</h3>
+<p><strong>基于误差的触发：</strong>
+$$||q_{actual} - q_{planned}|| &gt; \epsilon_{position}$$
+$$||\dot{q}_{actual} - \dot{q}_{planned}|| &gt; \epsilon_{velocity}$$
+<strong>基于预测的触发：</strong>
+预测未来违反约束的概率：
+$$P(violation|current_state) &gt; threshold$$
+<strong>事件驱动触发：</strong></p>
+<ul>
+<li>检测到新障碍物</li>
+<li>目标位置更新</li>
+<li>执行器故障</li>
+</ul>
+<h3 id="843">8.4.3 增量式重规划</h3>
+<p>完全重规划计算代价高，增量式方法更高效：</p>
+<ol>
+<li>
+<p><strong>局部修正：</strong>
+只修改违反约束的轨迹段：
+$$q_{new}(t) = \begin{cases}
+q_{old}(t), &amp; t \notin [t_{start}, t_{end}] \\
+q_{corrected}(t), &amp; t \in [t_{start}, t_{end}]
+\end{cases}$$</p>
+</li>
+<li>
+<p><strong>弹性带方法：</strong>
+将轨迹建模为弹性带，通过虚拟力场变形：
+$$F_{total} = F_{goal} + F_{obstacle} + F_{smooth}$$</p>
+</li>
+<li>
+<p><strong>梯度优化：</strong>
+沿约束违反的负梯度方向调整：
+$$q^{(k+1)} = q^{(k)} - \alpha \nabla_{q} V(q)$$
+其中$V(q)$是违反度量函数。</p>
+</li>
+</ol>
+<h3 id="844">8.4.4 计算加速技术</h3>
+<ol>
+<li>
+<p><strong>热启动：</strong>
+使用上一时刻的解作为初始猜测：
+$$q_{init}^{t+1} = shift(q_{solution}^t)$$</p>
+</li>
+<li>
+<p><strong>并行化：</strong>
+- 多段轨迹并行优化
+- 约束检查并行化
+- GPU加速矩阵运算</p>
+</li>
+<li>
+<p><strong>自适应分辨率：</strong>
+远离当前时刻的轨迹使用粗分辨率：
+$$\Delta t(k) = \Delta t_{min} \cdot (1 + \beta \cdot k)$$</p>
+</li>
+</ol>
+<h2 id="2canadarm2">案例研究：国际空间站加拿大臂2(Canadarm2)的轨迹规划</h2>
+<h3 id="_2">背景与挑战</h3>
+<p>Canadarm2是国际空间站(ISS)上的关键机械臂系统，长17.6米，7个自由度，用于空间站组装、载荷操作和宇航员辅助。其轨迹规划面临独特挑战：</p>
+<ol>
+<li><strong>微重力环境</strong>：无重力项$G(q) = 0$，但惯性效应显著</li>
+<li><strong>柔性结构</strong>：长臂导致显著弹性变形，需考虑振动抑制</li>
+<li><strong>功率限制</strong>：依赖太阳能，峰值功率仅2kW</li>
+<li><strong>安全约束</strong>：必须避免与ISS模块碰撞，安全距离&gt;0.5m</li>
+<li><strong>通信延迟</strong>：地面控制延迟2-7秒，需要自主规划能力</li>
+</ol>
+<h3 id="_3">技术解决方案</h3>
+<ol>
+<li><strong>振动抑制轨迹设计</strong></li>
+</ol>
+<p>采用输入整形(Input Shaping)技术，设计零振动(ZV)轨迹：
+$$u_{shaped}(t) = \sum_{i=1}^{n} A_i \cdot u(t - t_i)$$
+其中$A_i$和$t_i$根据系统固有频率$\omega_n$和阻尼比$\zeta$计算：
+$$A_1 = \frac{1}{1 + K}, \quad A_2 = \frac{K}{1 + K}$$
+$$t_1 = 0, \quad t_2 = \frac{\pi}{\omega_d}$$
+$$K = e^{-\zeta\pi/\sqrt{1-\zeta^2}}$$</p>
+<ol start="2">
+<li><strong>分层规划架构</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code>任务层：高级任务分解（抓取卫星、移动载荷）
+     ↓
+路径层：笛卡尔空间无碰撞路径（RRT*算法）
+     ↓  
+轨迹层：时间参数化，考虑动力学约束
+     ↓
+控制层：PID + 前馈补偿
+</code></pre></div>
+
+<ol start="3">
+<li><strong>碰撞检测优化</strong></li>
+</ol>
+<p>使用包围体层次结构(BVH)加速碰撞检测：</p>
+<ul>
+<li>每个连杆用胶囊体(capsule)近似</li>
+<li>ISS模块用轴对齐包围盒(AABB)树表示</li>
+<li>使用GJK算法计算最小距离</li>
+</ul>
+<ol start="4">
+<li><strong>自适应重规划</strong></li>
+</ol>
+<p>根据任务紧急度调整规划策略：</p>
+<ul>
+<li>紧急任务：简化动力学模型，使用准静态假设</li>
+<li>常规任务：完整动力学优化，最小化能耗</li>
+<li>精密操作：考虑柔性振动，使用有限元模型</li>
+</ul>
+<h3 id="_4">实际性能</h3>
+<ul>
+<li>典型载荷转移任务时间：45-90分钟</li>
+<li>位置精度：±10mm（末端）</li>
+<li>姿态精度：±0.5°</li>
+<li>能耗：平均800W，峰值1.8kW</li>
+<li>最大速度：0.37m/s（空载），0.06m/s（满载）</li>
+</ul>
+<h2 id="sdp">高级话题：凸优化与半定规划(SDP)在轨迹优化中的应用</h2>
+<h3 id="851-sdp">8.5.1 轨迹优化的SDP形式</h3>
+<p>许多轨迹优化问题可转化为半定规划：
+$$\begin{align}
+\min_{X} \quad &amp; \text{tr}(CX) \\
+\text{s.t.} \quad &amp; \text{tr}(A_iX) = b_i, \quad i = 1, ..., m \\
+&amp; X \succeq 0
+\end{align}$$
+其中$X \succeq 0$表示$X$是半正定矩阵。</p>
+<p><strong>例：最小能量轨迹</strong></p>
+<p>对于线性系统$\dot{x} = Ax + Bu$，最小能量控制问题可表述为：
+$$\min_u \int_0^T u^Tu \, dt$$
+通过可控性格拉姆矩阵：
+$$W_c = \int_0^T e^{At}BB^Te^{A^Tt} dt$$
+最优控制为：
+$$u^*(t) = B^Te^{A^T(T-t)}W_c^{-1}(x_f - e^{AT}x_0)$$</p>
+<h3 id="852-sum-of-squares-sos">8.5.2 Sum-of-Squares (SOS)优化</h3>
+<p>对于多项式系统，使用SOS技术验证轨迹可行性：</p>
+<p>一个多项式$p(x)$是SOS的，当且仅当存在多项式$q_i(x)$使得：
+$$p(x) = \sum_i q_i^2(x)$$
+这等价于存在半正定矩阵$Q$使得：
+$$p(x) = z(x)^T Q z(x)$$
+其中$z(x)$是单项式基向量。</p>
+<p><strong>应用：障碍函数验证</strong></p>
+<p>验证轨迹$q(t)$避开障碍物：
+$$B(q) = ||q - q_{obs}||^2 - r^2 &gt; 0$$
+通过SOS分解证明$B(q(t)) &gt; 0, \forall t \in [0, T]$。</p>
+<h3 id="853">8.5.3 控制器合成与验证</h3>
+<p>使用SOS优化同时设计轨迹和反馈控制器：
+$$\begin{align}
+\text{find} \quad &amp; q(t), K(q) \\
+\text{s.t.} \quad &amp; V(q) - \epsilon||q||^2 \in SOS \\
+&amp; -\dot{V}(q, K(q)) \in SOS \\
+&amp; ||K(q)|| \leq u_{max}
+\end{align}$$</p>
+<p>其中$V(q)$是李雅普诺夫函数，保证闭环稳定性。</p>
+<h2 id="_5">本章小结</h2>
+<p>本章系统介绍了轮足机械臂系统的轨迹规划与优化技术。核心要点包括：</p>
+<ol>
+<li>
+<p><strong>规划空间选择</strong>：关节空间规划计算高效但路径不直观；笛卡尔空间规划任务描述自然但需处理奇异性。混合策略结合两者优势。</p>
+</li>
+<li>
+<p><strong>优化目标权衡</strong>：时间最优追求效率，能量最优降低功耗，实际应用需多目标平衡。时间缩放法是处理速度/加速度约束的有效方法。</p>
+</li>
+<li>
+<p><strong>动力学约束处理</strong>：直接配点法和多重打靶法是两种主流数值方法。凸化技术（SCP、信赖域）可将非凸问题转化为可求解的凸问题序列。</p>
+</li>
+<li>
+<p><strong>实时性保证</strong>：MPC框架提供反馈修正能力。增量式重规划、热启动、并行化是提升实时性的关键技术。</p>
+</li>
+<li>
+<p><strong>高级优化技术</strong>：SDP和SOS优化提供了严格的理论保证，适用于安全关键应用。</p>
+</li>
+</ol>
+<p><strong>关键公式回顾：</strong></p>
+<ul>
+<li>雅可比关系：$\dot{x} = J(q)\dot{q}$</li>
+<li>动力学方程：$M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = \tau$</li>
+<li>时间缩放：$q(t) = q(s(t))$，优化$s(t)$</li>
+<li>MPC目标：$\min_{u_{t:t+H}} \sum_{k=0}^{H} L(x_{t+k}, u_{t+k})$</li>
+</ul>
+<h2 id="_6">练习题</h2>
+<h3 id="_7">基础题</h3>
+<p><strong>练习8.1</strong> 考虑一个2自由度平面机械臂，连杆长度分别为$l_1 = l_2 = 1$米。若要使末端从$(1, 0)$移动到$(0, 1)$，比较直线路径和圆弧路径在关节空间的表现差异。</p>
+<details>
+<summary>提示</summary>
+<p>计算两种路径对应的关节角度变化，注意奇异性位置。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>直线路径经过奇异配置（臂完全伸直），导致关节速度趋于无穷。圆弧路径可避免奇异性，关节运动更平滑。具体地，在$x = \sqrt{2}, y = 0$处，雅可比矩阵行列式为0。</p>
+</details>
+<p><strong>练习8.2</strong> 给定关节约束$|q| \leq 2$rad，$|\dot{q}| \leq 1$rad/s，$|\ddot{q}| \leq 2$rad/s²。计算从$q = 0$到$q = 1.5$的时间最优轨迹。</p>
+<details>
+<summary>提示</summary>
+<p>使用梯形速度剖面，分为加速、匀速、减速三段。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>加速时间$t_1 = 0.5$s（达到最大速度），匀速时间$t_2 = 1$s，减速时间$t_3 = 0.5$s。总时间$T = 2$s。轨迹为：加速段$q = t^2$，匀速段$q = 0.25 + (t-0.5)$，减速段$q = 1.5 - (2-t)^2$。</p>
+</details>
+<p><strong>练习8.3</strong> 对于质量$m = 10$kg的单自由度系统，比较最小时间和最小能量轨迹的扭矩需求。设移动距离$d = 1$m，最大加速度$a_{max} = 1$m/s²。</p>
+<details>
+<summary>提示</summary>
+<p>时间最优使用bang-bang控制，能量最优使用正弦加速度剖面。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>时间最优：$T = 2$s，峰值扭矩$10$N，能量$10$J。能量最优（5次多项式）：$T = 3$s，峰值扭矩$6.58$N，能量$6.58$J。能量节省34%，但时间增加50%。</p>
+</details>
+<h3 id="_8">挑战题</h3>
+<p><strong>练习8.4</strong> 设计一个轨迹规划器，使7自由度机械臂在避开障碍物的同时，利用冗余自由度最小化关节运动范围。建立优化问题并描述求解策略。</p>
+<details>
+<summary>提示</summary>
+<p>使用零空间投影处理冗余度，将避障表述为不等式约束。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>优化问题：$\min \sum_i (q_i - q_{i,mid})^2$，约束：$f_{kin}(q) = x_{desired}$，$d(q, obstacle) &gt; d_{safe}$。求解策略：(1)用RRT*规划笛卡尔路径；(2)每个路径点用梯度投影法优化关节配置；(3)零空间速度$z = -k\nabla_q(\sum(q_i - q_{i,mid})^2)$。</p>
+</details>
+<p><strong>练习8.5</strong> 推导弹性关节机器人的最优轨迹条件。考虑关节弹性$k$和电机惯量$I_m$，建立包含振动抑制的轨迹优化问题。</p>
+<details>
+<summary>提示</summary>
+<p>使用双惯量模型，考虑电机侧和连杆侧的耦合动力学。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>系统方程：$I_m\ddot{\theta}_m + k(\theta_m - \theta_l) = \tau$，$I_l\ddot{\theta}_l + k(\theta_l - \theta_m) = 0$。优化目标增加振动项：$J = \int (\tau^2 + \alpha(\theta_m - \theta_l)^2)dt$。最优轨迹满足$\ddddot{\theta}_m + \omega_n^2\ddot{\theta}_m = 0$，其中$\omega_n = \sqrt{k(1/I_m + 1/I_l)}$。</p>
+</details>
+<p><strong>练习8.6</strong> 对于空间机械臂（无固定基座），如何修改轨迹规划以保持系统角动量为零？给出约束方程和实现方法。</p>
+<details>
+<summary>提示</summary>
+<p>利用角动量守恒，基座姿态与臂形相关。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>角动量约束：$H = H_{base} + H_{arm} = I_{base}\omega_{base} + \sum J_i\dot{q}_i = 0$。实现：(1)参数化臂轨迹$q(t)$；(2)计算所需基座角速度$\omega_{base} = -I_{base}^{-1}\sum J_i\dot{q}_i$；(3)优化$q(t)$使基座扰动最小：$\min \int ||\omega_{base}||^2 dt$。可用反作用轮吸收残余角动量。</p>
+</details>
+<p><strong>练习8.7</strong>（开放题）讨论如何将强化学习与传统轨迹优化结合，设计一个能够在线学习和改进的轨迹规划系统。考虑采样效率和安全性保证。</p>
+<details>
+<summary>提示</summary>
+<p>考虑使用轨迹优化作为先验，RL用于残差学习或参数调整。</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>混合架构：(1)离线轨迹优化生成初始策略库；(2)RL学习场景识别和参数选择网络；(3)在线时，RL调整优化器参数（权重、约束松弛）；(4)安全层通过CBF/IBF保证约束满足。具体实现：用PPO学习cost权重$w = \pi_\theta(s)$，轨迹优化求解$\min w^T f(q)$。优势：保留优化器的收敛保证，同时适应未知扰动。</p>
+</details>
+<h2 id="gotchas">常见陷阱与错误（Gotchas）</h2>
+<ol>
+<li>
+<p><strong>数值积分误差累积</strong>
+   - 错误：长时域规划使用固定步长Euler积分
+   - 正确：使用自适应步长Runge-Kutta方法，监控能量守恒</p>
+</li>
+<li>
+<p><strong>奇异性处理不当</strong>
+   - 错误：直接求解$\dot{q} = J^{-1}\dot{x}$
+   - 正确：使用阻尼最小二乘$\dot{q} = J^T(JJ^T + \lambda I)^{-1}\dot{x}$</p>
+</li>
+<li>
+<p><strong>约束不一致</strong>
+   - 错误：独立处理位置、速度、加速度约束
+   - 正确：确保约束相容性，$v_{max} \geq \sqrt{2 a_{max} \cdot d}$</p>
+</li>
+<li>
+<p><strong>局部最优陷阱</strong>
+   - 错误：单一初始猜测的局部优化
+   - 正确：多起点优化或全局方法（如RRT*）生成初值</p>
+</li>
+<li>
+<p><strong>实时性能退化</strong>
+   - 错误：每次完全重新规划
+   - 正确：增量更新、时域收缩、降阶模型切换</p>
+</li>
+<li>
+<p><strong>动力学模型误差</strong>
+   - 错误：忽略摩擦、柔性等非理想因素
+   - 正确：参数辨识 + 鲁棒优化 + 在线自适应</p>
+</li>
+</ol>
+<h2 id="_9">最佳实践检查清单</h2>
+<h3 id="_10">设计阶段</h3>
+<ul>
+<li>[ ] 明确任务需求：精度优先还是速度优先？</li>
+<li>[ ] 评估计算资源：嵌入式系统还是工作站？</li>
+<li>[ ] 识别关键约束：硬约束vs软约束</li>
+<li>[ ] 选择合适的规划空间和优化目标</li>
+<li>[ ] 考虑故障模式和降级策略</li>
+</ul>
+<h3 id="_11">实现阶段</h3>
+<ul>
+<li>[ ] 模块化设计：路径规划、时间参数化、动力学优化分离</li>
+<li>[ ] 数值稳定性：条件数监控、正则化处理</li>
+<li>[ ] 约束满足：使用障碍函数或投影方法</li>
+<li>[ ] 代码优化：矩阵运算使用BLAS/LAPACK</li>
+<li>[ ] 并行化：多核CPU/GPU加速</li>
+</ul>
+<h3 id="_12">验证阶段</h3>
+<ul>
+<li>[ ] 单元测试：各模块独立验证</li>
+<li>[ ] 集成测试：全系统闭环测试</li>
+<li>[ ] 边界测试：极限工况（最大速度、负载）</li>
+<li>[ ] 鲁棒性测试：加入噪声和扰动</li>
+<li>[ ] 性能评估：计算时间、内存占用、轨迹质量</li>
+</ul>
+<h3 id="_13">部署阶段</h3>
+<ul>
+<li>[ ] 实时监控：轨迹跟踪误差、约束违反检测</li>
+<li>[ ] 异常处理：超时、数值失败、约束冲突</li>
+<li>[ ] 日志记录：关键决策和性能指标</li>
+<li>[ ] 参数调优：基于实际运行数据优化</li>
+<li>[ ] 持续改进：收集场景数据，离线优化更新</li>
+</ul>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter7.html" class="nav-link prev">← 第7章：动力学建模与参数辨识</a><a href="chapter9.html" class="nav-link next">第9章：全身控制与平衡 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

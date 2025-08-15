@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第2章：执行器选择与优化</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="2">第2章：执行器选择与优化</h1>
+<p>执行器是机器人的"肌肉"，直接决定了系统的力矩输出、响应速度和能量效率。本章深入探讨各类执行器的工作原理、选型准则和优化策略，重点分析电机-减速器集成系统的设计权衡。我们将从电磁学基础出发，逐步深入到系统级的热管理和控制带宽优化，为后续的动力学建模和控制算法设计奠定硬件基础。</p>
+<h2 id="21-pmsm-vs-bldc-vs-vs">2.1 电机类型：永磁同步电机(PMSM) vs BLDC vs 伺服 vs 准直驱</h2>
+<h3 id="211">2.1.1 电机基础物理</h3>
+<p>机器人执行器的核心是电磁能量转换。洛伦兹力定律给出了基本关系：</p>
+<p>$$\mathbf{F} = q(\mathbf{v} \times \mathbf{B})$$
+对于载流导体，力矩产生的基本方程为：
+$$\tau = k_t \cdot I$$
+其中 $k_t$ 是力矩常数，$I$ 是相电流。然而，实际电机的性能受到多个因素限制：</p>
+<ol>
+<li><strong>磁饱和</strong>：铁芯材料的 B-H 曲线非线性</li>
+<li><strong>铜损</strong>：$P_{copper} = I^2 R$，限制连续电流</li>
+<li><strong>铁损</strong>：涡流和磁滞损耗，随频率增加</li>
+<li><strong>机械损耗</strong>：轴承摩擦和风阻</li>
+</ol>
+<h3 id="212-pmsm">2.1.2 永磁同步电机(PMSM)</h3>
+<p>PMSM 是高性能机器人的首选，具有高功率密度和效率。其特点：</p>
+<ul>
+<li><strong>转子结构</strong>：表贴式(SPM)或内置式(IPM)永磁体</li>
+<li><strong>反电动势波形</strong>：正弦波，需要矢量控制(FOC)</li>
+<li><strong>控制复杂度</strong>：需要转子位置反馈，通常采用编码器</li>
+</ul>
+<p>力矩方程（dq坐标系）：
+$$\tau = \frac{3}{2}p[\lambda_m i_q + (L_d - L_q)i_d i_q]$$
+其中第二项是磁阻力矩，IPM电机可利用此项提高力矩密度。</p>
+<h3 id="213-bldc">2.1.3 无刷直流电机(BLDC)</h3>
+<p>BLDC 与 PMSM 物理结构相似，但控制策略不同：</p>
+<ul>
+<li><strong>反电动势波形</strong>：梯形波</li>
+<li><strong>控制方式</strong>：六步换向，实现简单</li>
+<li><strong>力矩脉动</strong>：约13%，高于PMSM的2-5%</li>
+<li><strong>成本效益</strong>：控制器成本低，适合低成本应用</li>
+</ul>
+<p>换向时序关系：</p>
+<div class="codehilite"><pre><span></span><code>霍尔位置  | H1 H0 H1 | 导通相位
+---------|----------|----------
+  001    |  0  0  1 |  U+V-
+  011    |  0  1  1 |  U+W-
+  010    |  0  1  0 |  V+W-
+  110    |  1  1  0 |  V+U-
+  100    |  1  0  0 |  W+U-
+  101    |  1  0  1 |  W+V-
+</code></pre></div>
+
+<h3 id="214">2.1.4 伺服电机系统</h3>
+<p>伺服系统是电机+编码器+驱动器的集成：</p>
+<ul>
+<li><strong>位置反馈精度</strong>：17-23位编码器（131072-8388608 CPR）</li>
+<li><strong>速度环带宽</strong>：典型1-3 kHz</li>
+<li><strong>位置环带宽</strong>：典型100-500 Hz</li>
+<li><strong>通信协议</strong>：EtherCAT、CANopen、Modbus</li>
+</ul>
+<p>伺服调参的基本步骤：</p>
+<ol>
+<li>电流环调节（最内环，10-20 kHz）</li>
+<li>速度环调节（1-3 kHz）</li>
+<li>位置环调节（100-500 Hz）</li>
+<li>前馈补偿优化</li>
+</ol>
+<h3 id="215">2.1.5 准直驱方案</h3>
+<p>MIT Cheetah 推广的准直驱(Quasi-Direct Drive)方案：</p>
+<ul>
+<li><strong>减速比</strong>：6:1 到 10:1（远低于传统50-100:1）</li>
+<li><strong>反驱性</strong>：优秀，可实现力控制</li>
+<li><strong>带宽</strong>：&gt;100 Hz力控制带宽</li>
+<li><strong>效率链</strong>：电机效率90% × 传动效率95% ≈ 85%</li>
+</ul>
+<p>关键设计参数：
+$$\text{Motor Constant} = \frac{k_t}{\sqrt{R}} \propto \frac{\tau_{continuous}}{\sqrt{P_{copper}}}$$
+优化目标是最大化电机常数，同时保证：</p>
+<ul>
+<li>转动惯量匹配：$J_{motor} \cdot N^2 \approx J_{load}$</li>
+<li>热容量足够：连续功率 &lt; 散热能力</li>
+</ul>
+<h2 id="22-vs">2.2 永磁体材料：钕铁硼 vs 钐钴</h2>
+<h3 id="221">2.2.1 材料特性对比</h3>
+<p>永磁体是PMSM/BLDC的核心，其性能直接影响电机性能：</p>
+<p>| 参数 | 钕铁硼(NdFeB) | 钐钴(SmCo) |</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>钕铁硼(NdFeB)</th>
+<th>钐钴(SmCo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>剩余磁感应强度 $B_r$</td>
+<td>1.2-1.5 T</td>
+<td>0.9-1.15 T</td>
+</tr>
+<tr>
+<td>矫顽力 $H_c$</td>
+<td>900-2000 kA/m</td>
+<td>650-2000 kA/m</td>
+</tr>
+<tr>
+<td>最大磁能积 $(BH)_{max}$</td>
+<td>250-450 kJ/m³</td>
+<td>150-250 kJ/m³</td>
+</tr>
+<tr>
+<td>居里温度</td>
+<td>310-350°C</td>
+<td>720-800°C</td>
+</tr>
+<tr>
+<td>温度系数</td>
+<td>-0.12%/°C</td>
+<td>-0.035%/°C</td>
+</tr>
+<tr>
+<td>耐腐蚀性</td>
+<td>差，需镀层</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>中等</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<h3 id="222">2.2.2 温度特性与退磁曲线</h3>
+<p>永磁体的工作点分析至关重要。退磁曲线第二象限的斜率（回复磁导率）：
+$$\mu_{rec} = \frac{B_r}{H_c}$$
+温度升高导致的退磁风险：</p>
+<ol>
+<li><strong>可逆退磁</strong>：温度恢复后磁性恢复</li>
+<li><strong>不可逆退磁</strong>：超过拐点，永久损失</li>
+<li><strong>完全退磁</strong>：超过居里温度</li>
+</ol>
+<p>设计安全裕度：
+$$B_{operating} &gt; B_{knee} \times 1.5$$
+其中 $B_{knee}$ 是退磁曲线拐点。</p>
+<h3 id="223">2.2.3 磁路设计优化</h3>
+<p>Halbach阵列可提高气隙磁密：
+$$B_{gap} = B_r \cdot \frac{1 - e^{-2\pi h/\lambda}}{1 + e^{-2\pi h/\lambda}}$$
+其中 $h$ 是磁体厚度，$\lambda$ 是阵列周期。</p>
+<h2 id="23">2.3 谐波减速器原理与失效模式</h2>
+<h3 id="231">2.3.1 工作原理</h3>
+<p>谐波减速器利用柔性元件的弹性变形传递运动：</p>
+<ol>
+<li><strong>波发生器</strong>（Wave Generator）：椭圆凸轮+柔性轴承</li>
+<li><strong>柔轮</strong>（Flexspline）：薄壁柔性齿轮</li>
+<li><strong>刚轮</strong>（Circular Spline）：刚性内齿圈</li>
+</ol>
+<p>减速比计算：
+$$i = \frac{Z_2 - Z_1}{Z_1}$$
+其中 $Z_1$ 是柔轮齿数，$Z_2$ 是刚轮齿数。典型值：$Z_1=100$，$Z_2=102$，得 $i=50:1$。</p>
+<h3 id="232">2.3.2 性能特性</h3>
+<p>谐波减速器的独特优势：</p>
+<ul>
+<li><strong>零背隙</strong>：&lt;1 arcmin，优于行星齿轮</li>
+<li><strong>高减速比</strong>：30:1 到 320:1 单级</li>
+<li><strong>扭转刚度</strong>：非线性，随负载增加</li>
+</ul>
+<p>扭转刚度模型：
+$$K(\theta) = K_0 + K_1|\theta|$$
+其中 $K_0$ 是初始刚度，$K_1$ 是非线性系数。</p>
+<h3 id="233">2.3.3 失效模式分析</h3>
+<p>主要失效模式及预防：</p>
+<ol>
+<li>
+<p><strong>柔轮疲劳断裂</strong>
+   - 原因：循环应力超过疲劳极限
+   - 预防：控制负载，避免冲击
+   - 寿命估算：$N = C \cdot (\sigma_{max})^{-b}$</p>
+</li>
+<li>
+<p><strong>齿面磨损</strong>
+   - 原因：润滑不良或过载
+   - 监测指标：传动误差增大
+   - 预防：定期更换润滑脂</p>
+</li>
+<li>
+<p><strong>波发生器轴承失效</strong>
+   - 原因：高速旋转疲劳
+   - 症状：噪音增大，温升异常
+   - 预防：限制输入转速 &lt;3000 rpm</p>
+</li>
+<li>
+<p><strong>共振破坏</strong>
+   - 危险频率：$f_{critical} = \frac{1}{2\pi}\sqrt{\frac{K}{J}}$
+   - 预防：避开共振区间运行</p>
+</li>
+</ol>
+<h2 id="24-vs-vs">2.4 传动系统对比：谐波 vs 行星齿轮 vs 摆线针轮</h2>
+<h3 id="241">2.4.1 行星齿轮减速器</h3>
+<p>行星齿轮的力矩分配：
+$$\tau_{out} = \tau_{in} \cdot i \cdot \eta$$
+其中效率 $\eta$ 典型值95-98%。</p>
+<p>多级串联时：
+$$i_{total} = \prod_{k=1}^{n} i_k, \quad \eta_{total} = \prod_{k=1}^{n} \eta_k$$
+设计要点：</p>
+<ul>
+<li><strong>载荷均衡</strong>：浮动太阳轮或行星架</li>
+<li><strong>噪音控制</strong>：斜齿轮降噪，但增加轴向力</li>
+<li><strong>背隙控制</strong>：预紧或双联结构</li>
+</ul>
+<h3 id="242">2.4.2 摆线针轮减速器</h3>
+<p>摆线传动的独特机理：</p>
+<p>摆线方程（参数形式）：
+$$\begin{cases}
+x = r(\theta - \sin\theta) \\
+y = r(1 - \cos\theta)
+\end{cases}$$
+优势：</p>
+<ul>
+<li><strong>高减速比</strong>：单级可达119:1</li>
+<li><strong>高刚度</strong>：多齿同时啮合</li>
+<li><strong>抗冲击</strong>：过载时打滑保护</li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li><strong>制造精度要求高</strong></li>
+<li><strong>输出轴偏心补偿复杂</strong></li>
+<li><strong>效率略低于行星齿轮</strong></li>
+</ul>
+<h3 id="243">2.4.3 综合对比与选型准则</h3>
+<p>| 特性 | 谐波 | 行星齿轮 | 摆线针轮 |</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>谐波</th>
+<th>行星齿轮</th>
+<th>摆线针轮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>减速比范围</td>
+<td>30-320</td>
+<td>3-100</td>
+<td>10-119</td>
+</tr>
+<tr>
+<td>背隙</td>
+<td>&lt;1'</td>
+<td>3-15'</td>
+<td>1-3'</td>
+</tr>
+<tr>
+<td>效率</td>
+<td>70-85%</td>
+<td>95-98%</td>
+<td>90-95%</td>
+</tr>
+<tr>
+<td>扭转刚度</td>
+<td>中等</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>抗冲击性</td>
+<td>差</td>
+<td>好</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>高</td>
+<td>低</td>
+<td>中</td>
+</tr>
+<tr>
+<td>寿命</td>
+<td>10000h</td>
+<td>20000h</td>
+<td>15000h</td>
+</tr>
+</tbody>
+</table>
+<p>选型决策树：</p>
+<div class="codehilite"><pre><span></span><code>需要零背隙？
+├─是→ 谐波减速器
+└─否→ 需要高效率？
+      ├─是→ 行星齿轮
+      └─否→ 需要抗冲击？
+            ├─是→ 摆线针轮
+            └─否→ 成本优先→行星齿轮
+</code></pre></div>
+
+<h2 id="25-vs">2.5 液压执行器：阀控 vs 泵控系统</h2>
+<h3 id="251">2.5.1 液压系统基础</h3>
+<p>液压系统利用帕斯卡定律实现力的放大：
+$$F_2 = F_1 \cdot \frac{A_2}{A_1}$$
+功率密度优势明显：</p>
+<ul>
+<li>液压：3-7 kW/kg</li>
+<li>电机：0.5-2 kW/kg</li>
+</ul>
+<p>基本流量-压力关系：
+$$Q = C_d A \sqrt{\frac{2\Delta P}{\rho}}$$</p>
+<h3 id="252">2.5.2 阀控系统</h3>
+<p>阀控系统通过伺服阀调节流量：</p>
+<p>伺服阀传递函数：
+$$\frac{Q(s)}{U(s)} = \frac{K_v}{1 + 2\zeta\omega_n s + s^2/\omega_n^2}$$
+其中 $\omega_n$ 是自然频率（典型50-200 Hz），$\zeta$ 是阻尼比。</p>
+<p>优点：</p>
+<ul>
+<li>响应快速（&lt;10ms）</li>
+<li>控制精度高</li>
+<li>多执行器共享泵源</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>能效低（节流损失大）</li>
+<li>发热严重</li>
+<li>需要冷却系统</li>
+</ul>
+<h3 id="253">2.5.3 泵控系统</h3>
+<p>泵控系统通过变量泵直接控制：</p>
+<p>斜盘式变量泵的排量控制：
+$$V = V_{max} \cdot \sin(\alpha)$$
+其中 $\alpha$ 是斜盘倾角。</p>
+<p>能效分析：</p>
+<ul>
+<li>阀控效率：25-35%</li>
+<li>泵控效率：60-75%</li>
+</ul>
+<p>动态响应限制：</p>
+<ul>
+<li>斜盘惯量大，带宽低（5-20 Hz）</li>
+<li>适合位置控制，不适合力控制</li>
+</ul>
+<h3 id="254">2.5.4 液压执行器设计</h3>
+<p>波士顿动力Atlas的液压设计要点：</p>
+<ol>
+<li><strong>定制阀块</strong>：集成化减少管路</li>
+<li><strong>蓄能器</strong>：吸收压力脉动，提供瞬时功率</li>
+<li><strong>伺服阀选型</strong>：MOOG或Parker高频响阀</li>
+<li><strong>密封设计</strong>：低摩擦密封提高效率</li>
+</ol>
+<p>液压缸推力计算：
+$$F = P \cdot A - F_{friction} - F_{backpressure}$$
+泄漏模型（层流）：
+$$Q_{leak} = \frac{\pi d h^3 \Delta P}{12 \mu L}$$</p>
+<h2 id="26">2.6 域控制器与三电系统</h2>
+<h3 id="261">2.6.1 域控制器架构</h3>
+<p>现代机器人采用域控制器集中管理：</p>
+<div class="codehilite"><pre><span></span><code>         主控制器
+            |
+    --------+--------
+    |               |
+运动域控制器    感知域控制器
+    |               |
+[电机1-n]      [相机,激光雷达]
+</code></pre></div>
+
+<p>通信带宽需求：</p>
+<ul>
+<li>电机控制：1-10 kHz更新率</li>
+<li>每轴数据：位置(4B) + 速度(4B) + 电流(4B) = 12B</li>
+<li>20轴系统：20×12B×10kHz = 2.4 MB/s</li>
+</ul>
+<h3 id="262">2.6.2 电机驱动器设计</h3>
+<p>三相逆变器拓扑：</p>
+<div class="codehilite"><pre><span></span><code>    DC+
+     |
+
+     |
+   |---|---|
+   | Q1| Q3| Q5
+   |---|---|---|
+
+     U   V   W  → 电机
+   |---|---|---|
+   | Q2| Q4| Q6
+
+   | Q2| Q4| Q6
+   |---|---|
+     |
+
+    DC-
+</code></pre></div>
+
+<p>SVPWM调制的电压利用率：
+$$V_{line-max} = \frac{V_{DC}}{\sqrt{3}} \times 1.15$$
+比SPWM提高15%。</p>
+<h3 id="263-bms">2.6.3 电池管理系统(BMS)</h3>
+<p>电池选型考虑：</p>
+<ul>
+<li><strong>能量密度</strong>：180-260 Wh/kg (锂电池)</li>
+<li><strong>功率密度</strong>：1-3 kW/kg</li>
+<li><strong>循环寿命</strong>：1000-3000次@80% DOD</li>
+</ul>
+<p>SOC估算（扩展卡尔曼滤波）：
+$$\begin{cases}
+SOC_{k+1} = SOC_k - \frac{\eta I \Delta t}{Q_{nom}} \\
+V_{k} = OCV(SOC_k) - I_k R_{int}
+\end{cases}$$
+热管理需求：
+$$P_{heat} = I^2 R_{int} + P_{switching}$$
+电池温度需控制在15-35°C范围。</p>
+<h2 id="27-backdrivability">2.7 反驱性(Backdrivability)与力控制</h2>
+<h3 id="271">2.7.1 反驱性定义与度量</h3>
+<p>反驱性定义为输出端施加力矩时输入端的响应能力：</p>
+<p>反驱力矩：
+$$\tau_{backdrive} = \frac{\tau_{output}}{i \cdot \eta_{reverse}}$$
+其中 $\eta_{reverse}$ 是反向效率，通常远低于正向效率。</p>
+<p>反驱性指标：
+$$\text{Backdrivability} = \frac{\eta_{forward} \cdot \eta_{reverse}}{\eta_{forward} + \eta_{reverse}}$$
+理想值接近1，实际系统：</p>
+<ul>
+<li>准直驱：0.7-0.9</li>
+<li>谐波减速：0.1-0.3</li>
+<li>蜗轮蜗杆：&lt;0.01（自锁）</li>
+</ul>
+<h3 id="272">2.7.2 提高反驱性的设计策略</h3>
+<ol>
+<li><strong>降低减速比</strong>：准直驱方案</li>
+<li><strong>减少摩擦</strong>：精密轴承，优化预紧</li>
+<li><strong>补偿控制</strong>：摩擦力观测与补偿</li>
+<li><strong>串联弹性</strong>：SEA增加柔顺性</li>
+</ol>
+<p>摩擦力模型（LuGre模型）：
+$$F_f = \sigma_0 z + \sigma_1 \dot{z} + \sigma_2 \dot{x}$$
+其中 $z$ 是鬃毛变形，需要在线辨识。</p>
+<h3 id="273">2.7.3 力控制实现</h3>
+<p>阻抗控制律：
+$$\tau = J^T[K_p(x_d - x) + K_d(\dot{x}_d - \dot{x}) + F_d]$$
+导纳控制（位置控制型）：
+$$M\ddot{x} + D\dot{x} + Kx = F_{ext}$$
+稳定性条件（Hogan）：
+$$Z_{robot} + Z_{env} &gt; 0$$
+即机器人阻抗与环境阻抗之和必须为正。</p>
+<h2 id="28">2.8 热管理与连续扭矩限制</h2>
+<h3 id="281">2.8.1 热源分析</h3>
+<p>电机发热的主要来源：</p>
+<ol>
+<li>
+<p><strong>铜损</strong>（占60-70%）：
+$$P_{cu} = I^2 R = \frac{\tau^2 R}{k_t^2}$$</p>
+</li>
+<li>
+<p><strong>铁损</strong>（占20-30%）：
+$$P_{fe} = P_{hyst} + P_{eddy} = k_h f B^{1.6} + k_e f^2 B^2$$</p>
+</li>
+<li>
+<p><strong>机械损耗</strong>（占5-10%）：
+$$P_{mech} = P_{bearing} + P_{windage}$$
+总损耗功率：
+$$P_{loss} = P_{cu} + P_{fe} + P_{mech}$$</p>
+</li>
+</ol>
+<h3 id="282">2.8.2 热模型与温升计算</h3>
+<p>集总参数热模型：
+$$C_{th} \frac{dT}{dt} = P_{loss} - \frac{T - T_{amb}}{R_{th}}$$
+稳态温升：
+$$\Delta T_{ss} = P_{loss} \cdot R_{th}$$
+其中：</p>
+<ul>
+<li>$C_{th}$：热容量 [J/K]</li>
+<li>$R_{th}$：热阻 [K/W]</li>
+<li>$T_{amb}$：环境温度</li>
+</ul>
+<p>时间常数：
+$$\tau_{thermal} = R_{th} \cdot C_{th}$$
+典型值：小型电机5-10分钟，大型电机20-60分钟。</p>
+<h3 id="283">2.8.3 连续扭矩限制</h3>
+<p>连续扭矩由温升限制决定：
+$$\tau_{continuous} = k_t \sqrt{\frac{T_{max} - T_{amb}}{R_{th} \cdot R}}$$
+其中 $T_{max}$ 是绕组最高允许温度（通常130-180°C）。</p>
+<p>短时过载能力：
+$$\tau_{peak} = \tau_{continuous} \cdot \sqrt{\frac{t_{thermal}}{t_{peak}}}$$
+典型过载系数：2-3倍，持续1-10秒。</p>
+<h3 id="284">2.8.4 散热优化策略</h3>
+<ol>
+<li>
+<p><strong>自然对流</strong>：
+$$h_{conv} = 1.42 \left(\frac{\Delta T}{L}\right)^{0.25}$$
+典型：5-25 W/m²K</p>
+</li>
+<li>
+<p><strong>强制风冷</strong>：
+$$h_{forced} = 10.45 - v + 10\sqrt{v}$$
+其中 $v$ 是风速 [m/s]</p>
+</li>
+<li>
+<p><strong>液冷系统</strong>：
+   - 冷却液流量：$\dot{m} = \frac{P_{loss}}{c_p \Delta T}$
+   - 压降：$\Delta P = f \frac{L}{D} \frac{\rho v^2}{2}$</p>
+</li>
+<li>
+<p><strong>相变冷却</strong>：
+   利用相变材料(PCM)吸收瞬时热量</p>
+</li>
+</ol>
+<p>散热器设计：
+$$R_{th,heatsink} = \frac{1}{h A \eta_{fin}}$$
+其中 $\eta_{fin}$ 是翅片效率。</p>
+<h2 id="29-mit-mini-cheetah">2.9 案例研究：MIT Mini Cheetah准直驱设计</h2>
+<h3 id="291">2.9.1 设计理念</h3>
+<p>MIT Mini Cheetah采用准直驱方案的动机：</p>
+<ul>
+<li>高带宽力控制（&gt;100 Hz）</li>
+<li>优秀的反驱性</li>
+<li>简化机械结构</li>
+<li>降低成本</li>
+</ul>
+<p>关键参数：</p>
+<ul>
+<li>电机：自研低惯量PMSM</li>
+<li>减速比：6:1（腿部），9:1（髋部）</li>
+<li>峰值扭矩：17 Nm（腿部），23 Nm（髋部）</li>
+<li>质量：0.43 kg/执行器</li>
+</ul>
+<h3 id="292">2.9.2 电机优化</h3>
+<p>电机设计的创新点：</p>
+<ol>
+<li>
+<p><strong>低惯量转子</strong>：
+$$J_{rotor} = 2.8 \times 10^{-5} kg \cdot m^2$$
+采用薄壁结构和高强度磁体</p>
+</li>
+<li>
+<p><strong>高电机常数</strong>：
+$$k_m = \frac{k_t}{\sqrt{R}} = 0.125 \frac{Nm}{\sqrt{W}}$$</p>
+</li>
+<li>
+<p><strong>热管理</strong>：
+   - 定子灌封提高导热
+   - 铝制外壳作为散热器
+   - 连续功率：90W</p>
+</li>
+</ol>
+<h3 id="293">2.9.3 控制策略</h3>
+<p>力矩控制环：
+$$\tau = K_p(\theta_d - \theta) + K_d(\dot{\theta}_d - \dot{\theta}) + \tau_{ff}$$
+电流环带宽：40 kHz
+位置环带宽：1 kHz</p>
+<p>前馈补偿：</p>
+<ul>
+<li>重力补偿</li>
+<li>摩擦补偿</li>
+<li>惯量补偿</li>
+</ul>
+<h3 id="294">2.9.4 性能评估</h3>
+<p>实测性能指标：</p>
+<ul>
+<li>力控带宽：&gt;200 Hz</li>
+<li>位置精度：&lt;0.1°</li>
+<li>效率：&gt;80%（包含驱动器）</li>
+<li>成本：&lt;$500/执行器</li>
+</ul>
+<p>对比传统方案（谐波减速器）：</p>
+<ul>
+<li>成本降低60%</li>
+<li>重量减轻40%</li>
+<li>力控带宽提高10倍</li>
+<li>位置精度略有下降</li>
+</ul>
+<h2 id="210-seavsa">2.10 高级话题：串联弹性执行器(SEA)与变刚度执行器(VSA)</h2>
+<h3 id="2101-sea">2.10.1 串联弹性执行器(SEA)</h3>
+<p>SEA在电机与负载间串联弹簧：</p>
+<p>动力学模型：
+$$\begin{cases}
+I_m \ddot{\theta}_m = \tau_m - k_s(\theta_m - \theta_l) \\
+I_l \ddot{\theta}_l = k_s(\theta_m - \theta_l) - \tau_{ext}
+\end{cases}$$
+力矩估算：
+$$\tau = k_s(\theta_m - \theta_l)$$
+优势：</p>
+<ul>
+<li>无需力传感器</li>
+<li>储能能力（爆发力）</li>
+<li>天然柔顺性</li>
+</ul>
+<p>设计要点：</p>
+<ul>
+<li>弹簧刚度选择：$\omega_n = \sqrt{k_s/I_l} \approx 10-30 Hz$</li>
+<li>弹簧线性度：&lt;5%非线性</li>
+<li>疲劳寿命：&gt;10^7次循环</li>
+</ul>
+<h3 id="2102-vsa">2.10.2 变刚度执行器(VSA)</h3>
+<p>VSA可在线调节刚度：</p>
+<p>典型机构：</p>
+<ol>
+<li><strong>拮抗式</strong>：两个电机拮抗控制</li>
+<li><strong>凸轮式</strong>：改变力臂调节刚度</li>
+<li><strong>杠杆式</strong>：改变支点位置</li>
+</ol>
+<p>刚度调节范围：10:1到100:1</p>
+<p>控制策略：
+$$\begin{cases}
+\tau = \tau_1 + \tau_2 \\
+k = \frac{\partial \tau}{\partial \theta} = k_0 + \alpha(\tau_1 - \tau_2)
+\end{cases}$$
+应用场景：</p>
+<ul>
+<li>人机协作（安全性）</li>
+<li>动态运动（能量存储）</li>
+<li>不确定环境（适应性）</li>
+</ul>
+<h3 id="2103">2.10.3 设计权衡</h3>
+<p>| 方案 | 复杂度 | 成本 | 带宽 | 效率 | 适用场景 |</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>复杂度</th>
+<th>成本</th>
+<th>带宽</th>
+<th>效率</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>刚性</td>
+<td>低</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+<td>精确位置控制</td>
+</tr>
+<tr>
+<td>SEA</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>力控制、冲击吸收</td>
+</tr>
+<tr>
+<td>VSA</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+<td>人机交互、适应性</td>
+</tr>
+<tr>
+<td>准直驱</td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+<td>高</td>
+<td>高动态、力控制</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">本章小结</h2>
+<p>本章系统介绍了机器人执行器的选择与优化策略：</p>
+<p><strong>核心概念</strong>：</p>
+<ol>
+<li>电机类型选择：PMSM性能最优，BLDC成本效益好，伺服系统集成度高，准直驱方案平衡性能与成本</li>
+<li>永磁材料：钕铁硼性能强但温度敏感，钐钴稳定但成本高</li>
+<li>减速器权衡：谐波零背隙但效率低，行星齿轮高效但有背隙，摆线针轮抗冲击强</li>
+<li>液压系统：阀控响应快但效率低，泵控效率高但带宽有限</li>
+<li>反驱性：准直驱&gt;谐波&gt;蜗轮蜗杆，直接影响力控制性能</li>
+<li>热管理：连续扭矩受温升限制，需要综合散热设计</li>
+</ol>
+<p><strong>关键公式</strong>：</p>
+<ul>
+<li>电机力矩：$\tau = k_t \cdot I$</li>
+<li>热稳态温升：$\Delta T = P_{loss} \cdot R_{th}$</li>
+<li>反驱性指标：$\text{Backdrivability} = \frac{\eta_f \cdot \eta_r}{\eta_f + \eta_r}$</li>
+<li>SEA力矩估算：$\tau = k_s(\theta_m - \theta_l)$</li>
+</ul>
+<p><strong>设计准则</strong>：</p>
+<ol>
+<li>根据应用需求选择执行器类型</li>
+<li>平衡性能、成本、复杂度</li>
+<li>考虑系统级优化，而非单一组件</li>
+<li>重视热管理和长期可靠性</li>
+</ol>
+<h2 id="_2">练习题</h2>
+<h3 id="_3">基础题</h3>
+<p><strong>习题2.1</strong> 某PMSM电机的力矩常数$k_t = 0.1$ Nm/A，相电阻$R = 0.5$ Ω。若要输出2 Nm的连续力矩，计算铜损功率。</p>
+<p><em>提示：使用$P_{cu} = I^2R$和$\tau = k_t I$的关系。</em></p>
+<details>
+<summary>答案</summary>
+<p>由$\tau = k_t I$得：$I = \tau/k_t = 2/0.1 = 20$ A</p>
+<p>铜损功率：$P_{cu} = I^2R = 20^2 \times 0.5 = 200$ W</p>
+<p>这说明即使是相对较小的2 Nm连续力矩，也需要200W的散热能力。</p>
+</details>
+<p><strong>习题2.2</strong> 谐波减速器的柔轮齿数为200，刚轮齿数为202。计算减速比，并解释为什么输出方向与输入相反。</p>
+<p><em>提示：使用减速比公式$i = (Z_2 - Z_1)/Z_1$。</em></p>
+<details>
+<summary>答案</summary>
+<p>减速比：$i = (202 - 200)/200 = 2/200 = 1/100 = 100:1$</p>
+<p>输出方向相反是因为：</p>
+<ul>
+<li>波发生器每转一圈，柔轮相对刚轮反向转动2个齿</li>
+<li>减速比为正值表示反向</li>
+<li>若需同向，可固定柔轮，输出从刚轮取出</li>
+</ul>
+</details>
+<p><strong>习题2.3</strong> 某机器人关节需要50 Nm峰值力矩，5 Nm连续力矩。现有电机峰值力矩2 Nm，连续力矩0.5 Nm。设计减速比并分析是否满足要求。</p>
+<p><em>提示：考虑峰值和连续两个约束条件。</em></p>
+<details>
+<summary>答案</summary>
+<p>峰值力矩要求：$i_{peak} = 50/2 = 25:1$
+连续力矩要求：$i_{cont} = 5/0.5 = 10:1$</p>
+<p>需要选择$i = 25:1$以满足峰值要求。</p>
+<p>验证连续力矩：$\tau_{cont} = 0.5 \times 25 \times \eta$
+假设效率$\eta = 0.8$：$\tau_{cont} = 10$ Nm &gt; 5 Nm ✓</p>
+<p>结论：选择25:1减速比，两个要求都满足。</p>
+</details>
+<p><strong>习题2.4</strong> 某电机在环境温度25°C下运行，热阻$R_{th} = 2$ K/W，最高允许温度150°C。计算最大允许损耗功率。</p>
+<p><em>提示：使用稳态温升公式。</em></p>
+<details>
+<summary>答案</summary>
+<p>最大温升：$\Delta T_{max} = 150 - 25 = 125$ K</p>
+<p>最大损耗功率：$P_{max} = \Delta T_{max}/R_{th} = 125/2 = 62.5$ W</p>
+<p>这个功率包括铜损、铁损和机械损耗的总和。</p>
+</details>
+<h3 id="_4">挑战题</h3>
+<p><strong>习题2.5</strong> 设计一个轮足机器人的膝关节执行器。要求：最大力矩100 Nm，连续力矩20 Nm，响应带宽&gt;50 Hz，具备一定反驱性。对比分析谐波减速器方案和准直驱方案，给出推荐方案及理由。</p>
+<p><em>提示：考虑带宽、反驱性、成本、复杂度等多个因素。</em></p>
+<details>
+<summary>答案</summary>
+<p><strong>谐波减速器方案</strong>：</p>
+<ul>
+<li>选择4 Nm电机 + 50:1谐波减速器</li>
+<li>峰值力矩：4 × 50 × 0.8 = 160 Nm ✓</li>
+<li>连续力矩：0.8 × 50 × 0.8 = 32 Nm ✓  </li>
+<li>带宽：受减速器柔性限制，约20-30 Hz ✗</li>
+<li>反驱性：差，效率&lt;30% ✗</li>
+<li>成本：高（谐波减速器昂贵）</li>
+</ul>
+<p><strong>准直驱方案</strong>：</p>
+<ul>
+<li>选择12 Nm电机 + 10:1行星齿轮</li>
+<li>峰值力矩：12 × 10 × 0.95 = 114 Nm ✓</li>
+<li>连续力矩：2.5 × 10 × 0.95 = 23.75 Nm ✓</li>
+<li>带宽：&gt;100 Hz ✓</li>
+<li>反驱性：良好，效率&gt;70% ✓</li>
+<li>成本：中等</li>
+</ul>
+<p><strong>推荐</strong>：准直驱方案</p>
+<ul>
+<li>满足所有性能要求</li>
+<li>更好的动态性能和反驱性</li>
+<li>适合轮足机器人的高动态需求</li>
+<li>成本效益更好</li>
+</ul>
+</details>
+<p><strong>习题2.6</strong> 某伺服系统采用17位编码器（131072 CPR），减速比50:1。计算输出轴的理论分辨率（度）。若机械背隙为3 arcmin，分析实际可达精度。</p>
+<p><em>提示：考虑编码器分辨率和机械背隙的综合影响。</em></p>
+<details>
+<summary>答案</summary>
+<p>编码器分辨率：$360°/131072 = 0.00275°$/计数</p>
+<p>输出轴理论分辨率：$0.00275°/50 = 0.000055° = 0.2$ arcsec</p>
+<p>机械背隙：3 arcmin = 0.05°</p>
+<p>实际精度分析：</p>
+<ul>
+<li>理论分辨率远优于背隙（0.000055° &lt;&lt; 0.05°）</li>
+<li>实际定位精度受背隙限制：约±0.05°</li>
+<li>重复定位精度（单向）：可达0.001°量级</li>
+<li>双向定位需要背隙补偿</li>
+</ul>
+<p>结论：高分辨率编码器的优势被机械背隙抵消，需要采用预紧或补偿策略。</p>
+</details>
+<p><strong>习题2.7</strong> 分析准直驱方案中电机惯量与负载惯量的匹配问题。若负载惯量$J_l = 0.01$ kg·m²，减速比$N = 8$，如何选择电机惯量$J_m$以优化系统带宽？推导最优惯量比。</p>
+<p><em>提示：考虑反射惯量和系统总惯量的关系。</em></p>
+<details>
+<summary>答案</summary>
+<p>系统总惯量（从电机侧看）：
+$$J_{total} = J_m + \frac{J_l}{N^2} = J_m + \frac{0.01}{64} = J_m + 0.000156$$
+系统带宽：$\omega_n = \sqrt{K/J_{total}}$</p>
+<p>最优惯量匹配条件（最大加速度）：
+$$J_m = \frac{J_l}{N^2}$$
+因此：$J_m = 0.01/64 = 0.000156$ kg·m²</p>
+<p>验证：</p>
+<ul>
+<li>惯量比 = 1:1（最优）</li>
+<li>总惯量最小化 = 2×0.000156 = 0.000312 kg·m²</li>
+<li>保证最大加速度和带宽</li>
+</ul>
+<p>实践考虑：</p>
+<ul>
+<li>电机惯量过小难以制造</li>
+<li>通常选择惯量比在1:1到1:5之间</li>
+<li>本例中可选$J_m = 0.0002-0.0008$ kg·m²</li>
+</ul>
+</details>
+<p><strong>习题2.8</strong> 设计一个串联弹性执行器(SEA)用于机械臂末端。要求感知精度0.1 N，最大力200 N，固有频率15 Hz。确定弹簧刚度、编码器分辨率要求，并分析潜在的控制挑战。</p>
+<p><em>提示：SEA的力感知基于弹簧变形测量。</em></p>
+<details>
+<summary>答案</summary>
+<p><strong>弹簧刚度设计</strong>：</p>
+<p>固有频率：$f_n = \frac{1}{2\pi}\sqrt{k/m} = 15$ Hz</p>
+<p>假设末端负载质量 m = 2 kg：
+ $$k = (2\pi f_n)^2 \cdot m = (2\pi \times 15)^2 \times 2 = 17771$$ N/m</p>
+<p><strong>编码器分辨率</strong>：</p>
+<p>力分辨率0.1 N对应的变形：
+ $$\Delta x = F/k = 0.1/17771 = 5.6 \times 10^{-6}$$ m = 5.6 μm</p>
+<p>最大变形（200 N）：
+ $$x_{max} = 200/17771 = 0.0113$$ m = 11.3 mm</p>
+<p>需要的编码器分辨率：
+$$\text{counts} = 11.3\text{mm}/5.6\text{μm} = 2018$$</p>
+<p>选择12位编码器（4096计数）足够。</p>
+<p><strong>控制挑战</strong>：</p>
+<ol>
+<li>低通滤波特性（15 Hz带宽限制）</li>
+<li>共振峰需要阻尼控制</li>
+<li>非配置空间（力矩vs位置）</li>
+<li>弹簧非线性和迟滞</li>
+<li>编码器噪声放大（刚度很大）</li>
+</ol>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>采用力矩观测器+低通滤波</li>
+<li>主动阻尼控制抑制振荡</li>
+<li>自适应控制补偿非线性</li>
+</ul>
+</details>
+<h2 id="_5">常见陷阱与错误</h2>
+<ol>
+<li>
+<p><strong>电机选型错误</strong>
+   - 陷阱：只看峰值力矩，忽略连续力矩
+   - 后果：过热停机或烧毁
+   - 预防：详细热分析，留足裕量</p>
+</li>
+<li>
+<p><strong>减速器背隙忽视</strong>
+   - 陷阱：高精度编码器配低质量减速器
+   - 后果：定位精度差，振荡
+   - 预防：选择零背隙或预紧方案</p>
+</li>
+<li>
+<p><strong>惯量失配</strong>
+   - 陷阱：电机惯量&lt;&lt;负载反射惯量
+   - 后果：响应慢，易振荡
+   - 预防：惯量比控制在1:1到1:10</p>
+</li>
+<li>
+<p><strong>通信带宽不足</strong>
+   - 陷阱：多轴同步控制时总线拥塞
+   - 后果：控制延迟，不同步
+   - 预防：选择EtherCAT等实时总线</p>
+</li>
+<li>
+<p><strong>热设计不足</strong>
+   - 陷阱：按峰值功率设计散热
+   - 后果：连续运行过热
+   - 预防：按RMS功率+安全系数设计</p>
+</li>
+<li>
+<p><strong>电磁兼容问题</strong>
+   - 陷阱：PWM开关噪声干扰传感器
+   - 后果：测量噪声，控制不稳
+   - 预防：屏蔽、滤波、接地设计</p>
+</li>
+</ol>
+<h2 id="_6">最佳实践检查清单</h2>
+<h3 id="_7">执行器选型检查</h3>
+<ul>
+<li>[ ] 峰值和连续力矩都满足要求</li>
+<li>[ ] 速度范围覆盖应用需求</li>
+<li>[ ] 惯量匹配合理（1:1到1:10）</li>
+<li>[ ] 效率满足能耗要求</li>
+<li>[ ] 成本在预算内</li>
+</ul>
+<h3 id="_8">热设计检查</h3>
+<ul>
+<li>[ ] 计算最坏情况下的发热功率</li>
+<li>[ ] 散热方案能处理连续功率</li>
+<li>[ ] 温度传感器布置合理</li>
+<li>[ ] 有过热保护机制</li>
+<li>[ ] 考虑环境温度变化</li>
+</ul>
+<h3 id="_9">控制系统检查</h3>
+<ul>
+<li>[ ] 编码器分辨率足够</li>
+<li>[ ] 通信带宽满足更新率</li>
+<li>[ ] 电流环、速度环、位置环依次调试</li>
+<li>[ ] 前馈补偿提高动态性能</li>
+<li>[ ] 安全限位和急停设计</li>
+</ul>
+<h3 id="_10">机械集成检查</h3>
+<ul>
+<li>[ ] 安装接口标准化</li>
+<li>[ ] 线缆管理不影响运动</li>
+<li>[ ] 密封等级满足环境要求</li>
+<li>[ ] 维护保养方便</li>
+<li>[ ] 备件可获得性</li>
+</ul>
+<h3 id="_11">可靠性检查</h3>
+<ul>
+<li>[ ] MTBF满足要求</li>
+<li>[ ] 关键件有冗余</li>
+<li>[ ] 故障模式分析(FMEA)</li>
+<li>[ ] 加速寿命测试</li>
+<li>[ ] 现场可更换单元(FRU)设计</li>
+</ul>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter1.html" class="nav-link prev">← 第1章：轮足机械臂架构概述</a><a href="chapter3.html" class="nav-link next">第3章：机械结构与刚度分析 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

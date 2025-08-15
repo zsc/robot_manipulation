@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>轮足机械臂机器人：从硬件制造到智能算法</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item active" >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="_1">轮足机械臂机器人：从硬件制造到智能算法</h1>
+<h2 id="_2">课程简介</h2>
+<p>本教程系统介绍轮足机械臂机器人的设计、制造与控制，涵盖从底层硬件优化到前沿AI算法的完整技术栈。课程特别关注硬件约束对算法设计的影响，以及如何在实际工程中权衡性能、成本与可靠性。全书共24章，每章配有业界案例分析、大量习题和工程实践指南。</p>
+<p><strong>目标读者</strong>：具有编程和AI背景的工程师与研究人员</p>
+<p><strong>学习成果</strong>：</p>
+<ul>
+<li>掌握机器人硬件设计中的关键权衡</li>
+<li>理解坐标系、运动学与动力学的工程应用</li>
+<li>实现基于扩散模型、VLA和世界模型的智能控制</li>
+<li>具备设计和调试复杂机器人系统的能力</li>
+</ul>
+<hr />
+<h2 id="_3">第一部分：硬件基础与机械设计</h2>
+<h3 id="1"><a href="chapter1.html">第1章：轮足机械臂架构概述</a></h3>
+<ul>
+<li>轮足vs纯足式vs轮式：运动学优势分析</li>
+<li>液压vs电动执行：功率密度与控制精度权衡</li>
+<li>机械臂集成的设计哲学</li>
+<li>刚度、质量分布与控制带宽的关系</li>
+<li><strong>案例研究</strong>：波士顿动力Handle vs 瑞士ANYmal轮足对比</li>
+<li><strong>高级话题</strong>：变刚度机构与自适应悬架系统</li>
+</ul>
+<h3 id="2"><a href="chapter2.html">第2章：执行器选择与优化</a></h3>
+<ul>
+<li>电机类型：永磁同步电机(PMSM) vs BLDC vs 伺服 vs 准直驱</li>
+<li>永磁体材料：钕铁硼vs钐钴，温度特性与退磁曲线</li>
+<li>谐波减速器原理与失效模式</li>
+<li>传动系统对比：谐波vs行星齿轮vs摆线针轮</li>
+<li>液压执行器：阀控vs泵控系统</li>
+<li>域控制器与三电系统：电机、电控、电池集成</li>
+<li>反驱性(Backdrivability)与力控制</li>
+<li>热管理与连续扭矩限制</li>
+<li><strong>案例研究</strong>：MIT Mini Cheetah准直驱设计</li>
+<li><strong>高级话题</strong>：串联弹性执行器(SEA)与变刚度执行器(VSA)</li>
+</ul>
+<h3 id="3"><a href="chapter3.html">第3章：机械结构与刚度分析</a></h3>
+<ul>
+<li>结构刚度vs重量的优化</li>
+<li>振动模态与控制频率耦合</li>
+<li>万向节锁(Gimbal Lock)的机械规避</li>
+<li>线缆管理对动力学的影响</li>
+<li>碳纤维vs铝合金的材料选择</li>
+<li><strong>案例研究</strong>：宇树B2机械臂的轻量化设计</li>
+<li><strong>高级话题</strong>：拓扑优化与增材制造在机器人结构中的应用</li>
+</ul>
+<h3 id="4"><a href="chapter4.html">第4章：传感器系统与数据融合</a></h3>
+<ul>
+<li>编码器：绝对式vs增量式，分辨率选择</li>
+<li>IMU放置与振动隔离</li>
+<li>力/扭矩传感器的集成</li>
+<li>视觉传感器的刚性安装</li>
+<li>多传感器时间同步与标定</li>
+<li><strong>案例研究</strong>：Agility Robotics Digit的传感器架构</li>
+<li><strong>高级话题</strong>：分布式触觉感知与电子皮肤技术</li>
+</ul>
+<hr />
+<h2 id="_4">第二部分：运动学与动力学基础</h2>
+<h3 id="5"><a href="chapter5.html">第5章：坐标系与姿态表示</a></h3>
+<ul>
+<li>DH参数 vs PoE(Product of Exponentials)</li>
+<li>四元数、旋转矩阵、欧拉角的工程选择</li>
+<li>李群/李代数在机器人学中的应用</li>
+<li>奇异性分析与规避策略</li>
+<li><strong>案例研究</strong>：NASA瓦尔基里机器人的坐标系设计</li>
+<li><strong>高级话题</strong>：双四元数与螺旋理论的统一框架</li>
+</ul>
+<h3 id="6"><a href="chapter6.html">第6章：正逆运动学与工作空间</a></h3>
+<ul>
+<li>解析解vs数值解的适用场景</li>
+<li>雅可比矩阵与奇异性</li>
+<li>冗余自由度的利用</li>
+<li>工作空间优化与可达性分析</li>
+<li><strong>案例研究</strong>：Franka Emika Panda七自由度设计</li>
+<li><strong>高级话题</strong>：任务优先级与零空间投影</li>
+</ul>
+<h3 id="7"><a href="chapter7.html">第7章：动力学建模与参数辨识</a></h3>
+<ul>
+<li>刚体动力学：Newton-Euler vs Lagrange</li>
+<li>柔性关节与传动系统建模</li>
+<li>摩擦力建模与补偿</li>
+<li>参数辨识：最小二乘vs贝叶斯方法</li>
+<li><strong>案例研究</strong>：库卡iiwa的动力学补偿</li>
+<li><strong>高级话题</strong>：接触动力学与互补性问题(LCP)</li>
+</ul>
+<hr />
+<h2 id="_5">第三部分：经典控制与优化</h2>
+<h3 id="8"><a href="chapter8.html">第8章：轨迹规划与优化</a></h3>
+<ul>
+<li>关节空间vs笛卡尔空间规划</li>
+<li>时间最优vs能量最优轨迹</li>
+<li>动力学约束下的轨迹优化</li>
+<li>实时轨迹修正与重规划</li>
+<li><strong>案例研究</strong>：国际空间站加拿大臂2(Canadarm2)的轨迹规划</li>
+<li><strong>高级话题</strong>：凸优化与SDP在轨迹优化中的应用</li>
+</ul>
+<h3 id="9"><a href="chapter9.html">第9章：全身控制与平衡</a></h3>
+<ul>
+<li>ZMP、CoM与稳定性准则</li>
+<li>QP优化的全身控制</li>
+<li>接触力分配与摩擦锥约束</li>
+<li>动态平衡与步态转换</li>
+<li><strong>案例研究</strong>：波士顿动力Atlas的动态平衡</li>
+<li><strong>高级话题</strong>：Centroidal动力学与角动量规划</li>
+</ul>
+<h3 id="10"><a href="chapter10.html">第10章：阻抗控制与力控制</a></h3>
+<ul>
+<li>位置控制vs力控制vs阻抗控制</li>
+<li>笛卡尔阻抗与关节阻抗</li>
+<li>接触稳定性与被动性</li>
+<li>混合力/位置控制架构</li>
+<li><strong>案例研究</strong>：德国宇航中心DLR机器人的软体控制</li>
+<li><strong>高级话题</strong>：分数阶控制与自适应阻抗</li>
+</ul>
+<hr />
+<h2 id="_6">第四部分：感知与操作</h2>
+<h3 id="11"><a href="chapter11.html">第11章：视觉感知基础</a></h3>
+<ul>
+<li>RGB-D相机原理与标定</li>
+<li>立体视觉与深度估计</li>
+<li>相机内外参标定与畸变矫正</li>
+<li>多视角几何与三维重建</li>
+<li>图像特征提取：SIFT/ORB vs 深度特征</li>
+<li><strong>案例研究</strong>：Intel RealSense在机器人中的应用</li>
+<li><strong>高级话题</strong>：事件相机与动态视觉传感器(DVS)</li>
+</ul>
+<h3 id="123d"><a href="chapter12.html">第12章：3D感知与场景理解</a></h3>
+<ul>
+<li>点云获取：LiDAR vs ToF vs 结构光</li>
+<li>点云处理：滤波、配准、分割</li>
+<li>6D位姿估计：基于模型vs无模型方法</li>
+<li>物体检测与实例分割</li>
+<li>SLAM与实时建图</li>
+<li>语义SLAM与场景图构建</li>
+<li><strong>案例研究</strong>：谷歌机器人抓取系统的感知流程</li>
+<li><strong>高级话题</strong>：神经辐射场(NeRF)与3D Gaussian Splatting</li>
+</ul>
+<h3 id="13"><a href="chapter13.html">第13章：抓取理论与规划</a></h3>
+<ul>
+<li>抓取分析：力闭合与形闭合</li>
+<li>抓取质量度量：Ferrari-Canny指标</li>
+<li>抓取综合：解析法vs采样法</li>
+<li>抓取数据集：YCB、EGAD评估</li>
+<li>触觉感知在抓取中的作用</li>
+<li><strong>案例研究</strong>：Amazon机器人拣选挑战获胜方案</li>
+<li><strong>高级话题</strong>：软体抓手与适应性抓取</li>
+</ul>
+<h3 id="14"><a href="chapter14.html">第14章：灵巧操作与双臂协调</a></h3>
+<ul>
+<li>手内操作与重抓取策略</li>
+<li>灵巧手运动学与接触建模</li>
+<li>操作图与任务规划</li>
+<li>双臂协调：主从控制vs协同控制</li>
+<li>柔顺装配与插孔任务</li>
+<li>工具使用与功能推理</li>
+<li><strong>案例研究</strong>：OpenAI灵巧手魔方操作</li>
+<li><strong>高级话题</strong>：接触丰富操作的可微分仿真</li>
+</ul>
+<hr />
+<h2 id="_7">第五部分：学习型控制与世界模型</h2>
+<h3 id="15"><a href="chapter15.html">第15章：行为克隆与模仿学习</a></h3>
+<ul>
+<li>行为克隆基础：监督学习方法</li>
+<li>数据集收集：遥操作vs演示学习</li>
+<li>分布偏移问题与DAgger算法</li>
+<li>逆强化学习(IRL)原理</li>
+<li>GAIL与对抗模仿学习</li>
+<li><strong>案例研究</strong>：特斯拉FSD的模仿学习架构</li>
+<li><strong>高级话题</strong>：离线强化学习与保守Q学习(CQL)</li>
+</ul>
+<h3 id="16"><a href="chapter16.html">第16章：扩散模型在机器人中的应用</a></h3>
+<ul>
+<li>扩散模型基础：DDPM/DDIM原理</li>
+<li>条件生成与分类器引导</li>
+<li>动作序列的扩散建模</li>
+<li>多模态轨迹生成</li>
+<li>扩散策略的实时推理优化</li>
+<li>与传统策略梯度方法的对比</li>
+<li><strong>案例研究</strong>：丰田研究院Diffusion Policy实现</li>
+<li><strong>高级话题</strong>：Flow Matching与一致性模型</li>
+</ul>
+<h3 id="17-"><a href="chapter17.html">第17章：视觉-语言基础模型</a></h3>
+<ul>
+<li>大规模视觉-语言预训练：CLIP、ALIGN</li>
+<li>Vision Transformer架构详解</li>
+<li>语言模型基础：GPT、T5架构</li>
+<li>多模态融合策略：早期vs晚期融合</li>
+<li>Prompt工程与上下文学习</li>
+<li><strong>案例研究</strong>：Flamingo与BLIP-2架构分析</li>
+<li><strong>高级话题</strong>：检索增强生成(RAG)在机器人中的应用</li>
+</ul>
+<h3 id="18-vla"><a href="chapter18.html">第18章：视觉-语言-动作模型(VLA)</a></h3>
+<ul>
+<li>VLA架构设计：编码器-解码器vs仅解码器</li>
+<li>动作token化与离散化策略</li>
+<li>任务调节与指令跟随</li>
+<li>数据效率与少样本学习</li>
+<li>从互联网数据到机器人数据的迁移</li>
+<li><strong>案例研究</strong>：DeepMind RT-2与谷歌RT-X</li>
+<li><strong>高级话题</strong>：思维链(CoT)与工具使用</li>
+</ul>
+<h3 id="19"><a href="chapter19.html">第19章：世界模型基础</a></h3>
+<ul>
+<li>世界模型概念与动机</li>
+<li>前向动力学vs逆向动力学建模</li>
+<li>隐空间表示学习：VAE、β-VAE</li>
+<li>预测模型：RNN vs Transformer</li>
+<li>模型不确定性：认知vs偶然不确定性</li>
+<li><strong>案例研究</strong>：DeepMind的MuZero在机器人中的应用</li>
+<li><strong>高级话题</strong>：对比预测编码与SimSiam</li>
+</ul>
+<h3 id="20"><a href="chapter20.html">第20章：基于模型的规划与控制</a></h3>
+<ul>
+<li>模型预测控制(MPC)在学习系统中的应用</li>
+<li>规划算法：CEM、MPPI、iLQG</li>
+<li>Dreamer系列：v1、v2、v3演进</li>
+<li>视频预测与动作规划的结合</li>
+<li>在线适应与元学习</li>
+<li><strong>案例研究</strong>：Meta的JEPA世界模型</li>
+<li><strong>高级话题</strong>：因果世界模型与反事实推理</li>
+</ul>
+<hr />
+<h2 id="_8">第六部分：系统工程与部署</h2>
+<h3 id="21"><a href="chapter21.html">第21章：系统集成与部署</a></h3>
+<ul>
+<li>实时性保证与调度策略</li>
+<li>硬件加速：GPU/TPU/FPGA</li>
+<li>Sim-to-Real与域随机化</li>
+<li>安全性验证与故障恢复</li>
+<li>持续学习与在线适应</li>
+<li><strong>案例研究</strong>：特斯拉Optimus端到端系统</li>
+<li><strong>高级话题</strong>：形式化验证与概率安全保证</li>
+</ul>
+<h3 id="22"><a href="chapter22.html">第22章：计算平台与操作系统</a></h3>
+<ul>
+<li>嵌入式处理器选择：ARM Cortex vs RISC-V</li>
+<li>专用AI芯片：NVIDIA Jetson vs 地平线征程 vs 寒武纪</li>
+<li>实时操作系统：RT-Linux vs QNX vs FreeRTOS</li>
+<li>ROS2与DDS中间件优化</li>
+<li>硬件抽象层(HAL)设计</li>
+<li>中断处理与DMA优化</li>
+<li><strong>案例研究</strong>：波士顿动力Spot的计算架构</li>
+<li><strong>高级话题</strong>：异构计算与神经形态芯片</li>
+</ul>
+<h3 id="23"><a href="chapter23.html">第23章：仿真环境与数字孪生</a></h3>
+<ul>
+<li>物理引擎对比：MuJoCo vs Isaac Gym vs Bullet</li>
+<li>URDF/SDF/MJCF模型构建</li>
+<li>接触力与摩擦模型校准</li>
+<li>传感器噪声与延迟仿真</li>
+<li>并行仿真与强化学习训练</li>
+<li>数字孪生系统架构</li>
+<li><strong>案例研究</strong>：NVIDIA Isaac Sim在工业机器人中的应用</li>
+<li><strong>高级话题</strong>：可微分仿真与梯度优化</li>
+</ul>
+<h3 id="24"><a href="chapter24.html">第24章：系统调试与性能优化</a></h3>
+<ul>
+<li>控制环路时序分析</li>
+<li>实时性能profiling工具</li>
+<li>内存管理与缓存优化</li>
+<li>通信总线调试：CAN/EtherCAT/RS485</li>
+<li>振动与噪声诊断</li>
+<li>数据记录与回放系统</li>
+<li>故障注入测试</li>
+<li><strong>案例研究</strong>：库卡机器人的诊断系统</li>
+<li><strong>高级话题</strong>：基于模型的故障检测与隔离(FDI)</li>
+</ul>
+<hr />
+<h2 id="_9">附录</h2>
+<h3 id="a"><a href="appendix_a.html">附录A：数学基础回顾</a></h3>
+<ul>
+<li>线性代数与矩阵运算</li>
+<li>优化理论基础</li>
+<li>概率论与贝叶斯推断</li>
+<li>信号处理基础</li>
+</ul>
+<h3 id="_10"><a href="references.html">参考文献</a></h3>
+<hr />
+<h2 id="_11">学习建议</h2>
+<ol>
+<li><strong>硬件基础薄弱者</strong>：重点学习第1-4章，配合实物观察</li>
+<li><strong>算法背景强者</strong>：可快速浏览第1-7章，重点关注第8-16章</li>
+<li><strong>工程实践导向</strong>：每章案例研究必读，关注"常见陷阱"和"最佳实践"部分</li>
+<li><strong>研究导向</strong>：深入第13-15章，关注最新论文引用</li>
+</ol>
+<h2 id="_12">版权与引用</h2>
+<p>本教程遵循 CC BY-NC-SA 4.0 协议。引用请使用：</p>
+<div class="codehilite"><pre><span></span><code>轮足机械臂机器人：从硬件制造到智能算法. 2024.
+</code></pre></div>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter1.html" class="nav-link next">第1章：轮足机械臂架构概述 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

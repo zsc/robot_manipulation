@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第22章：计算平台与操作系统</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="22">第22章：计算平台与操作系统</h1>
+<p>机器人系统的计算架构是实现复杂控制算法和AI模型的基础。本章深入探讨轮足机械臂机器人的计算平台选择、实时操作系统配置、中间件优化以及底层硬件接口设计。我们将从处理器架构的选择开始，逐步深入到实时性保证、中断处理和DMA优化等系统级优化技术。通过本章学习，读者将掌握如何为特定的机器人应用场景选择和配置最优的计算平台，以及如何在保证实时性的前提下最大化计算效率。</p>
+<h2 id="221">22.1 嵌入式处理器架构选择</h2>
+<h3 id="2211-arm-cortex">22.1.1 ARM Cortex系列处理器</h3>
+<p>ARM Cortex处理器在机器人领域占据主导地位，其优势在于成熟的生态系统和广泛的工具链支持。对于轮足机械臂机器人，我们需要在不同层级选择合适的处理器：</p>
+<p><strong>Cortex-M系列（实时控制层）</strong>：</p>
+<ul>
+<li>Cortex-M4/M7：适用于电机控制和传感器数据采集</li>
+<li>主频：100-600MHz</li>
+<li>特点：DSP指令集、单精度FPU、确定性中断延迟</li>
+<li>典型应用：FOC电机控制、IMU数据融合、编码器读取</li>
+</ul>
+<p><strong>Cortex-A系列（应用处理层）</strong>：</p>
+<ul>
+<li>Cortex-A53/A72：运行高级控制算法和视觉处理</li>
+<li>主频：1.5-2.5GHz</li>
+<li>特点：乱序执行、NEON SIMD、多核架构</li>
+<li>典型应用：路径规划、SLAM、机器学习推理</li>
+</ul>
+<p><strong>Cortex-R系列（安全关键层）</strong>：</p>
+<ul>
+<li>Cortex-R5/R52：用于功能安全相关任务</li>
+<li>特点：锁步核心、ECC保护、快速上下文切换</li>
+<li>典型应用：紧急停止、故障检测、安全监控</li>
+</ul>
+<p>处理器选择的关键考虑因素：</p>
+<p>$$\text{Performance} = \frac{\text{IPC} \times \text{Frequency}}{\text{Power}} \times \text{Utilization}$$
+其中IPC（Instructions Per Cycle）决定了处理器的效率，而功耗直接影响机器人的续航能力。</p>
+<h3 id="2212-risc-v">22.1.2 RISC-V架构的崛起</h3>
+<p>RISC-V作为开源指令集架构，在机器人领域展现出独特优势：</p>
+<p><strong>架构特点</strong>：</p>
+<ul>
+<li>模块化ISA设计：基础整数指令集（RV32I/RV64I）+ 可选扩展</li>
+<li>扩展集选择：</li>
+<li>M：整数乘除法（电机控制必需）</li>
+<li>F/D：单/双精度浮点（运动学计算）</li>
+<li>V：向量扩展（视觉处理加速）</li>
+<li>P：DSP扩展（信号处理）</li>
+</ul>
+<p><strong>RISC-V在机器人中的优势</strong>：</p>
+<ol>
+<li>定制化能力：可根据具体需求裁剪指令集</li>
+<li>无授权费用：降低BOM成本</li>
+<li>开放生态：便于学术研究和创新</li>
+</ol>
+<p><strong>典型RISC-V处理器</strong>：</p>
+<ul>
+<li>SiFive U74：多核应用处理器，用于高级控制</li>
+<li>平头哥玄铁C906：支持RVV0.7.1向量扩展</li>
+<li>芯来科技UX607：面向实时控制的MCU</li>
+</ul>
+<h3 id="2213">22.1.3 异构多核架构设计</h3>
+<p>现代机器人系统采用异构计算架构以优化性能功耗比：</p>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────┐
+│          应用处理器集群                   │
+│   ┌─────────┐  ┌─────────┐             │
+│   │ A72 #0  │  │ A72 #1  │  (2.0GHz)   │
+│   └─────────┘  └─────────┘             │
+│   ┌─────────┐  ┌─────────┐             │
+│   │ A53 #0  │  │ A53 #1  │  (1.5GHz)   │
+│   └─────────┘  └─────────┘             │
+└───────────┬─────────────────────────────┘
+            │ AMBA AXI4
+┌───────────┴─────────────────────────────┐
+│          实时处理器集群                   │
+│   ┌─────────┐  ┌─────────┐             │
+│   │  M7 #0  │  │  M7 #1  │  (400MHz)   │
+│   └─────────┘  └─────────┘             │
+└───────────┬─────────────────────────────┘
+            │ AHB-Lite
+┌───────────┴─────────────────────────────┐
+│          外设与协处理器                  │
+│   GPU | NPU | DSP | ISP | Codec        │
+└─────────────────────────────────────────┘
+</code></pre></div>
+
+<p><strong>任务分配策略</strong>：</p>
+<ul>
+<li>大核（A72）：路径规划、视觉处理、AI推理</li>
+<li>小核（A53）：系统管理、通信协议栈</li>
+<li>实时核（M7）：电机控制、传感器融合</li>
+<li>协处理器：专用加速任务</li>
+</ul>
+<h2 id="222-ai">22.2 专用AI加速芯片</h2>
+<h3 id="2221-nvidia-jetson">22.2.1 NVIDIA Jetson系列</h3>
+<p>NVIDIA Jetson平台集成了ARM CPU和NVIDIA GPU，是机器人AI应用的主流选择：</p>
+<p><strong>Jetson产品线对比</strong>：</p>
+<p>| 型号 | GPU | CPU | AI性能 | 功耗 | 适用场景 |</p>
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>GPU</th>
+<th>CPU</th>
+<th>AI性能</th>
+<th>功耗</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nano</td>
+<td>128-core Maxwell</td>
+<td>4x A57</td>
+<td>0.5 TFLOPS</td>
+<td>5-10W</td>
+<td>入门级视觉</td>
+</tr>
+<tr>
+<td>TX2</td>
+<td>256-core Pascal</td>
+<td>2x Denver + 4x A57</td>
+<td>1.3 TFLOPS</td>
+<td>7.5-15W</td>
+<td>中型机器人</td>
+</tr>
+<tr>
+<td>Xavier NX</td>
+<td>384-core Volta</td>
+<td>6x Carmel</td>
+<td>21 TOPS</td>
+<td>10-20W</td>
+<td>自主导航</td>
+</tr>
+<tr>
+<td>AGX Orin</td>
+<td>2048-core Ampere</td>
+<td>12x A78AE</td>
+<td>275 TOPS</td>
+<td>15-60W</td>
+<td>大型机器人</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CUDA编程优化要点</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 优化的矩阵乘法kernel示例</span>
+<span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">matmul_tiled</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">__shared__</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">As</span><span class="p">[</span><span class="n">TILE_SIZE</span><span class="p">][</span><span class="n">TILE_SIZE</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">__shared__</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">Bs</span><span class="p">[</span><span class="n">TILE_SIZE</span><span class="p">][</span><span class="n">TILE_SIZE</span><span class="p">];</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">ty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="o">/</span><span class="n">TILE_SIZE</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">As</span><span class="p">[</span><span class="n">ty</span><span class="p">][</span><span class="n">tx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[(</span><span class="n">by</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ty</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tx</span><span class="p">];</span>
+<span class="w">        </span><span class="n">Bs</span><span class="p">[</span><span class="n">ty</span><span class="p">][</span><span class="n">tx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">[(</span><span class="n">m</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ty</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bx</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tx</span><span class="p">];</span>
+<span class="w">        </span><span class="nf">__syncthreads</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">TILE_SIZE</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">k</span><span class="p">)</span>
+<span class="w">            </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">As</span><span class="p">[</span><span class="n">ty</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Bs</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">tx</span><span class="p">];</span>
+<span class="w">        </span><span class="nf">__syncthreads</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">C</span><span class="p">[(</span><span class="n">by</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ty</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bx</span><span class="o">*</span><span class="n">TILE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2222-ai">22.2.2 国产AI芯片方案</h3>
+<p><strong>地平线征程系列</strong>：</p>
+<ul>
+<li>征程5：128 TOPS，BPU架构</li>
+<li>特点：低延迟、高能效比</li>
+<li>优势：本土支持、成本优势</li>
+</ul>
+<p><strong>寒武纪思元系列</strong>：</p>
+<ul>
+<li>思元370：256 TOPS，MLU架构</li>
+<li>支持PyTorch/TensorFlow直接部署</li>
+<li>适合大模型推理</li>
+</ul>
+<p><strong>算能BM1684X</strong>：</p>
+<ul>
+<li>32 TOPS INT8性能</li>
+<li>支持多路视频解码</li>
+<li>适合视觉密集型应用</li>
+</ul>
+<h3 id="2223">22.2.3 推理优化技术</h3>
+<p><strong>量化策略</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># INT8量化示例</span>
+<span class="k">def</span> <span class="nf">quantize_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">calibration_data</span><span class="p">):</span>
+    <span class="c1"># 收集激活值统计信息</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">collect_stats</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">calibration_data</span><span class="p">)</span>
+
+    <span class="c1"># 计算量化参数</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">):</span>
+            <span class="n">w_scale</span> <span class="o">=</span> <span class="n">compute_scale</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">stats</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">weight_scale</span> <span class="o">=</span> <span class="n">w_scale</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">weight_int8</span> <span class="o">=</span> <span class="n">quantize</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">w_scale</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">quantized_model</span>
+</code></pre></div>
+
+<p><strong>推理延迟优化</strong>：
+$$\text{Latency} = \text{Compute} + \text{Memory} + \text{Sync}$$</p>
+<p>优化策略：</p>
+<ol>
+<li>算子融合：减少内存访问</li>
+<li>批处理：提高吞吐量</li>
+<li>流水线并行：隐藏传输延迟</li>
+</ol>
+<h2 id="223">22.3 实时操作系统选择与配置</h2>
+<h3 id="2231-rt-linux">22.3.1 RT-Linux配置与优化</h3>
+<p>RT-Linux通过PREEMPT_RT补丁实现硬实时性能：</p>
+<p><strong>内核配置关键参数</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 配置实时内核</span>
+<span class="nv">CONFIG_PREEMPT_RT</span><span class="o">=</span>y
+<span class="nv">CONFIG_HIGH_RES_TIMERS</span><span class="o">=</span>y
+<span class="nv">CONFIG_NO_HZ_FULL</span><span class="o">=</span>y
+<span class="nv">CONFIG_RCU_NOCB_CPU</span><span class="o">=</span>y
+<span class="nv">CONFIG_RCU_NOCB_CPU_ALL</span><span class="o">=</span>y
+</code></pre></div>
+
+<p><strong>CPU隔离与亲和性设置</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 隔离CPU核心用于实时任务</span>
+<span class="c1"># /boot/cmdline.txt</span>
+<span class="nv">isolcpus</span><span class="o">=</span><span class="m">2</span>,3<span class="w"> </span><span class="nv">nohz_full</span><span class="o">=</span><span class="m">2</span>,3<span class="w"> </span><span class="nv">rcu_nocbs</span><span class="o">=</span><span class="m">2</span>,3
+
+<span class="c1"># 应用程序中设置CPU亲和性</span>
+cpu_set_t<span class="w"> </span>cpuset<span class="p">;</span>
+CPU_ZERO<span class="o">(</span><span class="p">&amp;</span>cpuset<span class="o">)</span><span class="p">;</span>
+CPU_SET<span class="o">(</span><span class="m">2</span>,<span class="w"> </span><span class="p">&amp;</span>cpuset<span class="o">)</span><span class="p">;</span><span class="w">  </span>//<span class="w"> </span>绑定到CPU<span class="w"> </span><span class="m">2</span>
+pthread_setaffinity_np<span class="o">(</span>thread,<span class="w"> </span>sizeof<span class="o">(</span>cpuset<span class="o">)</span>,<span class="w"> </span><span class="p">&amp;</span>cpuset<span class="o">)</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong>实时调度策略</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">sched_param</span><span class="w"> </span><span class="n">param</span><span class="p">;</span>
+<span class="n">param</span><span class="p">.</span><span class="n">sched_priority</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span><span class="w">  </span><span class="c1">// 最高优先级</span>
+<span class="n">pthread_setschedparam</span><span class="p">(</span><span class="kr">thread</span><span class="p">,</span><span class="w"> </span><span class="n">SCHED_FIFO</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">param</span><span class="p">);</span>
+
+<span class="c1">// 内存锁定防止页面交换</span>
+<span class="n">mlockall</span><span class="p">(</span><span class="n">MCL_CURRENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MCL_FUTURE</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="2232-qnx">22.3.2 QNX微内核架构</h3>
+<p>QNX作为商业RTOS，在汽车和机器人领域广泛应用：</p>
+<p><strong>微内核架构优势</strong>：</p>
+<ul>
+<li>内核最小化：仅包含调度、IPC、内存管理</li>
+<li>故障隔离：驱动程序运行在用户空间</li>
+<li>可靠性：单个组件崩溃不影响系统</li>
+</ul>
+<p><strong>消息传递机制</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// QNX消息传递示例</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">subtype</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">position</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">velocity</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="p">}</span><span class="w"> </span><span class="n">robot_msg_t</span><span class="p">;</span>
+
+<span class="c1">// 服务器端</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rcvid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MsgReceive</span><span class="p">(</span><span class="n">chid</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="c1">// 处理消息</span>
+<span class="n">MsgReply</span><span class="p">(</span><span class="n">rcvid</span><span class="p">,</span><span class="w"> </span><span class="n">EOK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">reply</span><span class="p">));</span>
+
+<span class="c1">// 客户端</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">coid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConnectAttach</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">chid</span><span class="p">,</span><span class="w"> </span><span class="n">_NTO_SIDE_CHANNEL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">MsgSend</span><span class="p">(</span><span class="n">coid</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reply</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">reply</span><span class="p">));</span>
+</code></pre></div>
+
+<h3 id="2233-freertosmcu">22.3.3 FreeRTOS在MCU中的应用</h3>
+<p>FreeRTOS适用于资源受限的实时控制器：</p>
+<p><strong>任务创建与管理</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 电机控制任务</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">vMotorControlTask</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pvParameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TickType_t</span><span class="w"> </span><span class="n">xLastWakeTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xTaskGetTickCount</span><span class="p">();</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">TickType_t</span><span class="w"> </span><span class="n">xPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pdMS_TO_TICKS</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1kHz控制频率</span>
+
+<span class="w">    </span><span class="k">for</span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 读取编码器</span>
+<span class="w">        </span><span class="n">read_encoders</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// PID控制</span>
+<span class="w">        </span><span class="n">compute_pid</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// 输出PWM</span>
+<span class="w">        </span><span class="n">update_pwm</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// 严格周期执行</span>
+<span class="w">        </span><span class="n">vTaskDelayUntil</span><span class="p">(</span><span class="o">&amp;</span><span class="n">xLastWakeTime</span><span class="p">,</span><span class="w"> </span><span class="n">xPeriod</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 创建任务</span>
+<span class="n">xTaskCreate</span><span class="p">(</span><span class="n">vMotorControlTask</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MotorCtrl&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">configMINIMAL_STACK_SIZE</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">tskIDLE_PRIORITY</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+</code></pre></div>
+
+<p><strong>中断服务程序设计</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">EXTI0_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BaseType_t</span><span class="w"> </span><span class="n">xHigherPriorityTaskWoken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pdFALSE</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 清除中断标志</span>
+<span class="w">    </span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">PR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXTI_PR_PR0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 发送信号量通知任务</span>
+<span class="w">    </span><span class="n">xSemaphoreGiveFromISR</span><span class="p">(</span><span class="n">xEncoderSemaphore</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                          </span><span class="o">&amp;</span><span class="n">xHigherPriorityTaskWoken</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 触发上下文切换</span>
+<span class="w">    </span><span class="n">portYIELD_FROM_ISR</span><span class="p">(</span><span class="n">xHigherPriorityTaskWoken</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter21.html" class="nav-link prev">← 第21章：系统集成与部署</a><a href="CLAUDE.html" class="nav-link next">Untitled →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

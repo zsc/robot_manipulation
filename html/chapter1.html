@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第1章：轮足机械臂架构概述</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="1">第1章：轮足机械臂架构概述</h1>
+<h2 id="_1">开篇导读</h2>
+<p>轮足机械臂机器人代表了移动操作机器人的前沿发展方向，它巧妙地结合了轮式运动的高效性、足式运动的地形适应性以及机械臂的精确操作能力。本章将从系统架构的角度，深入分析不同运动形式的权衡、执行器选择的考量、以及硬件设计对算法实现的根本性影响。通过学习本章，你将理解为什么某些看似纯粹的硬件决策会深刻影响整个系统的控制策略和智能算法设计。</p>
+<p><strong>学习目标：</strong></p>
+<ul>
+<li>理解轮足混合运动形式的运动学优势和设计权衡</li>
+<li>掌握液压与电动执行器在不同应用场景下的选择依据</li>
+<li>认识机械臂集成对移动平台稳定性的影响</li>
+<li>建立刚度、质量分布与控制性能之间的定量关系</li>
+<li>通过实际案例理解不同设计哲学的工程实现</li>
+</ul>
+<h2 id="11-vsvs">1.1 轮足vs纯足式vs轮式：运动学优势分析</h2>
+<h3 id="111">1.1.1 运动形式的基本特征</h3>
+<p>机器人的运动形式从根本上决定了其运动学约束、能量效率和地形适应能力。让我们首先建立一个定量分析框架：</p>
+<p><strong>轮式运动</strong>的本质是通过滚动接触实现位移，其运动学约束可表述为：
+$$\dot{x} = r\omega \cos\theta, \quad \dot{y} = r\omega \sin\theta, \quad \dot{\theta} = \frac{r\omega}{L}\tan\phi$$
+其中 $r$ 为轮半径，$\omega$ 为轮转速，$L$ 为轴距，$\phi$ 为转向角。轮式运动的核心优势在于其极高的能量效率——滚动摩擦系数通常仅为 0.001-0.01，远小于滑动摩擦的 0.1-1.0。这意味着在平坦地形上，轮式机器人的能量消耗可以比足式机器人低 1-2 个数量级。</p>
+<p><strong>足式运动</strong>则通过离散的接触点实现运动，其运动学更为复杂但也更加灵活。对于一个简化的单腿模型，支撑相的动力学可表示为：
+$$m\ddot{x} = f_x, \quad m\ddot{z} = f_z - mg$$
+其中接触力 $(f_x, f_z)$ 必须满足摩擦锥约束：
+$$\sqrt{f_x^2 + f_y^2} \leq \mu f_z$$
+足式运动的关键优势在于其对离散地形的适应能力——它可以选择落脚点，避开障碍，这是轮式系统无法实现的。</p>
+<p><strong>轮足混合系统</strong>试图结合两者的优势。其设计理念是：在结构化环境中利用轮式运动的高效性，在复杂地形中切换到足式模式。数学上，这可以表示为一个混合动力学系统：</p>
+<div class="codehilite"><pre><span></span><code>状态空间 S = S_wheel ∪ S_leg ∪ S_hybrid
+转换条件：
+
+<span class="k">-</span> Wheel → Leg: 当地形粗糙度 σ &gt; σ_threshold
+<span class="k">-</span> Leg → Wheel: 当能量效率 η &lt; η_threshold  
+<span class="k">-</span> Hybrid模式：同时使用轮式滚动和足式步态调整
+</code></pre></div>
+
+<h3 id="112">1.1.2 运动学约束与能耗分析</h3>
+<p>轮足系统的能耗模型需要考虑多种运动模式的切换成本。总能耗可以分解为：
+$$E_{total} = E_{locomotion} + E_{transition} + E_{stabilization}$$
+其中：</p>
+<ul>
+<li>$E_{locomotion}$：基本运动能耗，轮式模式下主要是滚动阻力和加速功耗，足式模式下包括支撑相的负功和摆动相的正功</li>
+<li>$E_{transition}$：模式切换能耗，包括姿态调整和动量转换</li>
+<li>$E_{stabilization}$：稳定控制能耗，特别是在携带机械臂时</li>
+</ul>
+<p>实验数据表明，在平坦地形上，轮式运动的比能耗（CoT, Cost of Transport）约为 0.05-0.1，而足式运动的 CoT 通常在 0.5-2.0 范围内。但在 30° 斜坡上，轮式系统可能因打滑而无法工作，而足式系统仍能保持 CoT &lt; 5.0 的运动。</p>
+<h3 id="113">1.1.3 地形适应性的定量评估</h3>
+<p>为了定量评估不同运动形式的地形适应性，我们引入地形复杂度指标 $\mathcal{T}$：
+$$\mathcal{T} = w_1 \cdot \text{slope} + w_2 \cdot \text{roughness} + w_3 \cdot \text{discreteness}$$
+其中：</p>
+<ul>
+<li>slope：地形坡度（rad）</li>
+<li>roughness：表面粗糙度的 RMS 值（m）  </li>
+<li>discreteness：离散障碍物密度（obstacles/m²）</li>
+</ul>
+<p>不同运动形式的通过性可以用概率模型表示：
+$$P_{traverse} = \begin{cases}
+e^{-\lambda_w \mathcal{T}} &amp; \text{轮式} \\
+1 - e^{-\lambda_l (\mathcal{T}_{max} - \mathcal{T})} &amp; \text{足式} \\
+\max(P_{wheel}, P_{leg}) &amp; \text{轮足混合}
+\end{cases}$$
+典型参数：$\lambda_w = 2.0$, $\lambda_l = 0.5$, $\mathcal{T}_{max} = 10.0$</p>
+<p>这个模型揭示了轮足系统的设计哲学：不是简单的"1+1=2"，而是通过智能切换实现"1+1&gt;2"的效果。</p>
+<h2 id="12-vs">1.2 液压vs电动执行：功率密度与控制精度权衡</h2>
+<h3 id="121">1.2.1 液压系统的功率密度优势</h3>
+<p>液压执行器的核心优势在于其无与伦比的功率密度。一个典型的液压缸可以在 200-350 bar 的工作压力下产生巨大的力输出。功率密度可达：
+$$\rho_{power} = \frac{P}{m} = \frac{p \cdot Q}{m_{cylinder} + m_{fluid}} \approx 3-5 \text{ kW/kg}$$
+相比之下，高性能电机的功率密度通常为 0.5-2 kW/kg。这种差异在需要大负载、高动态响应的应用中尤为关键。</p>
+<p>液压系统的力输出与压力成正比：
+$$F = p \cdot A_{piston} - f_{friction}$$
+其中摩擦力 $f_{friction}$ 包括密封摩擦和粘性摩擦，通常占输出力的 5-10%。</p>
+<p>然而，液压系统的能量效率链较长：
+$$\eta_{total} = \eta_{pump} \cdot \eta_{valve} \cdot \eta_{cylinder} \cdot \eta_{cooling} \approx 0.4-0.6$$
+这意味着总体能量效率仅为 40-60%，远低于电动系统的 80-90%。</p>
+<h3 id="122">1.2.2 电动执行器的控制精度</h3>
+<p>电动执行器，特别是永磁同步电机（PMSM）配合高分辨率编码器，可以实现极高的控制精度。位置控制精度可达：
+$$\sigma_{position} = \frac{2\pi}{N_{encoder} \cdot i_{gear}} \approx 10^{-4} \text{ rad}$$
+其中 $N_{encoder}$ 为编码器分辨率（如 20 位），$i_{gear}$ 为减速比。</p>
+<p>电机的动态模型相对简单：
+$$J\ddot{\theta} + b\dot{\theta} = \tau_m - \tau_l$$
+$$\tau_m = K_t i_q$$
+这种线性关系使得控制器设计更加直接。现代电机控制采用场定向控制（FOC），可以实现：</p>
+<ul>
+<li>带宽：&gt; 1 kHz</li>
+<li>力矩纹波：&lt; 2%</li>
+<li>效率：&gt; 90%（在额定工作点附近）</li>
+</ul>
+<h3 id="123">1.2.3 混合驱动的新思路</h3>
+<p>近年来出现了电液混合驱动的新设计，试图结合两者优势：</p>
+<div class="codehilite"><pre><span></span><code>高频小幅运动 → 电动执行器（高精度、高带宽）
+低频大力输出 → 液压执行器（高功率密度）
+</code></pre></div>
+
+<p>数学上，这可以表示为频域分解：
+$$\tau_{total}(s) = H_{electric}(s) \cdot \tau_{ref}(s) + H_{hydraulic}(s) \cdot \tau_{ref}(s)$$
+其中：
+$$H_{electric}(s) = \frac{s^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}, \quad \omega_n &gt; 100 \text{ rad/s}$$
+$$H_{hydraulic}(s) = \frac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}, \quad \omega_n &lt; 10 \text{ rad/s}$$
+这种设计在 Boston Dynamics 的 Atlas 机器人中得到了验证，其腿部主要关节使用液压，而手部精细操作使用电动。</p>
+<h2 id="13">1.3 机械臂集成的设计哲学</h2>
+<h3 id="131">1.3.1 移动操作的根本挑战</h3>
+<p>将机械臂集成到移动平台上引入了独特的控制挑战。最根本的问题是：机械臂的运动会改变整个系统的质心位置和惯性矩阵。</p>
+<p>系统的总动量守恒要求：
+$$\vec{p}_{base} + \vec{p}_{arm} = \text{const}$$
+这意味着机械臂的快速运动会导致基座的反向运动。对于一个 7 自由度机械臂，其末端执行器的笛卡尔速度与关节速度的关系为：
+$$\vec{v}_{ee} = J_{arm}(\vec{q}) \dot{\vec{q}} + \vec{v}_{base}$$
+其中基座速度 $\vec{v}_{base}$ 不再为零，而是需要通过全身协调控制来确定。</p>
+<h3 id="132">1.3.2 基座稳定性与零力矩点</h3>
+<p>对于轮足机器人，稳定性判据更加复杂。我们需要同时考虑：</p>
+<ol>
+<li>
+<p><strong>静态稳定性</strong>：质心投影在支撑多边形内
+$$\vec{r}_{CoM} \in \text{ConvexHull}(\{\vec{r}_{contact_i}\})$$</p>
+</li>
+<li>
+<p><strong>动态稳定性</strong>：零力矩点（ZMP）在支撑区域内
+$$\vec{r}_{ZMP} = \frac{\sum_i (m_i \vec{r}_i (\ddot{z}_i + g) - m_i \ddot{\vec{r}}_i z_i)}{\sum_i m_i (\ddot{z}_i + g)}$$</p>
+</li>
+<li>
+<p><strong>接触力约束</strong>：所有接触力在摩擦锥内
+$$\vec{f}_{contact_i} \in \mathcal{FC}_i, \quad \forall i$$
+机械臂的运动规划必须满足这些约束，这通常通过优化问题来解决：
+$$\min_{\vec{q}, \vec{f}} |\vec{x}_{ee}^{desired} - \vec{x}_{ee}|^2 + w_1 |\vec{f}|^2 + w_2 |\ddot{\vec{q}}|^2$$
+$$\text{s.t. } \text{稳定性约束、关节限位、力矩限制}$$</p>
+</li>
+</ol>
+<h3 id="133">1.3.3 工作空间的优化设计</h3>
+<p>机械臂在移动平台上的工作空间不仅取决于其自身的运动学，还受到基座运动能力的影响。有效工作空间可以表示为：
+$$\mathcal{W}_{effective} = \mathcal{W}_{arm} \oplus \mathcal{W}_{base}$$
+其中 $\oplus$ 表示 Minkowski 和。但这种简单相加忽略了动态耦合。更准确的模型需要考虑：</p>
+<ol>
+<li><strong>可达性地图</strong>：给定基座位置，机械臂的可达空间</li>
+<li>
+<p><strong>可操作度椭球</strong>：
+$$\mathcal{M} = \sqrt{\det(J J^T)}$$</p>
+</li>
+<li>
+<p><strong>动态可达集</strong>：考虑速度和加速度约束的可达区域</p>
+</li>
+</ol>
+<p>优化设计通常追求最大化某个性能指标：
+$$\mathcal{P} = \int_{\mathcal{W}} w(\vec{x}) \cdot \mathcal{M}(\vec{x}) d\vec{x}$$
+其中 $w(\vec{x})$ 是任务相关的权重函数。</p>
+<h2 id="14">1.4 刚度、质量分布与控制带宽的关系</h2>
+<h3 id="141">1.4.1 结构刚度对控制性能的影响</h3>
+<p>机器人的结构刚度直接决定了其控制带宽的上限。从控制理论的角度，系统的第一阶固有频率 $f_n$ 设定了闭环控制带宽的理论上限：
+$$f_{control} &lt; \frac{f_n}{5} \approx \frac{1}{10\pi}\sqrt{\frac{k}{m}}$$
+其中 $k$ 是等效刚度，$m$ 是等效质量。这个"1/5 规则"来源于避免激发结构振动的工程经验。</p>
+<p>对于一个典型的轮足机械臂系统，我们可以建立多体动力学模型：
+$$M(\vec{q})\ddot{\vec{q}} + C(\vec{q}, \dot{\vec{q}})\dot{\vec{q}} + G(\vec{q}) + K_{flex}\Delta\vec{q} = \vec{\tau}$$
+其中 $K_{flex}$ 表示柔性变形的刚度矩阵。当刚度不足时，会出现以下问题：</p>
+<ol>
+<li>
+<p><strong>静态挠度</strong>：在重力和负载作用下的变形
+$$\delta_{static} = \frac{F \cdot L^3}{3EI}$$
+对于悬臂梁结构，$E$ 是弹性模量，$I$ 是截面惯性矩。</p>
+</li>
+<li>
+<p><strong>动态耦合</strong>：控制输入会激发振动模态
+$$\vec{q}(t) = \vec{q}_{rigid}(t) + \sum_i a_i(t) \vec{\phi}_i$$
+其中 $\vec{\phi}_i$ 是第 $i$ 阶振动模态。</p>
+</li>
+<li>
+<p><strong>相位滞后</strong>：在频率 $f$ 处的相位滞后约为
+$$\phi_{lag}(f) \approx -\arctan\left(\frac{2\zeta f/f_n}{1-(f/f_n)^2}\right)$$
+实际工程中，我们通常要求第一阶固有频率 &gt; 30 Hz，这对应的刚度要求为：
+$$k &gt; 4\pi^2 f_n^2 m \approx 35,000 \cdot m \text{ (N/m)}$$</p>
+</li>
+</ol>
+<h3 id="142">1.4.2 质量分布的优化策略</h3>
+<p>质量分布不仅影响系统的动态响应，还决定了能量效率。优化目标通常包括：</p>
+<ol>
+<li>
+<p><strong>降低转动惯量</strong>：特别是远端连杆
+$$J_{link_i} = J_{cm_i} + m_i d_i^2$$
+通过将质量集中在近端，可以显著降低驱动力矩需求。</p>
+</li>
+<li>
+<p><strong>平衡配重设计</strong>：使质心靠近旋转轴
+$$\vec{r}_{CoM} = \frac{\sum_i m_i \vec{r}_i}{\sum_i m_i} \approx \vec{0}$$</p>
+</li>
+<li>
+<p><strong>惯性匹配</strong>：电机转子惯量与负载惯量的匹配
+$$\frac{J_{load}}{J_{motor} \cdot i^2} \approx 1-10$$
+其中 $i$ 是减速比。过大或过小的惯量比都会降低系统性能。</p>
+</li>
+</ol>
+<p>质量分布还影响系统的可操作度。对于冗余机械臂，质量矩阵的条件数：
+$$\kappa(M) = \frac{\lambda_{max}(M)}{\lambda_{min}(M)}$$
+理想情况下 $\kappa(M) \approx 1$，但实际系统通常在 10-100 范围内。</p>
+<h3 id="143">1.4.3 控制带宽的系统性限制</h3>
+<p>控制带宽受到多个因素的限制，形成一个"瓶颈链"：</p>
+<div class="codehilite"><pre><span></span><code>传感器带宽 → 通信延迟 → 计算延迟 → 执行器带宽 → 结构带宽
+</code></pre></div>
+
+<p>系统的总延迟可以建模为：
+$$\tau_{total} = \tau_{sensor} + \tau_{comm} + \tau_{comp} + \tau_{actuator}$$
+典型值：</p>
+<ul>
+<li>编码器采样：$\tau_{sensor} \approx 0.1-1$ ms</li>
+<li>EtherCAT 通信：$\tau_{comm} \approx 0.5-2$ ms  </li>
+<li>控制计算：$\tau_{comp} \approx 1-5$ ms</li>
+<li>电机响应：$\tau_{actuator} \approx 5-20$ ms</li>
+</ul>
+<p>这导致总延迟在 10-30 ms 范围内，限制控制带宽在 30-100 Hz。</p>
+<p>对于需要高带宽的任务（如接触力控制），我们需要采用分层控制架构：
+$$\vec{\tau} = \vec{\tau}_{low}(1000Hz) + \vec{\tau}_{mid}(100Hz) + \vec{\tau}_{high}(10Hz)$$
+其中：</p>
+<ul>
+<li>低层：关节级阻抗控制</li>
+<li>中层：任务空间轨迹跟踪</li>
+<li>高层：运动规划和决策</li>
+</ul>
+<h2 id="15-handle-vs-anymal">1.5 案例研究：波士顿动力Handle vs 瑞士ANYmal轮足对比</h2>
+<h3 id="151-handle">1.5.1 Handle的设计哲学</h3>
+<p>Boston Dynamics Handle 代表了一种激进的轮足融合设计。其核心特征：</p>
+<ol>
+<li>
+<p><strong>双轮平衡</strong>：类似倒立摆，通过动态平衡实现稳定
+   - 轮直径：40 cm
+   - 最高速度：15 km/h
+   - 跳跃高度：1.2 m</p>
+</li>
+<li>
+<p><strong>液压驱动</strong>：继承 Atlas 的液压技术
+   - 工作压力：200 bar
+   - 功率密度：&gt; 3 kW/kg
+   - 响应时间：&lt; 10 ms</p>
+</li>
+<li>
+<p><strong>简化的运动学</strong>：仅 10 个自由度
+   - 2 个驱动轮
+   - 2 个腿部关节（髋、膝）
+   - 1 个腰部旋转
+   - 5 个机械臂关节</p>
+</li>
+</ol>
+<p>Handle 的控制策略基于模型预测控制（MPC）：
+$$\min_{\vec{u}} \sum_{k=0}^{N} |\vec{x}_k - \vec{x}_{ref}|_Q^2 + |\vec{u}_k|_R^2$$
+$$\text{s.t. } \vec{x}_{k+1} = f(\vec{x}_k, \vec{u}_k), \quad \vec{u}_k \in \mathcal{U}, \quad \vec{x}_k \in \mathcal{X}_{stable}$$
+其中状态 $\vec{x} = [\vec{r}, \vec{v}, \vec{q}, \dot{\vec{q}}]$ 包括位置、速度、姿态和角速度。</p>
+<h3 id="152-anymal">1.5.2 ANYmal的模块化方案</h3>
+<p>瑞士 ANYbotics 的 ANYmal 采用了更保守但更实用的设计：</p>
+<ol>
+<li>
+<p><strong>可更换足端模块</strong>：
+   - 标准足端：点接触，适合崎岖地形
+   - 轮式足端：可驱动轮，平地高速移动
+   - 切换时间：&lt; 5 分钟（人工）</p>
+</li>
+<li>
+<p><strong>电动驱动</strong>：ANYdrive 模块化执行器
+   - 峰值扭矩：40 Nm
+   - 连续扭矩：15 Nm
+   - 带宽：&gt; 100 Hz
+   - 效率：&gt; 80%</p>
+</li>
+<li>
+<p><strong>分布式控制架构</strong>：</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>High-level (10 Hz): 感知、规划
+Mid-level (100 Hz): MPC、WBC
+Low-level (1000 Hz): 关节控制、反射
+</code></pre></div>
+
+<p>ANYmal 的轮足切换策略基于地形分类：
+$$P(mode = wheel | terrain) = \frac{1}{1 + e^{-(\alpha_0 + \alpha_1 \cdot slope + \alpha_2 \cdot roughness)}}$$
+实验数据显示：</p>
+<ul>
+<li>平地速度：轮式 2.0 m/s，足式 1.0 m/s</li>
+<li>能耗：轮式 100 W，足式 350 W</li>
+<li>越障高度：轮式 5 cm，足式 25 cm</li>
+</ul>
+<h3 id="153">1.5.3 性能对比与适用场景</h3>
+<p>| 指标 | Handle | ANYmal |</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>Handle</th>
+<th>ANYmal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大速度</td>
+<td>4.2 m/s</td>
+<td>2.0 m/s (轮) / 1.0 m/s (足)</td>
+</tr>
+<tr>
+<td>续航时间</td>
+<td>2 小时</td>
+<td>4 小时</td>
+</tr>
+<tr>
+<td>有效载荷</td>
+<td>45 kg</td>
+<td>15 kg</td>
+</tr>
+<tr>
+<td>越障能力</td>
+<td>优秀（跳跃）</td>
+<td>良好（步态）</td>
+</tr>
+<tr>
+<td>地形适应</td>
+<td>中等</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>控制复杂度</td>
+<td>高（动态平衡）</td>
+<td>中等（静态稳定）</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>高（液压系统）</td>
+<td>中等（电动）</td>
+</tr>
+<tr>
+<td>维护</td>
+<td>复杂</td>
+<td>简单</td>
+</tr>
+</tbody>
+</table>
+<p>两种设计反映了不同的应用定位：</p>
+<ul>
+<li>Handle：仓库物流、快速运输</li>
+<li>ANYmal：巡检、搜救、科研</li>
+</ul>
+<h2 id="16">1.6 高级话题：变刚度机构与自适应悬架系统</h2>
+<h3 id="161-vsa">1.6.1 变刚度执行器（VSA）原理</h3>
+<p>变刚度执行器通过主动调节刚度来适应不同任务需求。其核心思想是在高刚度（精确控制）和低刚度（安全交互）之间动态切换。</p>
+<p>基本的 VSA 模型：
+$$\tau = k(\theta_m - \theta_l) + d(\dot{\theta}_m - \dot{\theta}_l)$$
+其中 $\theta_m$ 是电机位置，$\theta_l$ 是连杆位置，刚度 $k$ 可调。</p>
+<p>常见的实现方式：</p>
+<ol>
+<li>
+<p><strong>拮抗驱动</strong>：两个电机通过非线性弹簧耦合
+$$k_{eff} = \frac{\partial \tau}{\partial \theta} = k_1 + k_2 + (r_1^2 F_1 + r_2^2 F_2)/l$$</p>
+</li>
+<li>
+<p><strong>凸轮机构</strong>：改变弹簧预紧力
+$$k(\alpha) = k_0 + k_1 \cos(\alpha)$$</p>
+</li>
+<li>
+<p><strong>磁流变/电流变材料</strong>：通过电磁场调节材料刚度
+$$k(B) = k_0 (1 + \alpha B^2)$$
+VSA 的控制需要同时考虑位置和刚度：
+$$\vec{u} = [u_{position}, u_{stiffness}]^T$$
+这引入了新的优化问题：在满足任务约束的同时，最小化能量消耗和冲击。</p>
+</li>
+</ol>
+<h3 id="162">1.6.2 自适应悬架的控制策略</h3>
+<p>轮足机器人的悬架系统需要在不同地形和速度下自适应调节。主动悬架的动力学模型：
+$$m_s \ddot{z}_s = -k_s(z_s - z_u) - c_s(\dot{z}_s - \dot{z}_u) + f_a$$
+$$m_u \ddot{z}_u = k_s(z_s - z_u) + c_s(\dot{z}_s - \dot{z}_u) - k_t(z_u - z_r) - f_a$$
+其中：</p>
+<ul>
+<li>$m_s, m_u$：簧载质量和非簧载质量</li>
+<li>$z_s, z_u, z_r$：车身、轮轴和路面位移</li>
+<li>$k_s, c_s$：悬架刚度和阻尼</li>
+<li>$k_t$：轮胎刚度</li>
+<li>$f_a$：主动控制力</li>
+</ul>
+<p>自适应控制策略通常采用多目标优化：
+$$J = w_1 \int (\ddot{z}_s)^2 dt + w_2 \int (z_s - z_{ref})^2 dt + w_3 \int f_a^2 dt$$
+其中权重 $w_i$ 根据运行模式动态调整：</p>
+<ul>
+<li>高速移动：重视舒适性（$w_1$ 大）</li>
+<li>精确操作：重视位置精度（$w_2$ 大）</li>
+<li>节能模式：重视能耗（$w_3$ 大）</li>
+</ul>
+<h3 id="163">1.6.3 未来发展方向</h3>
+<p>变刚度和自适应技术的发展趋势：</p>
+<ol>
+<li>
+<p><strong>智能材料集成</strong>：
+   - 形状记忆合金（SMA）执行器
+   - 压电材料的高频振动抑制
+   - 自修复材料提高可靠性</p>
+</li>
+<li>
+<p><strong>学习型自适应</strong>：</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 伪代码：基于强化学习的刚度调节</span>
+<span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="n">terrain_type</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">load</span><span class="p">]</span>
+<span class="n">stiffness</span> <span class="o">=</span> <span class="n">policy_network</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">reward</span> <span class="o">=</span> <span class="o">-</span><span class="n">energy</span> <span class="o">-</span> <span class="n">tracking_error</span> <span class="o">-</span> <span class="n">impact</span>
+</code></pre></div>
+
+<ol start="3">
+<li><strong>分布式柔性</strong>：
+   - 每个关节独立调节刚度
+   - 基于任务的刚度椭球优化
+   - 接触点的局部柔顺控制</li>
+</ol>
+<p>这些技术的成熟将使轮足机器人能够：</p>
+<ul>
+<li>在未知地形上保持稳定高速移动</li>
+<li>安全地与人类和环境交互</li>
+<li>通过能量存储和释放提高效率</li>
+</ul>
+<h2 id="_2">本章小结</h2>
+<p>本章系统介绍了轮足机械臂机器人的架构设计原理，核心要点包括：</p>
+<h3 id="_3">关键概念回顾</h3>
+<ol>
+<li>
+<p><strong>运动形式权衡</strong>：
+   - 轮式：高效（CoT ≈ 0.05-0.1）但地形受限
+   - 足式：灵活但能耗高（CoT ≈ 0.5-2.0）
+   - 轮足混合：通过智能切换实现优势互补</p>
+</li>
+<li>
+<p><strong>执行器选择</strong>：
+   - 液压：功率密度高（3-5 kW/kg），适合大负载
+   - 电动：控制精度高（&lt; 0.01°），效率高（&gt; 90%）
+   - 选择依据：任务需求、能源约束、维护成本</p>
+</li>
+<li>
+<p><strong>机械臂集成挑战</strong>：
+   - 动态耦合：$\vec{p}_{base} + \vec{p}_{arm} = \text{const}$
+   - 稳定性约束：ZMP、接触力锥
+   - 工作空间：$\mathcal{W}_{effective} = \mathcal{W}_{arm} \oplus \mathcal{W}_{base}$</p>
+</li>
+<li>
+<p><strong>系统性能限制</strong>：
+   - 控制带宽：$f_{control} &lt; f_n/5$
+   - 结构刚度：$k &gt; 35,000 \cdot m$ (N/m)
+   - 总延迟：10-30 ms 限制带宽在 30-100 Hz</p>
+</li>
+</ol>
+<h3 id="_4">核心公式汇总</h3>
+<p>| 类别 | 公式 | 说明 |</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>公式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运动学约束</td>
+<td>$\dot{x} = r\omega \cos\theta$</td>
+<td>轮式运动模型</td>
+</tr>
+<tr>
+<td>摩擦锥约束</td>
+<td>$\sqrt{f_x^2 + f_y^2} \leq \mu f_z$</td>
+<td>接触力限制</td>
+</tr>
+<tr>
+<td>能耗模型</td>
+<td>$E_{total} = E_{locomotion} + E_{transition} + E_{stabilization}$</td>
+<td>总能耗分解</td>
+</tr>
+<tr>
+<td>ZMP计算</td>
+<td>$\vec{r}_{ZMP} = \frac{\sum_i (m_i \vec{r}_i (\ddot{z}_i + g))}{\sum_i m_i (\ddot{z}_i + g)}$</td>
+<td>动态稳定性</td>
+</tr>
+<tr>
+<td>控制带宽</td>
+<td>$f_{control} &lt; \frac{1}{10\pi}\sqrt{\frac{k}{m}}$</td>
+<td>结构限制</td>
+</tr>
+<tr>
+<td>VSA模型</td>
+<td>$\tau = k(\theta_m - \theta_l)$</td>
+<td>变刚度原理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">设计决策流程</h3>
+<div class="codehilite"><pre><span></span><code><span class="mf">1.</span><span class="w"> </span><span class="n">确定应用场景</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mf">2.</span><span class="w"> </span><span class="n">选择运动形式</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mf">3.</span><span class="w"> </span><span class="n">确定执行器类型</span>
+<span class="w">                </span><span class="err">↓</span>
+
+<span class="mf">6.</span><span class="w"> </span><span class="n">验证与迭代</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mf">5.</span><span class="w"> </span><span class="n">优化质量分布</span><span class="w"> </span><span class="err">←</span><span class="w"> </span><span class="mf">4.</span><span class="w"> </span><span class="n">设计结构刚度</span>
+</code></pre></div>
+
+<h2 id="_6">练习题</h2>
+<h3 id="_7">基础题（理解概念）</h3>
+<p><strong>习题 1.1</strong> 某轮式机器人在平地上以 2 m/s 速度移动，轮半径 0.2 m，质量 50 kg。若滚动摩擦系数为 0.01，计算其稳态功耗和 CoT。</p>
+<details>
+<summary>提示</summary>
+<p>使用滚动阻力公式 $F_r = \mu_r mg$，功率 $P = F_r v$，CoT = P/(mgv)</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>滚动阻力：$F_r = 0.01 \times 50 \times 9.8 = 4.9$ N
+功率：$P = 4.9 \times 2 = 9.8$ W
+CoT = $9.8/(50 \times 9.8 \times 2) = 0.01$</p>
+</details>
+<p><strong>习题 1.2</strong> 一个液压缸直径 50 mm，工作压力 200 bar。计算其最大输出力，并与相同重量（2 kg）的电机（峰值扭矩 40 Nm，减速比 100:1）比较。</p>
+<details>
+<summary>提示</summary>
+<p>液压力 $F = p \times A$，电机输出力需考虑力臂</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>液压缸面积：$A = \pi (0.025)^2 = 1.96 \times 10^{-3}$ m²
+液压力：$F = 200 \times 10^5 \times 1.96 \times 10^{-3} = 39,200$ N
+电机输出扭矩：$\tau = 40 \times 100 = 4000$ Nm
+若力臂为 0.1 m，电机输出力：$F = 4000/0.1 = 40,000$ N
+两者相当，但液压系统响应更快</p>
+</details>
+<p><strong>习题 1.3</strong> 机器人结构的第一阶固有频率为 25 Hz，等效质量 10 kg。求所需的最小结构刚度，并判断能否实现 10 Hz 的控制带宽。</p>
+<details>
+<summary>提示</summary>
+<p>使用 $f_n = \frac{1}{2\pi}\sqrt{\frac{k}{m}}$ 和 1/5 规则</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>刚度：$k = 4\pi^2 f_n^2 m = 4\pi^2 \times 25^2 \times 10 = 246,740$ N/m
+最大控制带宽：$f_{control} &lt; 25/5 = 5$ Hz
+无法实现 10 Hz 控制带宽，需提高结构刚度至 50 Hz 固有频率</p>
+</details>
+<h3 id="_8">挑战题（深入分析）</h3>
+<p><strong>习题 1.4</strong> 设计一个轮足切换策略。给定地形参数：坡度 θ (0-45°)，粗糙度 σ (0-0.2 m)，障碍密度 ρ (0-10 个/m²)。建立切换决策的数学模型。</p>
+<details>
+<summary>提示</summary>
+<p>考虑建立成本函数，包括能耗、通过概率、速度等因素</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>定义综合成本函数：
+$$J_{mode} = w_1 \cdot E_{mode} + w_2 \cdot (1-P_{traverse}) + w_3 \cdot t_{traverse}$$</p>
+<p>轮式模式：</p>
+<ul>
+<li>能耗：$E_{wheel} = 0.1 \cdot (1 + \tan\theta)$</li>
+<li>通过概率：$P_{wheel} = e^{-2(\theta/30 + 5\sigma + 0.1\rho)}$</li>
+<li>时间：$t_{wheel} = d/v_{wheel}$，其中 $v_{wheel} = 2(1-\theta/45)$ m/s</li>
+</ul>
+<p>足式模式：</p>
+<ul>
+<li>能耗：$E_{leg} = 1.0 \cdot (1 + 0.5\tan\theta)$</li>
+<li>通过概率：$P_{leg} = 1 - e^{-0.5(1 - \theta/45 - \sigma/0.2 - \rho/10)}$</li>
+<li>时间：$t_{leg} = d/v_{leg}$，其中 $v_{leg} = 0.5$ m/s</li>
+</ul>
+<p>决策：选择 $J$ 最小的模式</p>
+</details>
+<p><strong>习题 1.5</strong> 某轮足机器人携带 7-DOF 机械臂，基座质量 80 kg，机械臂总质量 20 kg。机械臂末端以 1 m/s 速度运动时，估算对基座稳定性的影响。</p>
+<details>
+<summary>提示</summary>
+<p>使用动量守恒和 ZMP 分析</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>动量守恒：$m_{arm} v_{arm} + m_{base} v_{base} = 0$
+基座速度：$v_{base} = -\frac{20 \times 1}{80} = -0.25$ m/s</p>
+<p>ZMP 偏移（简化模型）：
+$\Delta x_{ZMP} \approx \frac{m_{arm} \cdot l_{arm} \cdot a_{arm}}{(m_{arm} + m_{base}) \cdot g}$</p>
+<p>假设臂长 1 m，加速度 2 m/s²：
+$\Delta x_{ZMP} = \frac{20 \times 1 \times 2}{100 \times 9.8} = 0.041$ m</p>
+<p>需确保 ZMP 偏移在支撑多边形内（典型安全裕度 &gt; 0.1 m）</p>
+</details>
+<p><strong>习题 1.6</strong> 比较 Handle 和 ANYmal 在以下场景的适用性：(a) 仓库货物搬运 (b) 山地搜救 (c) 核电站巡检。给出定量评分（1-10）。</p>
+<details>
+<summary>提示</summary>
+<p>考虑速度、续航、载荷、地形适应、可靠性等因素</p>
+</details>
+<details>
+<summary>答案</summary>
+<p>评分矩阵（1-10，10 最佳）：</p>
+<p>| 场景 | Handle | ANYmal | 关键因素 |</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>Handle</th>
+<th>ANYmal</th>
+<th>关键因素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>仓库搬运</td>
+<td>9</td>
+<td>5</td>
+<td>速度(H:9)、载荷(H:9)、平地效率(H:10)</td>
+</tr>
+<tr>
+<td>山地搜救</td>
+<td>4</td>
+<td>9</td>
+<td>地形适应(A:9)、续航(A:8)、稳定性(A:9)</td>
+</tr>
+<tr>
+<td>核电站巡检</td>
+<td>6</td>
+<td>8</td>
+<td>可靠性(A:9)、维护(A:8)、精确控制(A:7)</td>
+</tr>
+</tbody>
+</table>
+<p>Handle 优势：高速、大载荷、动态性能
+ANYmal 优势：稳定、可靠、全地形</p>
+</details>
+<p><strong>习题 1.7</strong>（开放题）未来 10 年，轮足机器人最可能的技术突破点是什么？请从材料、控制、感知三个角度分析。</p>
+<details>
+<summary>思考方向</summary>
+<ul>
+<li>材料：智能材料、自修复、变刚度</li>
+<li>控制：学习型控制、云端协同、仿生算法</li>
+<li>感知：多模态融合、触觉反馈、意图理解</li>
+</ul>
+</details>
+<p><strong>习题 1.8</strong>（设计题）为火星探测设计一款轮足机械臂机器人。考虑：重力 3.7 m/s²，温度 -60°C 到 20°C，沙尘暴，通信延迟 4-24 分钟。</p>
+<details>
+<summary>设计要点</summary>
+<ul>
+<li>轻量化设计（火星重力小）</li>
+<li>密封防尘（沙尘暴）</li>
+<li>宽温度范围材料和润滑</li>
+<li>高度自主（通信延迟）</li>
+<li>太阳能+电池供电</li>
+<li>冗余设计（维修困难）</li>
+</ul>
+</details>
+<h2 id="gotchas">常见陷阱与错误（Gotchas）</h2>
+<h3 id="_9">设计阶段常见错误</h3>
+<ol>
+<li>
+<p><strong>过度优化单一指标</strong>
+   - ❌ 错误：只追求最大速度，忽视稳定性
+   - ✅ 正确：平衡速度、稳定性、能耗等多个指标</p>
+</li>
+<li>
+<p><strong>忽视动态耦合</strong>
+   - ❌ 错误：独立设计移动平台和机械臂
+   - ✅ 正确：考虑机械臂运动对基座的反作用</p>
+</li>
+<li>
+<p><strong>刚度设计不足</strong>
+   - ❌ 错误：按静载设计，忽视动态响应
+   - ✅ 正确：确保 $f_n &gt; 5 \times f_{control}$</p>
+</li>
+</ol>
+<h3 id="_10">实现阶段常见陷阱</h3>
+<ol start="4">
+<li>
+<p><strong>传感器布置不当</strong>
+   - ❌ 错误：IMU 安装在振动部位
+   - ✅ 正确：IMU 安装在刚性好、振动小的位置，必要时加装减振器</p>
+</li>
+<li>
+<p><strong>通信总线瓶颈</strong>
+   - ❌ 错误：所有传感器共用一条 CAN 总线
+   - ✅ 正确：分层通信架构，关键信号独立通道</p>
+</li>
+<li>
+<p><strong>忽视热管理</strong>
+   - ❌ 错误：按峰值功率选择电机，忽视散热
+   - ✅ 正确：考虑连续功率和温升，设计主动散热</p>
+</li>
+</ol>
+<h3 id="_11">调试阶段易犯错误</h3>
+<ol start="7">
+<li>
+<p><strong>控制参数调节顺序错误</strong>
+   - ❌ 错误：直接调节高层控制器
+   - ✅ 正确：从底层到高层逐级调节（电流环→速度环→位置环）</p>
+</li>
+<li>
+<p><strong>忽视机械间隙和迟滞</strong>
+   - ❌ 错误：假设理想传动
+   - ✅ 正确：建模并补偿间隙、摩擦、迟滞</p>
+</li>
+<li>
+<p><strong>模式切换不平滑</strong>
+   - ❌ 错误：轮足模式硬切换
+   - ✅ 正确：设计过渡态，确保连续性</p>
+</li>
+</ol>
+<h2 id="_12">最佳实践检查清单</h2>
+<h3 id="_13">概念设计阶段 ✓</h3>
+<ul>
+<li>[ ] 明确定义任务需求和性能指标</li>
+<li>[ ] 完成运动形式的定量对比分析</li>
+<li>[ ] 建立初步的动力学模型</li>
+<li>[ ] 评估执行器类型（液压/电动/混合）</li>
+<li>[ ] 确定传感器配置方案</li>
+<li>[ ] 制定模块化和可维护性策略</li>
+</ul>
+<h3 id="_14">详细设计阶段 ✓</h3>
+<ul>
+<li>[ ] 完成运动学和工作空间分析</li>
+<li>[ ] 验证结构刚度满足控制带宽要求（$f_n &gt; 5f_{control}$）</li>
+<li>[ ] 优化质量分布（惯量比 1-10）</li>
+<li>[ ] 设计冗余和故障保护机制</li>
+<li>[ ] 完成热分析和散热设计</li>
+<li>[ ] 制定线缆管理方案</li>
+</ul>
+<h3 id="_15">控制设计阶段 ✓</h3>
+<ul>
+<li>[ ] 建立完整的动力学模型（包括柔性和摩擦）</li>
+<li>[ ] 设计分层控制架构（1000Hz/100Hz/10Hz）</li>
+<li>[ ] 实现平滑的模式切换策略</li>
+<li>[ ] 设计稳定性监测和保护机制</li>
+<li>[ ] 规划标定和参数辨识流程</li>
+</ul>
+<h3 id="_16">集成测试阶段 ✓</h3>
+<ul>
+<li>[ ] 逐级测试（组件→子系统→系统）</li>
+<li>[ ] 验证所有工作模式和切换</li>
+<li>[ ] 测试极限工况和故障模式</li>
+<li>[ ] 测量实际能耗和续航时间</li>
+<li>[ ] 验证通信延迟和控制带宽</li>
+<li>[ ] 完成 EMC 和环境适应性测试</li>
+</ul>
+<h3 id="_17">部署维护阶段 ✓</h3>
+<ul>
+<li>[ ] 建立运行数据记录和分析系统</li>
+<li>[ ] 制定预防性维护计划</li>
+<li>[ ] 准备故障诊断工具和流程</li>
+<li>[ ] 建立软件更新和版本管理机制</li>
+<li>[ ] 培训操作和维护人员</li>
+<li>[ ] 建立备件库存管理</li>
+</ul>
+<hr />
+<p>通过本章的学习，你应该已经建立了对轮足机械臂机器人架构设计的系统性认识。记住，优秀的机器人设计不是各个组件的简单堆砌，而是在深入理解各子系统相互作用基础上的整体优化。下一章，我们将深入探讨执行器的选择与优化，这是实现高性能机器人系统的关键基础。</p>
+            </article>
+            
+            <nav class="page-nav"><a href="index.html" class="nav-link prev">← 轮足机械臂机器人：从硬件制造到智能算法</a><a href="chapter2.html" class="nav-link next">第2章：执行器选择与优化 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

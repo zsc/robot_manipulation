@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第10章：阻抗控制与力控制</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="10">第10章：阻抗控制与力控制</h1>
+<p>机器人与环境的物理交互是实现复杂操作任务的核心挑战。传统的位置控制在自由空间运动时表现优异，但在接触任务中往往力不从心——过高的位置增益可能导致过大的接触力，甚至损坏机器人或环境。本章系统介绍阻抗控制理论，这是一种优雅地统一位置与力控制的框架，通过调节机器人的动态行为来实现柔顺且稳定的物理交互。我们将深入探讨不同控制模式的数学基础、稳定性分析以及工程实现中的关键问题。</p>
+<h2 id="101-vsvs">10.1 位置控制vs力控制vs阻抗控制</h2>
+<h3 id="1011">10.1.1 三种控制范式的基本原理</h3>
+<p>在机器人控制领域，存在三种基本的控制范式，每种都有其独特的优势和适用场景。</p>
+<p><strong>位置控制（Position Control）</strong> 是最直观的控制方式，控制器的目标是让机器人末端执行器达到期望位置 $\mathbf{x}_d$：</p>
+<p>$$\boldsymbol{\tau} = \mathbf{K}_p(\mathbf{x}_d - \mathbf{x}) + \mathbf{K}_d(\dot{\mathbf{x}}_d - \dot{\mathbf{x}}) + \mathbf{g}(\mathbf{q})$$
+其中 $\mathbf{K}_p$ 和 $\mathbf{K}_d$ 分别是位置和速度增益矩阵，$\mathbf{g}(\mathbf{q})$ 是重力补偿项。这种控制方式在自由空间运动中效果excellent，但在接触环境中会产生问题：微小的位置误差会导致巨大的接触力。</p>
+<p><strong>力控制（Force Control）</strong> 直接控制机器人与环境的接触力 $\mathbf{F}_d$：
+$$\boldsymbol{\tau} = \mathbf{J}^T(\mathbf{F}_d + \mathbf{K}_f \int (\mathbf{F}_d - \mathbf{F}) dt)$$
+其中 $\mathbf{J}$ 是雅可比矩阵，$\mathbf{K}_f$ 是力控制增益。纯力控制在接触任务中表现出色，但无法控制运动方向上的位置。</p>
+<p><strong>阻抗控制（Impedance Control）</strong> 则是一种更加灵活的方法，它不直接控制位置或力，而是控制位置与力之间的动态关系：
+$$\mathbf{M}_d(\ddot{\mathbf{x}} - \ddot{\mathbf{x}}_d) + \mathbf{C}_d(\dot{\mathbf{x}} - \dot{\mathbf{x}}_d) + \mathbf{K}_d(\mathbf{x} - \mathbf{x}_d) = \mathbf{F}_{ext}$$
+这里 $\mathbf{M}_d$、$\mathbf{C}_d$、$\mathbf{K}_d$ 分别是期望的惯性、阻尼和刚度矩阵，$\mathbf{F}_{ext}$ 是外部作用力。</p>
+<h3 id="1012">10.1.2 适用场景对比</h3>
+<div class="codehilite"><pre><span></span><code>场景类型        位置控制    力控制    阻抗控制
+--------------------------------------------
+自由空间运动      优秀       差        良好
+硬接触           差         优秀      良好
+软接触           一般       良好      优秀
+装配任务         差         一般      优秀
+人机协作         危险       安全      最安全
+计算复杂度       低         中        高
+传感器需求       编码器     力传感器   两者皆需
+</code></pre></div>
+
+<h3 id="1013">10.1.3 数学模型与动力学耦合</h3>
+<p>考虑一个n自由度机械臂的动力学方程：
+$$\mathbf{M}(\mathbf{q})\ddot{\mathbf{q}} + \mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q}) = \boldsymbol{\tau} + \mathbf{J}^T\mathbf{F}_{ext}$$
+在阻抗控制中，我们希望末端执行器表现出期望的阻抗特性。通过逆动力学控制，可以设计控制律：
+$$\boldsymbol{\tau} = \mathbf{M}(\mathbf{q})\mathbf{J}^{-1}[\ddot{\mathbf{x}}_d - \dot{\mathbf{J}}\dot{\mathbf{q}}] + \mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q}) - \mathbf{J}^T\mathbf{F}_{cmd}$$
+其中 $\mathbf{F}_{cmd}$ 是根据阻抗控制律计算的虚拟力：
+$$\mathbf{F}_{cmd} = \mathbf{M}_d^{-1}[\mathbf{K}_d(\mathbf{x}_d - \mathbf{x}) + \mathbf{C}_d(\dot{\mathbf{x}}_d - \dot{\mathbf{x}}) - \mathbf{F}_{ext}]$$</p>
+<h2 id="102">10.2 笛卡尔阻抗与关节阻抗</h2>
+<h3 id="1021">10.2.1 笛卡尔空间阻抗控制</h3>
+<p>笛卡尔阻抗控制直接在任务空间定义期望的动态行为。对于6维任务空间（3维位置+3维姿态），期望阻抗可以表示为：
+$$\begin{bmatrix} \mathbf{F} \\ \boldsymbol{\tau}_e \end{bmatrix} = \begin{bmatrix} \mathbf{K}_p &amp; \mathbf{0} \\ \mathbf{0} &amp; \mathbf{K}_o \end{bmatrix} \begin{bmatrix} \Delta \mathbf{p} \\ \Delta \boldsymbol{\phi} \end{bmatrix} + \begin{bmatrix} \mathbf{D}_p &amp; \mathbf{0} \\ \mathbf{0} &amp; \mathbf{D}_o \end{bmatrix} \begin{bmatrix} \Delta \dot{\mathbf{p}} \\ \Delta \boldsymbol{\omega} \end{bmatrix}$$
+其中 $\Delta \mathbf{p}$ 是位置误差，$\Delta \boldsymbol{\phi}$ 是姿态误差（可用轴角表示），$\mathbf{K}_p$、$\mathbf{K}_o$ 是位置和姿态刚度，$\mathbf{D}_p$、$\mathbf{D}_o$ 是相应的阻尼矩阵。</p>
+<p>姿态误差的计算需要特别注意，常用的方法是通过四元数：
+$$\Delta \boldsymbol{\phi} = 2 \cdot \text{vec}(\mathbf{q}_d \otimes \mathbf{q}^{-1})$$
+其中 $\text{vec}(\cdot)$ 提取四元数的向量部分。</p>
+<h3 id="1022">10.2.2 关节空间阻抗控制</h3>
+<p>关节阻抗控制在关节空间定义期望行为：
+$$\boldsymbol{\tau} = \mathbf{K}_q(\mathbf{q}_d - \mathbf{q}) + \mathbf{D}_q(\dot{\mathbf{q}}_d - \dot{\mathbf{q}}) + \mathbf{g}(\mathbf{q})$$
+关节阻抗与笛卡尔阻抗之间通过雅可比矩阵相关联：
+$$\mathbf{K}_x = (\mathbf{J}^{-T} \mathbf{K}_q \mathbf{J}^{-1})|_{\mathbf{q}=\mathbf{q}_0}$$
+这个关系表明，关节刚度通过运动学配置影响笛卡尔刚度，在奇异配置附近，笛卡尔刚度会显著降低。</p>
+<h3 id="1023">10.2.3 可变刚度与零空间利用</h3>
+<p>对于冗余机器人（n &gt; 6），可以利用零空间调节刚度椭球的形状而不改变末端位置：
+$$\boldsymbol{\tau} = \mathbf{J}^T \mathbf{F}_{task} + (\mathbf{I} - \mathbf{J}^T \mathbf{J}^{T\dagger}) \boldsymbol{\tau}_{null}$$
+其中 $\mathbf{J}^{T\dagger} = (\mathbf{J}\mathbf{J}^T)^{-1}\mathbf{J}$ 是雅可比的伪逆，$\boldsymbol{\tau}_{null}$ 是零空间力矩，可用于：</p>
+<ul>
+<li>避免关节限位</li>
+<li>优化可操作度</li>
+<li>调节刚度椭球方向</li>
+</ul>
+<h2 id="103">10.3 接触稳定性与被动性</h2>
+<h3 id="1031">10.3.1 接触动力学建模</h3>
+<p>当机器人与环境接触时，系统动力学变为：</p>
+<div class="codehilite"><pre><span></span><code>    机器人                  环境
+      ↓                     ↓
+M_r ẍ + C_r ẋ + K_r x = F_c
+                          ↑
+                    F_c = K_e(x - x_e) + C_e ẋ
+</code></pre></div>
+
+<p>闭环系统的稳定性取决于机器人阻抗 $Z_r(s)$ 与环境阻抗 $Z_e(s)$ 的相互作用：
+$$Z_r(s) = M_r s^2 + C_r s + K_r$$
+$$Z_e(s) = C_e s + K_e$$</p>
+<h3 id="1032">10.3.2 稳定性条件</h3>
+<p>Hogan的稳定性准则指出，对于稳定的接触：</p>
+<ol>
+<li>机器人与环境中至少一个必须是被动的</li>
+<li>如果环境刚度很高，机器人应表现为低阻抗</li>
+<li>耦合端口的能量流必须满足被动性条件</li>
+</ol>
+<p>稳定性可通过Nyquist图分析，避免 $Z_r(j\omega) + Z_e(j\omega) = 0$ 的情况。</p>
+<h3 id="1033">10.3.3 被动性设计</h3>
+<p>为保证被动性，阻抗参数必须满足：
+$$\mathbf{M}_d &gt; 0, \quad \mathbf{K}_d \geq 0, \quad \mathbf{C}_d \geq 2\sqrt{\mathbf{M}_d \mathbf{K}_d}$$
+最后一个条件确保系统是过阻尼或临界阻尼的。在实际实现中，通常选择：
+$$\mathbf{C}_d = 2\zeta\sqrt{\mathbf{M}_d \mathbf{K}_d}$$
+其中 $\zeta \in [0.7, 1.0]$ 是阻尼比。</p>
+<h2 id="104">10.4 混合力/位置控制架构</h2>
+<h3 id="1041">10.4.1 选择矩阵方法</h3>
+<p>Mason提出的选择矩阵 $\mathbf{S}$ 允许在不同方向上分别进行力控制和位置控制：
+$$\boldsymbol{\tau} = \mathbf{J}^T[\mathbf{S}\mathbf{F}_d + (\mathbf{I} - \mathbf{S})\mathbf{F}_p]$$
+其中：</p>
+<ul>
+<li>$\mathbf{F}_d$ 是期望力</li>
+<li>$\mathbf{F}_p = \mathbf{K}_p(\mathbf{x}_d - \mathbf{x}) + \mathbf{K}_d(\dot{\mathbf{x}}_d - \dot{\mathbf{x}})$ 是位置控制产生的虚拟力</li>
+<li>$\mathbf{S} = \text{diag}(s_1, s_2, ..., s_6)$，$s_i \in \{0, 1\}$</li>
+</ul>
+<p>例如，对于平面抛光任务：</p>
+<div class="codehilite"><pre><span></span><code>S = diag(1, 1, 0, 1, 1, 1)
+        ↑  ↑  ↑  ↑  ↑  ↑
+        x  y  z  α  β  γ
+</code></pre></div>
+
+<p>表示z方向力控制，其他方向位置控制。</p>
+<h3 id="1042">10.4.2 约束框架</h3>
+<p>De Schutter和Bruyninckx提出的约束框架通过定义约束雅可比 $\mathbf{J}_c$ 来描述任务：
+$$\mathbf{J}_c \dot{\mathbf{x}} = \mathbf{0}$$
+控制律设计为：
+$$\boldsymbol{\tau} = \mathbf{J}^T_c \boldsymbol{\lambda} + (\mathbf{I} - \mathbf{J}^T_c \mathbf{J}^{T\dagger}_c)\mathbf{J}^T \mathbf{F}_{motion}$$
+其中 $\boldsymbol{\lambda}$ 是约束力，$\mathbf{F}_{motion}$ 控制约束允许的运动。</p>
+<h3 id="1043">10.4.3 实现细节与切换策略</h3>
+<p>在力/位置控制模式切换时，需要注意：</p>
+<ol>
+<li><strong>连续性保证</strong>：切换瞬间的控制输出应连续</li>
+<li><strong>积分器管理</strong>：切换时重置积分项避免wind-up</li>
+<li><strong>滤波器状态</strong>：保持滤波器状态连续性</li>
+</ol>
+<p>切换逻辑示例：</p>
+<div class="codehilite"><pre><span></span><code>if (contact_detected &amp;&amp; F_normal &gt; F_threshold):
+    S[2] = 0  # 切换到z方向力控制
+    integral_force_z = 0  # 重置积分器
+    F_d[2] = F_normal  # 设置期望力为当前接触力
+</code></pre></div>
+
+<h2 id="105-dlr">10.5 案例研究：德国宇航中心DLR轻型机器人的软体控制</h2>
+<h3 id="1051">10.5.1 背景与挑战</h3>
+<p>德国宇航中心（DLR）的轻型机器人系列（LWR-III/IV、KUKA LBR iiwa）是阻抗控制领域的标杆。这些机器人专为安全人机协作设计，面临的核心挑战包括：</p>
+<ol>
+<li><strong>高带宽力控制</strong>：需要1kHz以上的控制频率</li>
+<li><strong>关节弹性</strong>：谐波减速器引入的弹性影响稳定性</li>
+<li><strong>多模态控制</strong>：位置、力、阻抗模式的无缝切换</li>
+<li><strong>安全性保证</strong>：碰撞检测与反应时间&lt; 5ms</li>
+</ol>
+<h3 id="1052">10.5.2 硬件架构</h3>
+<p>DLR机器人的独特设计：</p>
+<div class="codehilite"><pre><span></span><code>关节传感器配置：
+┌─────────────────────────┐
+│  电机侧编码器（19位）      │ ← 电机位置 θ_m
+├─────────────────────────┤
+│  谐波减速器（100:1）      │ ← 弹性元件 K_joint
+├─────────────────────────┤
+│  连杆侧编码器（12位）      │ ← 连杆位置 θ_l
+├─────────────────────────┤
+│  关节力矩传感器           │ ← 力矩测量 τ_sensor
+└─────────────────────────┘
+</code></pre></div>
+
+<p>双编码器设计允许直接测量关节弹性变形：
+$$\tau_{elastic} = K_{joint}(\theta_m / N - \theta_l)$$
+其中 $N$ 是减速比。</p>
+<h3 id="1053">10.5.3 控制架构实现</h3>
+<p>DLR采用分层控制架构：</p>
+<p><strong>第1层：关节力矩控制（3kHz）</strong></p>
+<div class="codehilite"><pre><span></span><code>τ_cmd = τ_model + K_τ(τ_d - τ_sensor) + D_τ(τ̇_d - τ̇_sensor)
+</code></pre></div>
+
+<p><strong>第2层：笛卡尔阻抗控制（1kHz）</strong></p>
+<div class="codehilite"><pre><span></span><code>F_d = M_d(ẍ_d - ẍ) + C_d(ẋ_d - ẋ) + K_d(x_d - x) + F_ext
+τ_d = J^T F_d + null_space_torque
+</code></pre></div>
+
+<p><strong>第3层：任务规划（100Hz）</strong></p>
+<ul>
+<li>轨迹生成</li>
+<li>阻抗参数调度</li>
+<li>模式切换逻辑</li>
+</ul>
+<h3 id="1054">10.5.4 关键创新</h3>
+<ol>
+<li>
+<p><strong>振动抑制</strong>：通过状态反馈抑制弹性关节振动
+$$\tau_{motor} = \tau_{desired} + K_{damp}(\dot{\theta}_m - \dot{\theta}_l)$$</p>
+</li>
+<li>
+<p><strong>碰撞检测</strong>：基于动量观测器
+$$r = K_I \int (\tau_{ext} - \tau_{threshold}) dt$$
+当 $|r| &gt; r_{max}$ 时触发安全反应。</p>
+</li>
+<li>
+<p><strong>可变刚度控制</strong>：根据任务阶段自适应调节</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>装配接近阶段：K = 1000 N/m
+接触阶段：    K = 200 N/m
+插入阶段：    K = 50 N/m
+</code></pre></div>
+
+<h3 id="1055">10.5.5 性能指标</h3>
+<p>DLR LBR iiwa的典型性能：</p>
+<ul>
+<li>位置精度：±0.1mm</li>
+<li>力控制精度：±0.5N</li>
+<li>最小可控阻抗：10 N/m</li>
+<li>碰撞反应时间：&lt; 4ms</li>
+<li>安全接触力：&lt; 50N（ISO 10218标准）</li>
+</ul>
+<h2 id="106">10.6 高级话题：分数阶控制与自适应阻抗</h2>
+<h3 id="1061">10.6.1 分数阶阻抗控制</h3>
+<p>传统阻抗控制使用整数阶微分，分数阶控制引入非整数阶微分算子：
+$$M_d s^2 + C_d s^{\alpha} + K_d = Z_d(s), \quad 0 &lt; \alpha &lt; 2$$
+分数阶微分的Caputo定义：
+$$D^{\alpha} f(t) = \frac{1}{\Gamma(n-\alpha)} \int_0^t \frac{f^{(n)}(\tau)}{(t-\tau)^{\alpha-n+1}} d\tau$$
+其中 $n-1 &lt; \alpha &lt; n$，$\Gamma(\cdot)$ 是伽马函数。</p>
+<p><strong>优势</strong>：</p>
+<ol>
+<li>更灵活的频率响应调节</li>
+<li>改善的鲁棒性</li>
+<li>更好的人类肌肉阻抗匹配（研究表明人类肌肉表现出分数阶特性）</li>
+</ol>
+<p><strong>实现方法</strong>：
+Oustaloup近似将分数阶算子离散化：
+$$s^{\alpha} \approx K \prod_{k=-N}^{N} \frac{s + \omega_k'}{s + \omega_k}$$
+其中频率点按几何级数分布。</p>
+<h3 id="1062">10.6.2 自适应阻抗控制</h3>
+<p>自适应阻抗根据环境特性和任务需求实时调节参数：</p>
+<p><strong>基于力跟踪误差的自适应律</strong>：
+$$\dot{K}_d = -\gamma_K \mathbf{e}_F \mathbf{e}_x^T$$
+$$\dot{C}_d = -\gamma_C \mathbf{e}_F \dot{\mathbf{e}}_x^T$$
+其中 $\mathbf{e}_F = \mathbf{F}_d - \mathbf{F}$ 是力误差，$\mathbf{e}_x = \mathbf{x}_d - \mathbf{x}$ 是位置误差。</p>
+<p><strong>基于强化学习的阻抗优化</strong>：
+使用策略梯度方法优化阻抗参数：</p>
+<div class="codehilite"><pre><span></span><code>状态 s = [e_x, ė_x, F_ext, Ḟ_ext]
+动作 a = [ΔK_d, ΔC_d, ΔM_d]
+奖励 r = -w_1||e_F||² - w_2||e_x||² - w_3||a||²
+</code></pre></div>
+
+<h3 id="1063">10.6.3 变阻抗的生物启发</h3>
+<p>人类手臂阻抗调节机制：</p>
+<ol>
+<li><strong>协同收缩</strong>：同时激活拮抗肌增加刚度</li>
+<li><strong>反射调节</strong>：基于感觉反馈的快速调节</li>
+<li><strong>预测性调节</strong>：基于任务预期的前馈调节</li>
+</ol>
+<p>仿生实现：
+$$K_{arm} = K_{base} + \alpha \cdot co_contraction + \beta \cdot reflex_gain$$</p>
+<h2 id="107">10.7 本章小结</h2>
+<p>本章系统介绍了机器人阻抗控制的理论基础与工程实现。关键要点包括：</p>
+<ol>
+<li><strong>控制模式选择</strong>：位置控制适用于自由空间，力控制适用于约束空间，阻抗控制提供统一框架</li>
+<li><strong>阻抗参数设计</strong>：需考虑稳定性、被动性和任务需求</li>
+<li><strong>笛卡尔vs关节空间</strong>：笛卡尔空间直观但计算复杂，关节空间高效但缺乏物理直观性</li>
+<li><strong>稳定性保证</strong>：接触稳定性依赖于机器人与环境阻抗的匹配</li>
+<li><strong>混合控制</strong>：选择矩阵方法实现力/位置的解耦控制</li>
+<li><strong>工程实现</strong>：高性能阻抗控制需要优秀的硬件设计与多层控制架构</li>
+</ol>
+<p><strong>核心公式汇总</strong>：</p>
+<p>阻抗控制基本方程：
+$$\mathbf{M}_d(\ddot{\mathbf{x}} - \ddot{\mathbf{x}}_d) + \mathbf{C}_d(\dot{\mathbf{x}} - \dot{\mathbf{x}}_d) + \mathbf{K}_d(\mathbf{x} - \mathbf{x}_d) = \mathbf{F}_{ext}$$
+稳定性条件：
+$$\mathbf{C}_d \geq 2\sqrt{\mathbf{M}_d \mathbf{K}_d}$$
+笛卡尔-关节刚度映射：
+$$\mathbf{K}_x = \mathbf{J}^{-T} \mathbf{K}_q \mathbf{J}^{-1}$$</p>
+<h2 id="108">10.8 练习题</h2>
+<h3 id="_1">基础题</h3>
+<p><strong>练习10.1</strong> 一个2自由度平面机械臂，连杆长度均为0.5m，当前配置为 $q_1 = 30°$，$q_2 = 60°$。如果关节刚度为 $\mathbf{K}_q = \text{diag}(100, 50)$ Nm/rad，计算末端笛卡尔刚度矩阵。</p>
+<p><em>Hint</em>: 先计算雅可比矩阵，然后应用刚度变换公式。</p>
+<details>
+<summary>参考答案</summary>
+<p>雅可比矩阵：
+$$\mathbf{J} = \begin{bmatrix} 
+-0.5\sin(30°) - 0.5\sin(90°) &amp; -0.5\sin(90°) \\
+0.5\cos(30°) + 0.5\cos(90°) &amp; 0.5\cos(90°)
+\end{bmatrix} = \begin{bmatrix} 
+-0.75 &amp; -0.5 \\
+0.433 &amp; 0
+\end{bmatrix}$$
+笛卡尔刚度：
+$$\mathbf{K}_x = \mathbf{J}^{-T} \mathbf{K}_q \mathbf{J}^{-1} \approx \begin{bmatrix} 
+44.4 &amp; 38.5 \\
+38.5 &amp; 83.3
+\end{bmatrix}$$ N/m</p>
+</details>
+<p><strong>练习10.2</strong> 设计一个阻抗控制器，使机器人末端在接触刚度为 $K_e = 10000$ N/m 的环境时保持稳定。期望接触力为10N，选择合适的阻抗参数。</p>
+<p><em>Hint</em>: 考虑阻抗比 $K_d/K_e$ 应该远小于1。</p>
+<details>
+<summary>参考答案</summary>
+<p>为保证稳定性，选择：</p>
+<ul>
+<li>$K_d = 100$ N/m（$K_d/K_e = 0.01 &lt;&lt; 1$）</li>
+<li>$M_d = 1$ kg</li>
+<li>$C_d = 2\sqrt{M_d K_d} = 20$ Ns/m（临界阻尼）</li>
+</ul>
+<p>稳态接触力：$F = K_d \cdot \Delta x = 100 \times 0.1 = 10$ N</p>
+</details>
+<p><strong>练习10.3</strong> 实现一个平面抛光任务的混合力/位置控制。机器人需要在xy平面内跟踪轨迹，同时在z方向保持5N的接触力。写出选择矩阵和控制律。</p>
+<p><em>Hint</em>: z方向力控制，xy方向位置控制。</p>
+<details>
+<summary>参考答案</summary>
+<p>选择矩阵：
+$$\mathbf{S} = \text{diag}(0, 0, 1, 0, 0, 0)$$
+控制律：
+$$\boldsymbol{\tau} = \mathbf{J}^T[\mathbf{S}\mathbf{F}_d + (\mathbf{I} - \mathbf{S})\mathbf{K}_p(\mathbf{x}_d - \mathbf{x})]$$
+其中 $\mathbf{F}_d = [0, 0, 5, 0, 0, 0]^T$ N</p>
+</details>
+<h3 id="_2">挑战题</h3>
+<p><strong>练习10.4</strong> 推导七自由度机械臂利用零空间调节末端刚度椭球方向的控制律。假设主任务是保持末端位置不变，次任务是最大化某个方向的刚度。</p>
+<p><em>Hint</em>: 使用梯度投影法在零空间优化刚度指标。</p>
+<details>
+<summary>参考答案</summary>
+<p>定义刚度优化指标：
+$$\phi = \mathbf{v}^T \mathbf{K}_x \mathbf{v}$$
+其中 $\mathbf{v}$ 是期望的高刚度方向。</p>
+<p>零空间控制律：
+$$\boldsymbol{\tau}_{null} = k_0 (\mathbf{I} - \mathbf{J}^{\dagger}\mathbf{J}) \nabla_q \phi$$
+梯度计算：
+$$\nabla_q \phi = \frac{\partial}{\partial \mathbf{q}}(\mathbf{v}^T \mathbf{J}^{-T} \mathbf{K}_q \mathbf{J}^{-1} \mathbf{v})$$
+完整控制律：
+$$\boldsymbol{\tau} = \mathbf{J}^T \mathbf{F}_{task} + \boldsymbol{\tau}_{null}$$</p>
+</details>
+<p><strong>练习10.5</strong> 分析分数阶阻抗 $C_d s^{1.5}$ 相比整数阶阻尼 $C_d s$ 的频率响应特性。绘制Bode图并讨论物理意义。</p>
+<p><em>Hint</em>: 计算 $|s^{1.5}|$ 和 $\angle s^{1.5}$ 在 $s = j\omega$ 时的值。</p>
+<details>
+<summary>参考答案</summary>
+<p>分数阶项频率响应：
+$$s^{1.5}|_{s=j\omega} = (j\omega)^{1.5} = \omega^{1.5} e^{j1.5\pi/2} = \omega^{1.5} e^{j135°}$$
+幅值：$|\omega^{1.5}|$ = $\omega^{1.5}$（介于 $\omega$ 和 $\omega^2$ 之间）
+相位：135°（介于90°和180°之间）</p>
+<p>物理意义：</p>
+<ul>
+<li>提供介于速度阻尼和加速度阻尼之间的特性</li>
+<li>在高频具有更强的衰减（相比一阶）</li>
+<li>在低频保持较好的响应（相比二阶）</li>
+<li>更接近生物系统的阻尼特性</li>
+</ul>
+</details>
+<p><strong>练习10.6</strong>（开放题）设计一个自适应阻抗控制器用于未知刚度表面的接触任务。控制器应能在线估计环境刚度并相应调整机器人阻抗。</p>
+<p><em>Hint</em>: 使用递归最小二乘(RLS)估计环境参数。</p>
+<details>
+<summary>参考答案</summary>
+<p>环境模型：$F_{env} = K_e(x - x_e) + C_e \dot{x}$</p>
+<p>RLS估计器：
+$$\hat{\theta}_{k+1} = \hat{\theta}_k + \mathbf{P}_k \boldsymbol{\phi}_k (F_{measured} - \boldsymbol{\phi}_k^T \hat{\theta}_k)$$
+$$\mathbf{P}_{k+1} = \frac{1}{\lambda}(\mathbf{P}_k - \frac{\mathbf{P}_k \boldsymbol{\phi}_k \boldsymbol{\phi}_k^T \mathbf{P}_k}{\lambda + \boldsymbol{\phi}_k^T \mathbf{P}_k \boldsymbol{\phi}_k})$$
+其中 $\hat{\theta} = [K_e, C_e]^T$，$\boldsymbol{\phi} = [x-x_e, \dot{x}]^T$</p>
+<p>自适应律：
+$$K_d = \alpha / \hat{K}_e$$（保持阻抗比恒定）$$C_d = 2\sqrt{M_d K_d}$$（维持临界阻尼）</p>
+</details>
+<p><strong>练习10.7</strong> 证明在接触过程中，如果机器人阻抗 $Z_r(s)$ 和环境阻抗 $Z_e(s)$ 都是严格正实的(SPR)，则闭环系统是稳定的。</p>
+<p><em>Hint</em>: 使用Passivity定理和Lyapunov方法。</p>
+<details>
+<summary>参考答案</summary>
+<p>定义存储函数：
+$$V = \frac{1}{2}(M_r \dot{x}^2 + K_r x^2) + \frac{1}{2}K_e (x - x_e)^2$$
+计算时间导数：
+$$\dot{V} = \dot{x}(M_r \ddot{x} + K_r x) + K_e(x - x_e)\dot{x}$$
+代入动力学方程：
+$$M_r \ddot{x} + C_r \dot{x} + K_r x = -K_e(x - x_e) - C_e \dot{x}$$
+得到：
+$$\dot{V} = -C_r \dot{x}^2 - C_e \dot{x}^2 \leq 0$$</p>
+<p>由于 $C_r, C_e &gt; 0$（SPR条件），系统是稳定的。</p>
+</details>
+<p><strong>练习10.8</strong> 为双臂协调操作设计阻抗控制策略。两个机械臂需要协同搬运一个刚性物体，如何分配内力和运动控制？</p>
+<p><em>Hint</em>: 定义虚拟刚度连接两臂，使用主从或对称控制架构。</p>
+<details>
+<summary>参考答案</summary>
+<p>定义相对坐标：</p>
+<ul>
+<li>物体位姿：$\mathbf{x}_{obj} = (\mathbf{x}_1 + \mathbf{x}_2)/2$</li>
+<li>内力坐标：$\mathbf{x}_{int} = \mathbf{x}_1 - \mathbf{x}_2$</li>
+</ul>
+<p>控制律：
+臂1：$$\mathbf{F}_1 = \mathbf{K}_{obj}(\mathbf{x}_{obj,d} - \mathbf{x}_{obj}) + \mathbf{K}_{int}(\mathbf{x}_{int,d} - \mathbf{x}_{int})/2$$
+臂2：$$\mathbf{F}_2 = \mathbf{K}_{obj}(\mathbf{x}_{obj,d} - \mathbf{x}_{obj}) - \mathbf{K}_{int}(\mathbf{x}_{int,d} - \mathbf{x}_{int})/2$$</p>
+<p>参数选择：</p>
+<ul>
+<li>$\mathbf{K}_{obj}$：控制物体运动（高刚度）</li>
+<li>$\mathbf{K}_{int}$：控制内力（低刚度，避免过大内力）</li>
+<li>$\mathbf{x}_{int,d}$：期望抓取距离</li>
+</ul>
+</details>
+<h2 id="109-gotchas">10.9 常见陷阱与错误（Gotchas）</h2>
+<h3 id="_3">控制器设计陷阱</h3>
+<ol>
+<li><strong>刚度矩阵非对称</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code>错误：K_d = [1000, 500; 200, 800]  # 非对称！
+正确：K_d = [1000, 350; 350, 800]  # 对称正定
+</code></pre></div>
+
+<ol start="2">
+<li>
+<p><strong>忽视采样时间影响</strong>
+   - 离散化破坏被动性
+   - 解决：使用能量守恒的离散化方法</p>
+</li>
+<li>
+<p><strong>雅可比奇异性</strong></p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>if (det(J*J&#39;) &lt; 0.001):  # 接近奇异
+    use damped_inverse  # 使用阻尼逆
+</code></pre></div>
+
+<ol start="4">
+<li><strong>力传感器噪声</strong>
+   - 高增益 + 噪声 = 振荡
+   - 解决：低通滤波，但注意相位延迟</li>
+</ol>
+<h3 id="_4">实现陷阱</h3>
+<ol start="5">
+<li>
+<p><strong>坐标系不一致</strong>
+   - 力传感器坐标系 ≠ 机器人基座标系
+   - 必须正确变换：$\mathbf{F}_{base} = \mathbf{R}_{sensor}^{base} \mathbf{F}_{sensor}$</p>
+</li>
+<li>
+<p><strong>单位不匹配</strong></p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>K_joint = 100 Nm/rad  # 关节空间
+K_cart = 100 N/m      # 笛卡尔空间
+<span class="gh">#</span> 不能直接比较！
+</code></pre></div>
+
+<ol start="7">
+<li>
+<p><strong>积分饱和（Wind-up）</strong>
+   - 长时间接触导致积分项过大
+   - 解决：anti-windup机制</p>
+</li>
+<li>
+<p><strong>模式切换抖振</strong>
+   - 在力/位置控制边界频繁切换
+   - 解决：滞回区或平滑过渡</p>
+</li>
+</ol>
+<h3 id="_5">调试技巧</h3>
+<ol start="9">
+<li><strong>振荡诊断</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code>观察频率：
+
+- 高频(&gt;100Hz): 降低增益或增加阻尼
+- 低频(&lt;10Hz): 检查积分项或机械谐振
+- 极限环: 检查非线性（摩擦、饱和）
+</code></pre></div>
+
+<ol start="10">
+<li><strong>性能调优顺序</strong><ol>
+<li>先调重力补偿</li>
+<li>纯位置控制</li>
+<li>加入阻尼项</li>
+<li>最后调节刚度</li>
+</ol>
+</li>
+</ol>
+<h2 id="1010">10.10 最佳实践检查清单</h2>
+<h3 id="_6">设计审查要点</h3>
+<h4 id="_7">硬件配置</h4>
+<ul>
+<li>[ ] 力/扭矩传感器安装位置优化（靠近末端）</li>
+<li>[ ] 传感器量程选择（预期力的2-3倍）</li>
+<li>[ ] 关节柔性是否需要建模</li>
+<li>[ ] 编码器分辨率满足精度要求</li>
+<li>[ ] 实时控制器延迟 &lt; 1ms</li>
+</ul>
+<h4 id="_8">控制架构</h4>
+<ul>
+<li>[ ] 控制频率 ≥ 1kHz（力控制）</li>
+<li>[ ] 多层控制结构（关节力矩、笛卡尔阻抗、任务规划）</li>
+<li>[ ] 故障检测与安全反应机制</li>
+<li>[ ] 模式切换逻辑完备</li>
+<li>[ ] 零空间利用策略（冗余机器人）</li>
+</ul>
+<h4 id="_9">参数设计</h4>
+<ul>
+<li>[ ] 阻抗参数满足被动性条件</li>
+<li>[ ] 考虑工作空间内的参数变化</li>
+<li>[ ] 力控制增益 &lt; 位置控制增益/100</li>
+<li>[ ] 滤波器截止频率选择合理</li>
+<li>[ ] 积分项限幅设置</li>
+</ul>
+<h4 id="_10">安全性</h4>
+<ul>
+<li>[ ] 碰撞检测阈值设定</li>
+<li>[ ] 紧急停止逻辑</li>
+<li>[ ] 力/力矩限制</li>
+<li>[ ] 速度/加速度限制</li>
+<li>[ ] 故障模式分析（传感器失效、通信中断）</li>
+</ul>
+<h4 id="_11">性能验证</h4>
+<ul>
+<li>[ ] 自由空间轨迹跟踪精度</li>
+<li>[ ] 接触力控制精度</li>
+<li>[ ] 阻抗调节范围测试</li>
+<li>[ ] 稳定性边界测试</li>
+<li>[ ] 鲁棒性测试（参数摄动、外部扰动）</li>
+</ul>
+<h4 id="_12">实施要点</h4>
+<ul>
+<li>[ ] 重力补偿模型准确</li>
+<li>[ ] 摩擦补偿模型</li>
+<li>[ ] 传感器标定完成</li>
+<li>[ ] 坐标系定义清晰</li>
+<li>[ ] 代码实时性保证</li>
+</ul>
+<h4 id="_13">维护与调试</h4>
+<ul>
+<li>[ ] 数据记录功能</li>
+<li>[ ] 参数在线调节接口</li>
+<li>[ ] 性能指标监控</li>
+<li>[ ] 故障日志系统</li>
+<li>[ ] 定期标定计划</li>
+</ul>
+<hr />
+<p><em>本章完成。阻抗控制是现代机器人实现安全、柔顺交互的核心技术。掌握其原理与实现细节，对于开发下一代智能机器人系统至关重要。</em></p>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter9.html" class="nav-link prev">← 第9章：全身控制与平衡</a><a href="chapter11.html" class="nav-link next">第11章：视觉感知基础 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

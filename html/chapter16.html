@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第16章：扩散模型在机器人中的应用</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="16">第16章：扩散模型在机器人中的应用</h1>
+<p>扩散模型(Diffusion Models)近年来在生成式AI领域取得了突破性进展，从图像生成到机器人控制，展现出了强大的建模能力。本章将系统介绍扩散模型的理论基础，重点探讨其在机器人动作生成和轨迹规划中的创新应用。我们将深入分析扩散策略(Diffusion Policy)如何解决传统方法在处理多模态分布、长序列依赖和高维动作空间时的局限性。</p>
+<h2 id="_1">学习目标</h2>
+<ul>
+<li>掌握DDPM和DDIM的数学原理及其在连续控制中的应用</li>
+<li>理解条件扩散模型如何整合视觉和语言信息进行动作生成</li>
+<li>学会设计和优化适用于实时控制的扩散策略架构</li>
+<li>比较扩散策略与传统强化学习方法的优劣势</li>
+<li>了解最新的加速采样技术和一致性模型</li>
+</ul>
+<h2 id="161-ddpmddim">16.1 扩散模型基础：DDPM/DDIM原理</h2>
+<h3 id="1611">16.1.1 前向扩散过程的数学框架</h3>
+<p>扩散模型的核心思想是通过逐步添加高斯噪声将数据分布转化为标准高斯分布，然后学习反向过程来生成数据。对于机器人动作序列 $\mathbf{a}_0 \in \mathbb{R}^{H \times D}$（其中$H$是时间horizon，$D$是动作维度），前向扩散过程定义为：</p>
+<p>$$q(\mathbf{a}_t | \mathbf{a}_{t-1}) = \mathcal{N}(\mathbf{a}_t; \sqrt{1-\beta_t}\mathbf{a}_{t-1}, \beta_t\mathbf{I})$$
+其中 $\beta_t$ 是预定义的噪声调度(noise schedule)，通常采用线性或余弦调度：
+$$\beta_t = \beta_{\text{min}} + \frac{t}{T}(\beta_{\text{max}} - \beta_{\text{min}})$$
+通过重参数化，我们可以直接从 $\mathbf{a}_0$ 采样 $\mathbf{a}_t$：
+$$\mathbf{a}_t = \sqrt{\bar{\alpha}_t}\mathbf{a}_0 + \sqrt{1-\bar{\alpha}_t}\boldsymbol{\epsilon}$$
+其中 $\alpha_t = 1 - \beta_t$，$\bar{\alpha}_t = \prod_{s=1}^t \alpha_s$，$\boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I})$。</p>
+<h3 id="1612">16.1.2 反向去噪过程与变分推断</h3>
+<p>反向过程通过神经网络 $\epsilon_\theta$ 学习预测添加的噪声：
+$$p_\theta(\mathbf{a}_{t-1} | \mathbf{a}_t) = \mathcal{N}(\mathbf{a}_{t-1}; \boldsymbol{\mu}_\theta(\mathbf{a}_t, t), \boldsymbol{\Sigma}_\theta(\mathbf{a}_t, t))$$
+其中均值通过预测的噪声计算：
+$$\boldsymbol{\mu}_\theta(\mathbf{a}_t, t) = \frac{1}{\sqrt{\alpha_t}}\left(\mathbf{a}_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_\theta(\mathbf{a}_t, t)\right)$$
+训练目标是最小化简化的变分下界：
+$$\mathcal{L}_{\text{simple}} = \mathbb{E}_{t,\mathbf{a}_0,\boldsymbol{\epsilon}}\left[|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{a}_t, t)|^2\right]$$</p>
+<h3 id="1613-ddpm-vs-ddim">16.1.3 DDPM vs DDIM：确定性与随机性采样</h3>
+<p>DDPM采样是随机过程：
+$$\mathbf{a}_{t-1} = \boldsymbol{\mu}_\theta(\mathbf{a}_t, t) + \sigma_t \mathbf{z}, \quad \mathbf{z} \sim \mathcal{N}(0, \mathbf{I})$$
+DDIM通过引入确定性采样加速推理：
+$$\mathbf{a}_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\left(\frac{\mathbf{a}_t - \sqrt{1-\bar{\alpha}_t}\epsilon_\theta(\mathbf{a}_t, t)}{\sqrt{\bar{\alpha}_t}}\right) + \sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}\epsilon_\theta(\mathbf{a}_t, t)$$
+当 $\sigma_t = 0$ 时，过程完全确定，可以使用更少的去噪步骤。</p>
+<h3 id="1614">16.1.4 噪声调度与信噪比分析</h3>
+<p>信噪比(SNR)定义为：
+$$\text{SNR}(t) = \frac{\bar{\alpha}_t}{1-\bar{\alpha}_t}$$
+余弦调度通过保持更均匀的SNR衰减改善了生成质量：
+$$\bar{\alpha}_t = \frac{f(t)}{f(0)}, \quad f(t) = \cos\left(\frac{t/T + s}{1 + s} \cdot \frac{\pi}{2}\right)^2$$
+其中 $s$ 是小的偏移量（通常为0.008）以避免 $t=T$ 时的奇异性。</p>
+<h2 id="162">16.2 条件生成与分类器引导</h2>
+<h3 id="1621">16.2.1 条件扩散模型的数学框架</h3>
+<p>在机器人控制中，我们需要根据观察 $\mathbf{o}$（如图像、点云）生成动作。条件扩散模型通过修改噪声预测网络实现：
+$$\epsilon_\theta(\mathbf{a}_t, t, \mathbf{o})$$
+网络架构通常采用U-Net或Transformer，通过交叉注意力机制融合条件信息：</p>
+<div class="codehilite"><pre><span></span><code>观察编码器: \mathbf{h}_o = \text{Encoder}(\mathbf{o})
+噪声动作编码: \mathbf{h}_a = \text{PosEmbed}(\mathbf{a}_t) + \text{TimeEmbed}(t)
+交叉注意力: \mathbf{h} = \text{CrossAttention}(\mathbf{h}_a, \mathbf{h}_o)
+噪声预测: \epsilon = \text{Decoder}(\mathbf{h})
+</code></pre></div>
+
+<h3 id="1622-classifier-guidance">16.2.2 分类器引导(Classifier Guidance)</h3>
+<p>分类器引导通过外部分类器 $p_\phi(\mathbf{o}|\mathbf{a})$ 的梯度调整采样方向：
+$$\tilde{\epsilon}_\theta(\mathbf{a}_t, t, \mathbf{o}) = \epsilon_\theta(\mathbf{a}_t, t) - \sqrt{1-\bar{\alpha}_t} \nabla_{\mathbf{a}_t} \log p_\phi(\mathbf{o}|\mathbf{a}_t)$$
+这需要训练额外的分类器，在机器人应用中可以是任务成功预测器。</p>
+<h3 id="1623-classifier-free-guidance">16.2.3 无分类器引导(Classifier-Free Guidance)</h3>
+<p>无分类器引导通过混合条件和无条件预测避免额外模型：
+$$\tilde{\epsilon}_\theta(\mathbf{a}_t, t, \mathbf{o}) = (1+w)\epsilon_\theta(\mathbf{a}_t, t, \mathbf{o}) - w\epsilon_\theta(\mathbf{a}_t, t, \emptyset)$$
+其中 $w$ 是引导权重，训练时以概率 $p_{\text{uncond}}$（通常10-20%）随机丢弃条件。</p>
+<h3 id="1624">16.2.4 引导强度与生成质量权衡</h3>
+<p>引导强度 $w$ 控制条件遵循与多样性的权衡：</p>
+<ul>
+<li>$w=0$：标准条件采样，高多样性但可能偏离条件</li>
+<li>$w&gt;1$：强条件遵循，但可能过拟合训练分布</li>
+<li>典型值：$w \in [1, 3]$ 在机器人任务中效果较好</li>
+</ul>
+<h2 id="163">16.3 动作序列的扩散建模</h2>
+<h3 id="1631">16.3.1 动作空间的表示与归一化</h3>
+<p>机器人动作通常包含不同量纲的信号（位置、速度、力矩），需要careful归一化：
+$$\mathbf{a}_{\text{norm}} = \frac{\mathbf{a} - \boldsymbol{\mu}_a}{\boldsymbol{\sigma}_a}$$
+其中 $\boldsymbol{\mu}_a, \boldsymbol{\sigma}_a$ 从训练数据统计得出。对于关节限位，可使用tanh缩放：
+$$\mathbf{a}_{\text{bounded}} = \mathbf{a}_{\text{min}} + \frac{1}{2}(\mathbf{a}_{\text{max}} - \mathbf{a}_{\text{min}})(1 + \tanh(\mathbf{a}_{\text{norm}}))$$</p>
+<h3 id="1632">16.3.2 时间序列扩散模型架构</h3>
+<p>动作序列 $\mathbf{A} \in \mathbb{R}^{H \times D}$ 的扩散建模有两种主要方式：</p>
+<ol>
+<li>
+<p><strong>序列级扩散(Sequence-level Diffusion)</strong>
+将整个序列作为单个样本：
+$$\mathbf{A}_t = \sqrt{\bar{\alpha}_t}\mathbf{A}_0 + \sqrt{1-\bar{\alpha}_t}\boldsymbol{\epsilon}$$
+优点：保持时间相关性，生成连贯轨迹
+缺点：内存需求大，难以处理变长序列</p>
+</li>
+<li>
+<p><strong>帧级扩散(Frame-level Diffusion)</strong>
+独立处理每个时间步：
+$$\mathbf{a}^{(i)}_t = \sqrt{\bar{\alpha}_t}\mathbf{a}^{(i)}_0 + \sqrt{1-\bar{\alpha}_t}\boldsymbol{\epsilon}^{(i)}$$
+需要额外的时序模块（如RNN/Transformer）保持连贯性。</p>
+</li>
+</ol>
+<h3 id="1633-chunkhorizon">16.3.3 动作chunk与预测horizon设计</h3>
+<p>实践中通常采用滑动窗口策略：</p>
+<div class="codehilite"><pre><span></span><code><span class="err">观察历史长度</span><span class="o">:</span><span class="w"> </span><span class="n">T_obs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="o">-</span><span class="mi">4</span><span class="err">步</span>
+<span class="err">动作预测长度</span><span class="o">:</span><span class="w"> </span><span class="n">T_act</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="o">-</span><span class="mi">16</span><span class="err">步</span><span class="w">  </span>
+<span class="err">执行长度</span><span class="o">:</span><span class="w"> </span><span class="n">T_exec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">4</span><span class="err">步</span>
+</code></pre></div>
+
+<p>每个控制周期：</p>
+<ol>
+<li>编码最近T_obs步观察</li>
+<li>生成T_act步动作序列</li>
+<li>执行前T_exec步</li>
+<li>滑动窗口，重复</li>
+</ol>
+<p>这种设计平衡了时序建模能力和计算效率。</p>
+<h3 id="1634">16.3.4 位置/速度/力矩的统一建模</h3>
+<p>不同控制模式的统一表示：
+$$\mathbf{a} = [\mathbf{p}, \mathbf{v}, \boldsymbol{\tau}, \mathbf{g}]^T$$
+其中：</p>
+<ul>
+<li>$\mathbf{p}$：目标位置（关节或笛卡尔）</li>
+<li>$\mathbf{v}$：目标速度</li>
+<li>$\boldsymbol{\tau}$：前馈力矩</li>
+<li>$\mathbf{g}$：夹爪命令</li>
+</ul>
+<p>通过掩码机制 $\mathbf{m}$ 选择性激活不同分量：
+$$\mathbf{a}_{\text{final}} = \mathbf{m} \odot \mathbf{a}_{\text{generated}}$$</p>
+<h2 id="164">16.4 多模态轨迹生成</h2>
+<h3 id="1641">16.4.1 多解问题与模式覆盖</h3>
+<p>机器人任务常存在多个可行解（如绕障碍物左侧或右侧）。传统方法（如行为克隆）倾向于平均多个模式，导致不可行轨迹。扩散模型通过其生成特性自然处理多模态分布。</p>
+<p><strong>模式覆盖度量</strong>：
+$$\mathcal{C}(\mathcal{D}, \mathcal{G}) = \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}} \mathbb{1}\left[\min_{\mathbf{a} \in \mathcal{G}} d(\mathbf{a}, m) &lt; \epsilon\right]$$
+其中 $\mathcal{M}$ 是数据集中的模式集合，$\mathcal{G}$ 是生成的轨迹集合。</p>
+<p><strong>混合高斯初始化</strong>：
+为了更好的模式覆盖，可以从混合分布初始化：
+$$\mathbf{a}_T \sim \sum_{k=1}^K \pi_k \mathcal{N}(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)$$
+其中 $\pi_k$ 通过聚类训练数据得到。</p>
+<h3 id="1642">16.4.2 视觉条件的轨迹生成</h3>
+<p>视觉观察（RGB图像、深度图、点云）的编码策略：</p>
+<p><strong>1. CNN特征提取</strong>：</p>
+<div class="codehilite"><pre><span></span><code>ResNet backbone → FPN → RoI pooling → 特征向量
+</code></pre></div>
+
+<p><strong>2. Vision Transformer编码</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">图像patches</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">ViT</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="o">[</span><span class="n">CLS</span><span class="o">]</span><span class="w"> </span><span class="n">token作为全局特征</span>
+</code></pre></div>
+
+<p><strong>3. 3D感知编码</strong>（点云）：</p>
+<div class="codehilite"><pre><span></span><code>PointNet++ → 全局特征 + 局部特征
+</code></pre></div>
+
+<p><strong>时空融合</strong>：
+对于视频输入，使用3D卷积或时序Transformer：
+$$\mathbf{h}_{\text{visual}} = \text{TimeSformer}([\mathbf{I}_1, \mathbf{I}_2, ..., \mathbf{I}_T])$$</p>
+<h3 id="1643">16.4.3 语言指令的融合策略</h3>
+<p>语言条件 $\mathbf{l}$ 的集成方式：</p>
+<p><strong>1. FiLM调制(Feature-wise Linear Modulation)</strong>：
+$$\mathbf{h} = \gamma(\mathbf{l}) \odot \mathbf{h}_{\text{visual}} + \beta(\mathbf{l})$$</p>
+<p><strong>2. 交叉注意力融合</strong>：
+$$\text{Attention}(\mathbf{Q}_a, \mathbf{K}_l, \mathbf{V}_l) = \text{softmax}\left(\frac{\mathbf{Q}_a\mathbf{K}_l^T}{\sqrt{d}}\right)\mathbf{V}_l$$</p>
+<p><strong>3. 层级条件编码</strong>：
+- 任务级：整体目标（"组装齿轮箱"）
+- 步骤级：当前子任务（"插入轴承"）
+- 约束级：安全/偏好（"避免碰撞"）</p>
+<h3 id="1644">16.4.4 轨迹多样性与安全性约束</h3>
+<p><strong>多样性采样策略</strong>：</p>
+<ol>
+<li>
+<p><strong>温度调节</strong>：
+$$\mathbf{a}_{t-1} = \boldsymbol{\mu}_\theta(\mathbf{a}_t, t) + \tau \cdot \sigma_t \mathbf{z}$$
+其中 $\tau$ 控制探索程度。</p>
+</li>
+<li>
+<p><strong>多重采样与筛选</strong>：
+生成 $N$ 条轨迹，通过评分函数选择：
+$$\mathbf{a}^* = \arg\max_{\mathbf{a}^{(i)}} S(\mathbf{a}^{(i)}) = \arg\max_{\mathbf{a}^{(i)}} [R(\mathbf{a}^{(i)}) - \lambda C(\mathbf{a}^{(i)})]$$
+其中 $R$ 是任务奖励，$C$ 是约束违反代价。</p>
+</li>
+</ol>
+<p><strong>硬约束集成</strong>：</p>
+<ol>
+<li>
+<p><strong>投影方法</strong>：
+每步去噪后投影到可行域：
+$$\mathbf{a}_{t-1} = \text{Proj}_{\mathcal{C}}(\tilde{\mathbf{a}}_{t-1})$$</p>
+</li>
+<li>
+<p><strong>拉格朗日松弛</strong>：
+将约束作为额外条件：
+$$\epsilon_\theta(\mathbf{a}_t, t, \mathbf{o}, \mathbf{c})$$
+其中 $\mathbf{c}$ 编码约束信息。</p>
+</li>
+</ol>
+<h2 id="165">16.5 扩散策略的实时推理优化</h2>
+<h3 id="1651-ddim">16.5.1 DDIM加速采样策略</h3>
+<p>通过子序列采样减少去噪步骤：</p>
+<p>原始序列：$\{T, T-1, ..., 1, 0\}$
+子序列：$\{\tau_1, \tau_2, ..., \tau_S\}$，其中 $S \ll T$</p>
+<p>加速采样公式：
+$$\mathbf{a}_{\tau_{i-1}} = \sqrt{\bar{\alpha}_{\tau_{i-1}}}\hat{\mathbf{a}}_0 + \sqrt{1-\bar{\alpha}_{\tau_{i-1}}}\epsilon_\theta(\mathbf{a}_{\tau_i}, \tau_i)$$
+其中：
+$$\hat{\mathbf{a}}_0 = \frac{\mathbf{a}_{\tau_i} - \sqrt{1-\bar{\alpha}_{\tau_i}}\epsilon_\theta(\mathbf{a}_{\tau_i}, \tau_i)}{\sqrt{\bar{\alpha}_{\tau_i}}}$$
+典型配置：$T=100$ 训练，$S=10$ 推理，实现10倍加速。</p>
+<h3 id="1652">16.5.2 蒸馏与一致性模型</h3>
+<p><strong>渐进式蒸馏(Progressive Distillation)</strong>：
+训练学生模型 $\epsilon_{\text{student}}$ 用一步预测教师模型两步的结果：
+$$\mathcal{L}_{\text{distill}} = |\epsilon_{\text{student}}(\mathbf{a}_{2t}, 2t) - \epsilon_{\text{teacher}}(\tilde{\mathbf{a}}_t, t)|^2$$
+其中 $\tilde{\mathbf{a}}_t$ 是教师模型从 $\mathbf{a}_{2t}$ 去噪一步的结果。</p>
+<p><strong>一致性模型(Consistency Models)</strong>：
+直接学习映射 $f_\theta: (\mathbf{a}_t, t) \rightarrow \mathbf{a}_0$：
+$$\mathcal{L}_{\text{consistency}} = d(f_\theta(\mathbf{a}_t, t), f_{\theta^-}(\mathbf{a}_{t'}, t'))$$
+其中 $(t, t')$ 是相邻时间步，$\theta^-$ 是目标网络参数（EMA更新）。</p>
+<h3 id="1653">16.5.3 硬件加速与量化技术</h3>
+<p><strong>模型量化</strong>：</p>
+<ul>
+<li>FP32 → FP16：2倍内存节省，1.5-2倍速度提升</li>
+<li>INT8量化：4倍内存节省，需要量化感知训练(QAT)</li>
+</ul>
+<p><strong>并行化策略</strong>：</p>
+<ol>
+<li><strong>批处理并行</strong>：同时生成多条轨迹</li>
+<li><strong>时间并行</strong>：并行计算不同去噪步骤（仅适用于DDIM）</li>
+<li><strong>空间并行</strong>：将长序列切分到多个GPU</li>
+</ol>
+<p><strong>推理优化</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># TensorRT优化示例</span>
+<span class="kn">import</span> <span class="nn">tensorrt</span> <span class="k">as</span> <span class="nn">trt</span>
+
+<span class="c1"># 构建引擎</span>
+<span class="n">builder</span> <span class="o">=</span> <span class="n">trt</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">create_builder_config</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set_flag</span><span class="p">(</span><span class="n">trt</span><span class="o">.</span><span class="n">BuilderFlag</span><span class="o">.</span><span class="n">FP16</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">set_flag</span><span class="p">(</span><span class="n">trt</span><span class="o">.</span><span class="n">BuilderFlag</span><span class="o">.</span><span class="n">STRICT_TYPES</span><span class="p">)</span>
+
+<span class="c1"># 动态批大小</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">create_optimization_profile</span><span class="p">()</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">set_shape</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">D</span><span class="p">),</span> <span class="n">opt</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">D</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+</code></pre></div>
+
+<h3 id="1654">16.5.4 控制频率与推理延迟权衡</h3>
+<p>实时控制需要平衡生成质量与延迟：</p>
+<p><strong>分层控制架构</strong>：</p>
+<ul>
+<li>高层（1-10 Hz）：扩散策略生成轨迹</li>
+<li>中层（10-100 Hz）：轨迹跟踪与修正</li>
+<li>底层（100-1000 Hz）：电机控制</li>
+</ul>
+<p><strong>延迟隐藏技术</strong>：</p>
+<ol>
+<li><strong>预测补偿</strong>：预测未来状态进行规划</li>
+<li><strong>异步执行</strong>：规划与执行并行</li>
+<li><strong>增量更新</strong>：只更新轨迹的部分区域</li>
+</ol>
+<p><strong>自适应去噪</strong>：
+根据任务紧急度动态调整步数：
+$$S = \begin{cases}
+S_{\text{min}} &amp; \text{if } |\mathbf{v}| &gt; v_{\text{threshold}} \\
+S_{\text{max}} &amp; \text{if stationary} \\
+S_{\text{min}} + (S_{\text{max}}-S_{\text{min}})e^{-\lambda t} &amp; \text{otherwise}
+\end{cases}$$</p>
+<h2 id="166">16.6 与传统策略梯度方法的对比</h2>
+<h3 id="1661-vs">16.6.1 策略梯度vs扩散策略的理论对比</h3>
+<p><strong>策略梯度方法（PPO/SAC）</strong>：</p>
+<ul>
+<li>策略表示：$\pi_\theta(\mathbf{a}|\mathbf{s}) = \mathcal{N}(\mu_\theta(\mathbf{s}), \Sigma_\theta(\mathbf{s}))$</li>
+<li>优化目标：$J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[R(\tau)]$</li>
+<li>更新规则：$\nabla_\theta J = \mathbb{E}[\nabla_\theta \log \pi_\theta(\mathbf{a}|\mathbf{s}) A(\mathbf{s}, \mathbf{a})]$</li>
+</ul>
+<p><strong>扩散策略</strong>：</p>
+<ul>
+<li>策略表示：$\pi_\theta(\mathbf{a}|\mathbf{s}) = \int p_\theta(\mathbf{a}_0|\mathbf{s}) \prod_{t=1}^T p_\theta(\mathbf{a}_{t-1}|\mathbf{a}_t, \mathbf{s}) d\mathbf{a}_{1:T}$</li>
+<li>优化目标：行为克隆或逆向KL散度</li>
+<li>更新规则：去噪分数匹配</li>
+</ul>
+<p><strong>关键区别</strong>：</p>
+<ol>
+<li><strong>表达能力</strong>：扩散模型可表示任意复杂分布，策略梯度通常限于单峰分布</li>
+<li><strong>训练稳定性</strong>：扩散模型避免了值函数估计的不稳定性</li>
+<li><strong>数据效率</strong>：扩散策略可直接从离线数据学习</li>
+</ol>
+<h3 id="1662">16.6.2 样本效率与训练稳定性</h3>
+<p><strong>样本效率对比</strong>（典型机械臂任务）：</p>
+<p>| 方法 | 成功率@1k样本 | 成功率@10k样本 | 训练时间 |</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>成功率@1k样本</th>
+<th>成功率@10k样本</th>
+<th>训练时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PPO</td>
+<td>15%</td>
+<td>65%</td>
+<td>48小时</td>
+</tr>
+<tr>
+<td>SAC</td>
+<td>25%</td>
+<td>75%</td>
+<td>36小时</td>
+</tr>
+<tr>
+<td>BC</td>
+<td>45%</td>
+<td>70%</td>
+<td>2小时</td>
+</tr>
+<tr>
+<td>Diffusion Policy</td>
+<td>60%</td>
+<td>85%</td>
+<td>8小时</td>
+</tr>
+</tbody>
+</table>
+<p><strong>训练稳定性指标</strong>：</p>
+<ol>
+<li>
+<p><strong>梯度方差</strong>：
+$$\text{Var}[\nabla_\theta] = \begin{cases}
+\mathcal{O}(H^2) &amp; \text{策略梯度} \\
+\mathcal{O}(1) &amp; \text{扩散策略}
+\end{cases}$$</p>
+</li>
+<li>
+<p><strong>性能崩溃频率</strong>：
+- 策略梯度：20-30%实验出现性能突降
+- 扩散策略：&lt;5%实验出现性能问题</p>
+</li>
+</ol>
+<h3 id="1663-">16.6.3 探索-利用权衡的新视角</h3>
+<p><strong>传统探索策略</strong>：</p>
+<ul>
+<li>$\epsilon$-贪婪：$\mathbf{a} = \begin{cases} \mathbf{a}_{\text{random}} &amp; \text{w.p. } \epsilon \\ \mu_\theta(\mathbf{s}) &amp; \text{w.p. } 1-\epsilon \end{cases}$</li>
+<li>高斯噪声：$\mathbf{a} = \mu_\theta(\mathbf{s}) + \sigma \cdot \mathcal{N}(0, \mathbf{I})$</li>
+<li>熵正则化：$J = \mathbb{E}[R] + \alpha H[\pi]$</li>
+</ul>
+<p><strong>扩散模型的隐式探索</strong>：</p>
+<ul>
+<li>生成过程自然产生多样性</li>
+<li>通过调节去噪步数控制探索：</li>
+<li>更多步数 → 更保守/确定的行为</li>
+<li>更少步数 → 更探索/随机的行为</li>
+</ul>
+<p><strong>模式寻找vs模式覆盖</strong>：</p>
+<ul>
+<li>策略梯度：倾向于mode-seeking（找到单个最优解）</li>
+<li>扩散策略：倾向于mode-covering（覆盖所有可行解）
+$$D_{KL}(p||q) \text{ vs } D_{KL}(q||p)$$</li>
+</ul>
+<h3 id="1664">16.6.4 混合方法与实践选择</h3>
+<p><strong>混合架构1：扩散策略+Q函数引导</strong>：
+$$\tilde{\epsilon}_\theta(\mathbf{a}_t, t, \mathbf{s}) = \epsilon_\theta(\mathbf{a}_t, t, \mathbf{s}) - \sqrt{1-\bar{\alpha}_t} \nabla_{\mathbf{a}_t} Q(\mathbf{s}, \mathbf{a}_t)$$
+<strong>混合架构2：分层决策</strong>：</p>
+<ul>
+<li>高层：扩散模型生成子目标序列</li>
+<li>底层：策略梯度实现精细控制</li>
+</ul>
+<p><strong>实践选择准则</strong>：</p>
+<p>| 场景 | 推荐方法 | 原因 |</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方法</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大量专家演示数据</td>
+<td>扩散策略</td>
+<td>直接模仿学习，无需奖励设计</td>
+</tr>
+<tr>
+<td>稀疏奖励环境</td>
+<td>策略梯度+课程学习</td>
+<td>需要探索发现奖励</td>
+</tr>
+<tr>
+<td>多模态任务</td>
+<td>扩散策略</td>
+<td>自然处理多解问题</td>
+</tr>
+<tr>
+<td>安全关键应用</td>
+<td>扩散策略+约束</td>
+<td>更可预测的行为</td>
+</tr>
+<tr>
+<td>在线适应需求</td>
+<td>策略梯度</td>
+<td>持续学习能力更强</td>
+</tr>
+<tr>
+<td>计算资源受限</td>
+<td>简单BC或小型策略网络</td>
+<td>推理效率更高</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diffusion-policy">案例研究：丰田研究院Diffusion Policy实现</h2>
+<h3 id="_2">背景与动机</h3>
+<p>丰田研究院(TRI)在2023年发布的Diffusion Policy是扩散模型在机器人控制领域的里程碑工作。该系统在多个基准任务上大幅超越了传统方法，特别是在需要精确操作和多模态决策的场景。</p>
+<h3 id="_3">系统架构</h3>
+<p><strong>核心组件</strong>：</p>
+<ol>
+<li><strong>视觉编码器</strong>：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="err">输入</span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="err">个</span><span class="n">RGB相机</span><span class="w"> </span><span class="o">(</span><span class="mi">640</span><span class="n">x480</span><span class="o">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">腕部相机</span>
+<span class="err">↓</span>
+<span class="n">ResNet</span><span class="o">-</span><span class="mi">18</span><span class="w"> </span><span class="n">backbone</span><span class="w"> </span><span class="o">(</span><span class="err">预训练</span><span class="n">ImageNet</span><span class="o">)</span>
+<span class="err">↓</span>
+<span class="err">空间特征池化</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">2048</span><span class="err">维特征</span><span class="o">/</span><span class="err">相机</span>
+<span class="err">↓</span>
+<span class="err">特征融合</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">8192</span><span class="err">维观察表示</span>
+</code></pre></div>
+
+<ol start="2">
+<li><strong>扩散U-Net</strong>：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="err">时间嵌入</span><span class="o">:</span><span class="w"> </span><span class="n">SinusoidalPosEmb</span><span class="o">(</span><span class="n">t</span><span class="o">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">128</span><span class="err">维</span>
+<span class="err">动作序列</span><span class="o">:</span><span class="w"> </span><span class="o">(</span><span class="mi">16</span><span class="err">步</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mi">7</span><span class="n">DoF</span><span class="o">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Conv1D编码</span>
+<span class="err">条件融合</span><span class="o">:</span><span class="w"> </span><span class="n">FiLM层调制</span>
+<span class="err">去噪网络</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="n">D</span><span class="w"> </span><span class="n">U</span><span class="o">-</span><span class="n">Net</span><span class="w"> </span><span class="o">(</span><span class="mi">4</span><span class="err">层下采样</span><span class="o">/</span><span class="err">上采样</span><span class="o">)</span>
+</code></pre></div>
+
+<ol start="3">
+<li><strong>动作解码</strong>：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>预测16步动作序列
+执行前8步
+3步重叠进行平滑过渡
+</code></pre></div>
+
+<h3 id="_4">关键创新</h3>
+<ol>
+<li>
+<p><strong>时间一致性设计</strong>：
+- 使用因果卷积保持时序依赖
+- 动作chunk重叠确保平滑性
+- 速度/加速度约束后处理</p>
+</li>
+<li>
+<p><strong>训练技巧</strong>：
+- 数据增强：颜色抖动、随机裁剪
+- 课程学习：从简单到复杂任务
+- 混合精度训练：FP16加速</p>
+</li>
+<li>
+<p><strong>推理优化</strong>：
+- DDIM 10步采样（训练100步）
+- TensorRT部署：50Hz控制频率
+- 预测缓存：重用部分计算</p>
+</li>
+</ol>
+<h3 id="_5">实验结果</h3>
+<p><strong>基准任务性能</strong>：</p>
+<p>| 任务 | BC | IBC | BeT | Diffusion Policy |</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>BC</th>
+<th>IBC</th>
+<th>BeT</th>
+<th>Diffusion Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>方块堆叠</td>
+<td>14%</td>
+<td>58%</td>
+<td>61%</td>
+<td><strong>92%</strong></td>
+</tr>
+<tr>
+<td>工具使用</td>
+<td>22%</td>
+<td>41%</td>
+<td>53%</td>
+<td><strong>84%</strong></td>
+</tr>
+<tr>
+<td>线缆操作</td>
+<td>8%</td>
+<td>31%</td>
+<td>38%</td>
+<td><strong>76%</strong></td>
+</tr>
+<tr>
+<td>精密装配</td>
+<td>5%</td>
+<td>18%</td>
+<td>25%</td>
+<td><strong>68%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>泛化能力测试</strong>：</p>
+<ul>
+<li>新物体形状：72%成功率（BC: 23%）</li>
+<li>光照变化：81%成功率（BC: 45%）</li>
+<li>背景干扰：79%成功率（BC: 38%）</li>
+</ul>
+<h3 id="_6">失败案例分析</h3>
+<ol>
+<li><strong>遮挡处理</strong>：当关键特征被遮挡时性能下降</li>
+<li><strong>长期依赖</strong>：超过30秒的任务成功率降低</li>
+<li><strong>动态环境</strong>：对移动障碍物反应延迟</li>
+</ol>
+<h3 id="_7">经验教训</h3>
+<ol>
+<li><strong>数据质量&gt;数量</strong>：高质量演示比大量噪声数据更重要</li>
+<li><strong>多视角关键</strong>：单相机性能下降30-40%</li>
+<li><strong>实时性权衡</strong>：10步DDIM是质量和速度的最佳平衡</li>
+</ol>
+<h2 id="flow-matching">高级话题：Flow Matching与一致性模型</h2>
+<h3 id="flow-matching_1">Flow Matching：连续归一化流的新范式</h3>
+<p>Flow Matching是扩散模型的推广，通过学习连续时间的向量场来生成数据：</p>
+<p><strong>基本框架</strong>：
+$$\frac{d\mathbf{a}_t}{dt} = v_\theta(\mathbf{a}_t, t)$$
+其中 $v_\theta$ 是学习的速度场，将噪声分布传输到数据分布。</p>
+<p><strong>与扩散模型的关系</strong>：
+扩散模型可视为特定参数化的Flow Matching：
+$$v_\theta(\mathbf{a}_t, t) = \frac{1}{2}\left(\mathbf{a}_t - (1+e^{-2t})\nabla \log p_t(\mathbf{a}_t)\right)$$
+<strong>优势</strong>：</p>
+<ol>
+<li><strong>更直接的训练目标</strong>：直接匹配向量场而非分数</li>
+<li><strong>更灵活的噪声调度</strong>：不限于高斯扩散</li>
+<li><strong>更快的采样</strong>：ODE求解器可使用高阶方法</li>
+</ol>
+<p><strong>条件Flow Matching (CFM)</strong>：
+$$\mathcal{L}_{\text{CFM}} = \mathbb{E}_{t,\mathbf{a}_0,\mathbf{a}_1}\left[|v_\theta(\mathbf{a}_t, t) - (\mathbf{a}_1 - \mathbf{a}_0)|^2\right]$$
+其中 $\mathbf{a}_t = (1-t)\mathbf{a}_0 + t\mathbf{a}_1$ 是线性插值路径。</p>
+<h3 id="_8">一致性模型：单步生成的突破</h3>
+<p>一致性模型通过学习沿着PF-ODE轨迹的一致性映射实现单步生成：</p>
+<p><strong>一致性条件</strong>：
+$$f(\mathbf{a}_t, t) = f(\mathbf{a}_{t'}, t'), \quad \forall (t, t') \text{ on same trajectory}$$
+<strong>训练目标</strong>：
+$$\mathcal{L}_{\text{CT}} = \mathbb{E}_{t}\left[d(f_\theta(\mathbf{a}_{t+\Delta t}, t+\Delta t), f_{\theta^-}(\mathbf{a}_t, t))\right]$$
+<strong>一致性蒸馏vs一致性训练</strong>：</p>
+<ul>
+<li>蒸馏：从预训练扩散模型学习</li>
+<li>训练：直接从数据学习（更challenging但更灵活）</li>
+</ul>
+<h3 id="_9">在机器人控制中的应用前景</h3>
+<p><strong>1. 超低延迟控制</strong>：
+- 一致性模型可实现&lt;10ms的动作生成
+- 适用于高频控制环（&gt;100Hz）</p>
+<p><strong>2. 在线适应</strong>：
+- Flow Matching的连续性质便于在线微调
+- 可通过修改向量场实现实时约束满足</p>
+<p><strong>3. 多模态融合的新方法</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="err">视觉流</span><span class="o">:</span><span class="w"> </span><span class="n">v_visual</span><span class="o">(</span><span class="n">a_t</span><span class="o">,</span><span class="w"> </span><span class="n">t</span><span class="o">)</span>
+<span class="err">语言流</span><span class="o">:</span><span class="w"> </span><span class="n">v_language</span><span class="o">(</span><span class="n">a_t</span><span class="o">,</span><span class="w"> </span><span class="n">t</span><span class="o">)</span><span class="w">  </span>
+<span class="err">融合流</span><span class="o">:</span><span class="w"> </span><span class="n">v_total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">α·</span><span class="n">v_visual</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">β·</span><span class="n">v_language</span>
+</code></pre></div>
+
+<p><strong>4. 可解释性提升</strong>：
+- 向量场可视化直观展示决策过程
+- 轨迹分析揭示模式切换机制</p>
+<h3 id="_10">最新研究进展</h3>
+<p><strong>1. Rectified Flow (2023)</strong>：
+- 学习直线路径减少传输成本
+- 2-4步即可达到高质量生成</p>
+<p><strong>2. Flow Matching for RL (2024)</strong>：
+- 将Flow Matching与强化学习结合
+- 在连续控制任务上超越PPO/SAC</p>
+<p><strong>3. Consistency Trajectory Models (2024)</strong>：
+- 扩展一致性模型到序列生成
+- 机器人任务单步生成16步动作序列</p>
+<h3 id="_11">实践建议</h3>
+<ol>
+<li><strong>起步阶段</strong>：使用标准扩散模型建立baseline</li>
+<li><strong>优化阶段</strong>：尝试一致性蒸馏加速推理</li>
+<li><strong>研究前沿</strong>：探索Flow Matching的新架构</li>
+<li><strong>产品化</strong>：根据延迟要求选择合适方法</li>
+</ol>
+<h2 id="_12">本章小结</h2>
+<p>本章系统介绍了扩散模型在机器人控制中的应用，从理论基础到实践部署的完整技术链路。</p>
+<p><strong>核心要点回顾</strong>：</p>
+<ol>
+<li>
+<p><strong>扩散模型基础</strong>：
+   - 前向过程：$q(\mathbf{a}_t | \mathbf{a}_{t-1}) = \mathcal{N}(\mathbf{a}_t; \sqrt{1-\beta_t}\mathbf{a}_{t-1}, \beta_t\mathbf{I})$
+   - 反向去噪：$p_\theta(\mathbf{a}_{t-1} | \mathbf{a}_t) = \mathcal{N}(\mathbf{a}_{t-1}; \boldsymbol{\mu}_\theta(\mathbf{a}_t, t), \boldsymbol{\Sigma}_\theta)$
+   - 训练目标：$\mathcal{L} = \mathbb{E}_{t,\mathbf{a}_0,\boldsymbol{\epsilon}}[|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{a}_t, t)|^2]$</p>
+</li>
+<li>
+<p><strong>条件生成机制</strong>：
+   - 分类器引导通过外部模型梯度调整生成方向
+   - 无分类器引导通过混合条件/无条件预测实现灵活控制
+   - 引导强度$w$控制条件遵循与多样性权衡</p>
+</li>
+<li>
+<p><strong>实时优化策略</strong>：
+   - DDIM将100步训练压缩到10步推理
+   - 一致性模型实现单步生成
+   - 硬件加速和量化技术达到50Hz+控制频率</p>
+</li>
+<li>
+<p><strong>与传统方法对比</strong>：
+   - 扩散策略在多模态任务上显著优于策略梯度方法
+   - 样本效率提升40-50%，训练稳定性大幅改善
+   - 适合离线学习和安全关键应用</p>
+</li>
+<li>
+<p><strong>前沿发展方向</strong>：
+   - Flow Matching提供更灵活的生成框架
+   - 一致性模型突破延迟瓶颈
+   - 与大语言模型结合实现更智能的任务理解</p>
+</li>
+</ol>
+<p><strong>关键设计决策</strong>：</p>
+<ul>
+<li>动作序列长度：8-16步平衡时序建模与计算效率</li>
+<li>去噪步数：10步DDIM是质量与速度最佳平衡点</li>
+<li>条件融合：交叉注意力优于简单拼接</li>
+<li>多相机输入：性能提升30-40%</li>
+</ul>
+<p><strong>未来展望</strong>：
+扩散模型正在改变机器人学习范式，从"设计奖励函数"转向"收集高质量演示"。随着计算效率的提升和与基础模型的融合，扩散策略有望成为通用机器人控制的标准方法。</p>
+<h2 id="_13">练习题</h2>
+<h3 id="_14">基础题（理解概念）</h3>
+<p><strong>练习16.1</strong>：推导DDPM的边际分布
+给定前向过程 $q(\mathbf{a}_t | \mathbf{a}_{t-1}) = \mathcal{N}(\sqrt{1-\beta_t}\mathbf{a}_{t-1}, \beta_t\mathbf{I})$，证明：
+$$q(\mathbf{a}_t | \mathbf{a}_0) = \mathcal{N}(\sqrt{\bar{\alpha}_t}\mathbf{a}_0, (1-\bar{\alpha}_t)\mathbf{I})$$
+<em>Hint</em>：使用递归关系和高斯分布的性质。</p>
+<details>
+<summary>答案</summary>
+<p>从递归关系开始：
+$$\mathbf{a}_t = \sqrt{1-\beta_t}\mathbf{a}_{t-1} + \sqrt{\beta_t}\boldsymbol{\epsilon}_{t-1}$$
+递归展开：
+$$\mathbf{a}_t = \sqrt{\alpha_t}\mathbf{a}_{t-1} + \sqrt{1-\alpha_t}\boldsymbol{\epsilon}_{t-1}$$
+$$= \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}\mathbf{a}_{t-2} + \sqrt{1-\alpha_{t-1}}\boldsymbol{\epsilon}_{t-2}) + \sqrt{1-\alpha_t}\boldsymbol{\epsilon}_{t-1}$$
+$$= \sqrt{\alpha_t\alpha_{t-1}}\mathbf{a}_{t-2} + \sqrt{\alpha_t(1-\alpha_{t-1})}\boldsymbol{\epsilon}_{t-2} + \sqrt{1-\alpha_t}\boldsymbol{\epsilon}_{t-1}$$
+继续展开到$\mathbf{a}_0$：
+$$\mathbf{a}_t = \sqrt{\bar{\alpha}_t}\mathbf{a}_0 + \text{噪声项}$$
+由于所有噪声项独立，方差相加：
+$$\text{Var}[\text{噪声}] = \alpha_t(1-\alpha_{t-1}) + (1-\alpha_t) = 1-\bar{\alpha}_t$$</p>
+<p>因此：$q(\mathbf{a}_t | \mathbf{a}_0) = \mathcal{N}(\sqrt{\bar{\alpha}_t}\mathbf{a}_0, (1-\bar{\alpha}_t)\mathbf{I})$</p>
+</details>
+<p><strong>练习16.2</strong>：DDIM采样步数分析
+假设训练时使用$T=1000$步，推理时使用$S=50$步的DDIM。如果每步去噪需要20ms，计算：
+a) 总推理时间
+b) 若要达到100Hz控制频率，最多可以使用多少步？
+c) 使用一致性模型（单步生成）可以达到什么控制频率？</p>
+<p><em>Hint</em>：考虑控制周期的时间约束。</p>
+<details>
+<summary>答案</summary>
+<p>a) 总推理时间 = 50步 × 20ms/步 = 1000ms = 1秒</p>
+<p>b) 100Hz控制频率要求每个周期 ≤ 10ms
+   最多步数 = 10ms / 20ms/步 = 0.5步
+   实际上无法达到100Hz，需要进一步优化</p>
+<p>c) 一致性模型单步生成：
+   推理时间 = 1步 × 20ms = 20ms
+   控制频率 = 1000ms / 20ms = 50Hz</p>
+<p>若优化到10ms/步，则可达100Hz</p>
+</details>
+<p><strong>练习16.3</strong>：无分类器引导的实现
+编写伪代码实现无分类器引导的训练和推理过程。假设条件是图像观察$\mathbf{o}$。</p>
+<p><em>Hint</em>：训练时随机丢弃条件，推理时组合两个预测。</p>
+<details>
+<summary>答案</summary>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 训练</span>
+<span class="k">def</span> <span class="nf">train_classifier_free</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">p_uncond</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+        <span class="n">actions</span><span class="p">,</span> <span class="n">observations</span> <span class="o">=</span> <span class="n">batch</span>
+
+        <span class="c1"># 随机丢弃条件</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">p_uncond</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span><span class="p">:</span>
+            <span class="n">observations</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 或特殊的NULL token</span>
+
+        <span class="c1"># 添加噪声</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+        <span class="n">noisy_actions</span> <span class="o">=</span> <span class="n">add_noise</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># 预测噪声</span>
+        <span class="n">pred_noise</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">noisy_actions</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">observations</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">MSE</span><span class="p">(</span><span class="n">pred_noise</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># 推理</span>
+<span class="k">def</span> <span class="nf">sample_with_guidance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">observation</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+    <span class="n">a_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">action_shape</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">)):</span>
+        <span class="c1"># 有条件预测</span>
+        <span class="n">eps_cond</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">observation</span><span class="p">)</span>
+
+        <span class="c1"># 无条件预测</span>
+        <span class="n">eps_uncond</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># 组合预测</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">eps_cond</span> <span class="o">-</span> <span class="n">w</span> <span class="o">*</span> <span class="n">eps_uncond</span>
+
+        <span class="c1"># 去噪步骤</span>
+        <span class="n">a_t</span> <span class="o">=</span> <span class="n">denoise_step</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">a_t</span>
+</code></pre></div>
+
+</details>
+<p><strong>练习16.4</strong>：动作归一化设计
+给定机械臂的关节限位：</p>
+<ul>
+<li>关节1-3：[-180°, 180°]</li>
+<li>关节4-6：[-90°, 90°]  </li>
+<li>夹爪：[0, 100]mm</li>
+</ul>
+<p>设计合适的归一化和反归一化函数。</p>
+<p><em>Hint</em>：考虑使用tanh进行有界映射。</p>
+<details>
+<summary>答案</summary>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># 定义限位</span>
+<span class="n">limits</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;joints_1_3&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span>
+    <span class="s1">&#39;joints_4_6&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+    <span class="s1">&#39;gripper&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">normalize_action</span><span class="p">(</span><span class="n">action</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;将动作归一化到[-1, 1]&quot;&quot;&quot;</span>
+    <span class="n">normalized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+    <span class="c1"># 关节1-3</span>
+    <span class="n">normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mf">180.0</span>
+
+    <span class="c1"># 关节4-6</span>
+    <span class="n">normalized</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">/</span> <span class="mf">90.0</span>
+
+    <span class="c1"># 夹爪：[0,100] -&gt; [-1,1]</span>
+    <span class="n">normalized</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">-</span> <span class="mi">50</span><span class="p">)</span> <span class="o">/</span> <span class="mf">50.0</span>
+
+    <span class="k">return</span> <span class="n">normalized</span>
+
+<span class="k">def</span> <span class="nf">denormalize_action</span><span class="p">(</span><span class="n">normalized</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;从[-1, 1]恢复到原始范围&quot;&quot;&quot;</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">normalized</span><span class="p">)</span>
+
+    <span class="c1"># 使用tanh确保有界</span>
+    <span class="n">bounded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">normalized</span><span class="p">)</span>
+
+    <span class="c1"># 关节1-3</span>
+    <span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounded</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mf">180.0</span>
+
+    <span class="c1"># 关节4-6  </span>
+    <span class="n">action</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounded</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="mf">90.0</span>
+
+    <span class="c1"># 夹爪</span>
+    <span class="n">action</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">bounded</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">50.0</span>
+
+    <span class="k">return</span> <span class="n">action</span>
+</code></pre></div>
+
+</details>
+<h3 id="_15">挑战题（深入理解）</h3>
+<p><strong>练习16.5</strong>：多模态轨迹的模式覆盖分析
+考虑一个2D导航任务，机器人需要从起点(0,0)到终点(10,10)，中间有障碍物在(5,5)。存在两条可行路径：左绕和右绕。</p>
+<p>a) 解释为什么标准行为克隆会失败
+b) 设计评估扩散策略模式覆盖的指标
+c) 如何调整训练过程以确保两种模式都被学习？</p>
+<p><em>Hint</em>：考虑数据分布和生成样本的多样性。</p>
+<details>
+<summary>答案</summary>
+<p>a) 标准行为克隆失败原因：</p>
+<ul>
+<li>BC通常使用MSE损失：$\mathcal{L} = |\mathbf{a} - \hat{\mathbf{a}}|^2$</li>
+<li>当数据包含左绕(a_left)和右绕(a_right)两种模式时</li>
+<li>MSE最优解是平均：$\hat{\mathbf{a}} = \frac{a_{left} + a_{right}}{2}$</li>
+<li>这会导致直接穿过障碍物的不可行轨迹</li>
+</ul>
+<p>b) 模式覆盖指标设计：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">mode_coverage_metric</span><span class="p">(</span><span class="n">generated_trajs</span><span class="p">,</span> <span class="n">reference_trajs</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+    <span class="c1"># 聚类参考轨迹识别模式</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="n">cluster_trajectories</span><span class="p">(</span><span class="n">reference_trajs</span><span class="p">)</span>
+
+    <span class="n">coverage</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+        <span class="c1"># 检查是否有生成轨迹接近此模式</span>
+        <span class="n">min_dist</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span>
+            <span class="n">trajectory_distance</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">mode_center</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">generated_trajs</span>
+        <span class="p">])</span>
+        <span class="n">covered</span> <span class="o">=</span> <span class="n">min_dist</span> <span class="o">&lt;</span> <span class="n">threshold</span>
+        <span class="n">coverage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covered</span><span class="p">)</span>
+
+    <span class="c1"># 返回覆盖的模式比例</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">coverage</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
+</code></pre></div>
+
+<p>c) 训练改进策略：</p>
+<ol>
+<li>数据平衡：确保两种模式样本数量相近</li>
+<li>条件标签：添加离散模式标签作为条件</li>
+<li>对比学习：最大化不同模式间的距离</li>
+<li>混合初始化：从多个高斯分布初始化噪声</li>
+</ol>
+</details>
+<p><strong>练习16.6</strong>：实时性与质量的帕累托前沿
+设计实验分析DDIM步数对控制性能的影响。给定：</p>
+<ul>
+<li>任务成功率随步数变化：$S(n) = 1 - e^{-0.1n}$</li>
+<li>推理时间：$T(n) = 20n$ ms</li>
+<li>控制频率要求：至少20Hz</li>
+</ul>
+<p>找出最优的步数选择并解释权衡。</p>
+<p><em>Hint</em>：构建帕累托前沿图。</p>
+<details>
+<summary>答案</summary>
+<p>分析：</p>
+<ol>
+<li>
+<p>控制频率约束：$T(n) \leq 50$ms (20Hz)
+   因此 $n \leq 2.5$，实际最多2步</p>
+</li>
+<li>
+<p>计算不同步数的性能：
+   - n=1: S(1)=0.095, T(1)=20ms, f=50Hz
+   - n=2: S(2)=0.181, T(2)=40ms, f=25Hz
+   - n=5: S(5)=0.393, T(5)=100ms, f=10Hz (违反约束)</p>
+</li>
+<li>
+<p>帕累托最优解：
+   在满足20Hz约束下，n=2是最优选择</p>
+</li>
+<li>
+<p>权衡分析：
+   - 若放松频率要求到10Hz，可用n=5，成功率翻倍
+   - 若需要30Hz+，只能用n=1，性能较差
+   - 可考虑异步执行：高层5步规划，底层插值</p>
+</li>
+</ol>
+<p>实验设计：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pareto_analysis</span><span class="p">():</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">success_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">inference_time</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">inference_time</span>
+
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">:</span>  <span class="c1"># 满足约束</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">success_rate</span><span class="p">,</span> <span class="n">frequency</span><span class="p">))</span>
+
+    <span class="c1"># 绘制帕累托前沿</span>
+    <span class="n">plot_pareto_frontier</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<p><strong>练习16.7</strong>：扩散策略的失败模式分析
+分析以下场景中扩散策略可能的失败模式，并提出改进方案：
+a) 长期任务（&gt;100步动作序列）
+b) 需要精确力控的接触任务
+c) 动态环境with移动障碍物</p>
+<p><em>Hint</em>：考虑模型架构限制和训练数据分布。</p>
+<details>
+<summary>答案</summary>
+<p>a) 长期任务失败模式：</p>
+<ul>
+<li>问题：误差累积，远期预测退化</li>
+<li>原因：训练时horizon有限(通常16-32步)</li>
+<li>改进：
+  1. 层级规划：高层生成关键点，底层连接
+  2. 自回归生成with重叠窗口
+  3. 使用Transformer处理长序列依赖</li>
+</ul>
+<p>b) 精确力控失败：</p>
+<ul>
+<li>问题：力矩预测噪声大，接触不稳定</li>
+<li>原因：扩散过程引入随机性</li>
+<li>改进：
+  1. 混合架构：位置用扩散，力用确定性控制
+  2. 后处理滤波：卡尔曼滤波平滑力矩
+  3. 残差学习：扩散预测修正项</li>
+</ul>
+<p>c) 动态环境失败：</p>
+<ul>
+<li>问题：反应延迟，碰撞风险</li>
+<li>原因：推理时间长，缺乏在线适应</li>
+<li>改进：
+  1. 预测性控制：预测障碍物轨迹
+  2. 快速重规划：检测到变化立即更新
+  3. 安全层：反应式避障覆盖扩散输出</li>
+</ul>
+<p>综合解决方案框架：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">RobustDiffusionPolicy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffusion</span> <span class="o">=</span> <span class="n">DiffusionModel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">safety_filter</span> <span class="o">=</span> <span class="n">SafetyLayer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_controller</span> <span class="o">=</span> <span class="n">AdmittanceControl</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="c1"># 扩散生成轨迹</span>
+        <span class="n">traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffusion</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+
+        <span class="c1"># 安全过滤</span>
+        <span class="n">safe_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">safety_filter</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="n">obs</span><span class="p">)</span>
+
+        <span class="c1"># 力控增强</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_contact</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+            <span class="n">safe_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_controller</span><span class="o">.</span><span class="n">modify</span><span class="p">(</span><span class="n">safe_traj</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">safe_traj</span>
+</code></pre></div>
+
+</details>
+<p><strong>练习16.8</strong>：设计混合扩散-RL系统
+设计一个结合扩散策略和强化学习优势的混合系统，用于机械臂操作任务。要求：</p>
+<ul>
+<li>利用扩散模型的多模态建模能力</li>
+<li>利用RL的在线适应能力</li>
+<li>给出训练和部署流程</li>
+</ul>
+<p><em>Hint</em>：考虑分层架构或残差学习。</p>
+<details>
+<summary>答案</summary>
+<p>混合系统设计：</p>
+<p><strong>架构1：分层决策</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HierarchicalDiffusionRL</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 高层：扩散模型生成子目标</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subgoal_diffusion</span> <span class="o">=</span> <span class="n">DiffusionPolicy</span><span class="p">(</span>
+            <span class="n">horizon</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># 生成10个子目标</span>
+            <span class="n">dim</span><span class="o">=</span><span class="mi">3</span>  <span class="c1"># 3D位置</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 底层：RL策略执行精细控制</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_level_rl</span> <span class="o">=</span> <span class="n">SAC</span><span class="p">(</span>
+            <span class="n">obs_dim</span><span class="o">=</span><span class="n">state_dim</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span>  <span class="c1"># 状态+子目标</span>
+            <span class="n">action_dim</span><span class="o">=</span><span class="mi">7</span>  <span class="c1"># 7DoF动作</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demos</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="c1"># 阶段1：从演示学习子目标生成</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_subgoal_diffusion</span><span class="p">(</span><span class="n">demos</span><span class="p">)</span>
+
+        <span class="c1"># 阶段2：RL学习达到子目标</span>
+        <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_episodes</span><span class="p">):</span>
+            <span class="n">subgoals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgoal_diffusion</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">subgoal</span> <span class="ow">in</span> <span class="n">subgoals</span><span class="p">:</span>
+                <span class="c1"># RL训练达到子目标</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">low_level_rl</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">subgoal</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="c1"># 生成子目标序列</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">need_replan</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subgoals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgoal_diffusion</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+
+        <span class="c1"># RL跟踪当前子目标</span>
+        <span class="n">current_subgoal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgoals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">subgoal_idx</span><span class="p">]</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_level_rl</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">current_subgoal</span><span class="p">)</span>
+
+        <span class="c1"># 检查子目标达成</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reached_subgoal</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">current_subgoal</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subgoal_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">action</span>
+</code></pre></div>
+
+<p><strong>架构2：残差学习</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ResidualDiffusionRL</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 基础策略：扩散模型</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_diffusion</span> <span class="o">=</span> <span class="n">DiffusionPolicy</span><span class="p">()</span>
+
+        <span class="c1"># 残差策略：RL微调</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_rl</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span>
+            <span class="n">obs_dim</span><span class="o">=</span><span class="n">state_dim</span> <span class="o">+</span> <span class="n">action_dim</span><span class="p">,</span>
+            <span class="n">action_dim</span><span class="o">=</span><span class="n">action_dim</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demos</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="c1"># 阶段1：扩散模型模仿学习</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_diffusion</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">demos</span><span class="p">)</span>
+
+        <span class="c1"># 阶段2：RL学习残差</span>
+        <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_episodes</span><span class="p">):</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+                <span class="c1"># 基础动作</span>
+                <span class="n">base_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_diffusion</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+
+                <span class="c1"># 残差修正</span>
+                <span class="n">residual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual_rl</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">base_action</span><span class="p">)</span>
+
+                <span class="c1"># 组合动作</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">base_action</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">residual</span>
+
+                <span class="c1"># 环境交互</span>
+                <span class="n">next_obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+                <span class="c1"># RL更新</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">residual_rl</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>训练流程</strong>：</p>
+<ol>
+<li>收集专家演示（1000条轨迹）</li>
+<li>预训练扩散模型（模仿学习）</li>
+<li>部署混合系统到仿真环境</li>
+<li>RL组件在线学习（10k episodes）</li>
+<li>系统评估与调优</li>
+</ol>
+<p><strong>部署流程</strong>：</p>
+<ol>
+<li>加载预训练模型</li>
+<li>初始化安全监控</li>
+<li>实时推理循环：
+   - 扩散生成粗略方案
+   - RL精细调整
+   - 安全检查
+   - 执行动作</li>
+<li>在线更新RL组件（可选）</li>
+</ol>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>扩散处理多模态和长期规划</li>
+<li>RL处理实时反应和适应</li>
+<li>相比纯扩散：更好的在线适应</li>
+<li>相比纯RL：更好的样本效率</li>
+</ul>
+</details>
+<h2 id="gotchas">常见陷阱与错误 (Gotchas)</h2>
+<h3 id="1">1. 训练相关陷阱</h3>
+<p><strong>问题：训练不稳定，损失发散</strong></p>
+<ul>
+<li>原因：学习率过大或噪声调度不当</li>
+<li>解决：使用余弦调度，学习率warmup，梯度裁剪</li>
+<li>调试技巧：监控SNR变化，检查中间去噪结果</li>
+</ul>
+<p><strong>问题：模式坍塌，只生成单一轨迹</strong></p>
+<ul>
+<li>原因：训练数据不平衡或引导权重过大</li>
+<li>解决：数据增强，降低CFG权重，使用混合高斯初始化</li>
+<li>调试技巧：可视化多次采样结果的分布</li>
+</ul>
+<p><strong>问题：条件信息被忽略</strong></p>
+<ul>
+<li>原因：条件编码器容量不足或融合方式不当</li>
+<li>解决：增大编码器，使用交叉注意力而非简单拼接</li>
+<li>调试技巧：测试极端条件下的响应</li>
+</ul>
+<h3 id="2">2. 推理相关陷阱</h3>
+<p><strong>问题：推理速度无法满足实时要求</strong></p>
+<ul>
+<li>原因：去噪步数过多或模型过大</li>
+<li>解决：使用DDIM/一致性模型，模型蒸馏，硬件优化</li>
+<li>调试技巧：逐步减少步数观察性能退化</li>
+</ul>
+<p><strong>问题：生成动作不平滑或震荡</strong></p>
+<ul>
+<li>原因：时间一致性不足或采样噪声过大</li>
+<li>解决：动作chunk重叠，低通滤波，减小最后几步噪声</li>
+<li>调试技巧：绘制速度/加速度曲线</li>
+</ul>
+<p><strong>问题：超出关节限位或碰撞</strong></p>
+<ul>
+<li>原因：缺乏硬约束集成</li>
+<li>解决：投影到可行域，添加安全层，约束感知训练</li>
+<li>调试技巧：仿真环境测试边界情况</li>
+</ul>
+<h3 id="3">3. 数据相关陷阱</h3>
+<p><strong>问题：sim2real差距大</strong></p>
+<ul>
+<li>原因：训练数据与实际分布不匹配</li>
+<li>解决：域随机化，真实数据微调，残差学习</li>
+<li>调试技巧：对比仿真和真实环境的特征分布</li>
+</ul>
+<p><strong>问题：长尾事件处理差</strong></p>
+<ul>
+<li>原因：罕见情况在训练数据中代表性不足</li>
+<li>解决：重要性采样，数据合成，异常检测+fallback策略</li>
+<li>调试技巧：构建边缘案例测试集</li>
+</ul>
+<h3 id="4">4. 架构设计陷阱</h3>
+<p><strong>问题：动作维度增加导致性能急剧下降</strong></p>
+<ul>
+<li>原因：高维空间的诅咒</li>
+<li>解决：分层生成，维度分解，使用latent diffusion</li>
+<li>调试技巧：逐步增加维度观察scaling规律</li>
+</ul>
+<p><strong>问题：多模态融合效果差</strong></p>
+<ul>
+<li>原因：模态间时间不同步或特征尺度不匹配</li>
+<li>解决：时间对齐，特征归一化，注意力机制</li>
+<li>调试技巧：单模态ablation study</li>
+</ul>
+<h3 id="5">5. 部署相关陷阱</h3>
+<p><strong>问题：内存占用过大</strong></p>
+<ul>
+<li>原因：保存所有去噪中间状态</li>
+<li>解决：使用gradient checkpointing，减少批大小，模型量化</li>
+<li>调试技巧：profile内存使用pattern</li>
+</ul>
+<p><strong>问题：不同硬件平台性能差异大</strong></p>
+<ul>
+<li>原因：未针对特定硬件优化</li>
+<li>解决：使用TensorRT/CoreML，算子融合，专用推理引擎</li>
+<li>调试技巧：benchmark关键算子性能</li>
+</ul>
+<h3 id="_16">调试工具推荐</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 可视化工具</span>
+<span class="k">class</span> <span class="nc">DiffusionDebugger</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">visualize_denoising_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;可视化完整去噪过程&quot;&quot;&quot;</span>
+        <span class="n">trajectories</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">x_t</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">denoise_step</span><span class="p">(</span><span class="n">x_t</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="n">trajectories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_t</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">animate_trajectories</span><span class="p">(</span><span class="n">trajectories</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">analyze_mode_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generated_samples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;分析模式覆盖情况&quot;&quot;&quot;</span>
+        <span class="n">clusters</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">generated_samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plot_cluster_distribution</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check_temporal_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;检查时序一致性&quot;&quot;&quot;</span>
+        <span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">accelerations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">velocities</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;max_velocity&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">velocities</span><span class="p">)),</span>
+            <span class="s1">&#39;max_acceleration&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">accelerations</span><span class="p">)),</span>
+            <span class="s1">&#39;jerk&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">accelerations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">}</span>
+</code></pre></div>
+
+<h3 id="_17">经验法则</h3>
+<ol>
+<li><strong>开始简单</strong>：先用小模型和少步数建立baseline</li>
+<li><strong>逐步复杂化</strong>：验证每个组件后再添加新功能</li>
+<li><strong>监控一切</strong>：loss、SNR、生成质量、推理时间</li>
+<li><strong>失败快速恢复</strong>：准备fallback策略和安全机制</li>
+<li><strong>真实数据优先</strong>：少量真实数据胜过大量仿真</li>
+</ol>
+<h2 id="_18">最佳实践检查清单</h2>
+<h3 id="_19">设计阶段 ✓</h3>
+<ul>
+<li>[ ] <strong>需求分析</strong></li>
+<li>[ ] 任务是否存在多模态分布？（扩散模型优势）</li>
+<li>[ ] 实时性要求是什么？（&lt;50ms, &lt;100ms, &lt;1s）</li>
+<li>[ ] 可用数据量和质量如何？</li>
+<li>
+<p>[ ] 是否需要在线适应？</p>
+</li>
+<li>
+<p>[ ] <strong>架构选择</strong></p>
+</li>
+<li>[ ] 选择合适的backbone（U-Net vs Transformer）</li>
+<li>[ ] 确定动作表示（位置/速度/力矩）</li>
+<li>[ ] 设计条件融合方式（FiLM/Cross-attention）</li>
+<li>
+<p>[ ] 规划horizon长度（8-16步典型）</p>
+</li>
+<li>
+<p>[ ] <strong>性能预估</strong></p>
+</li>
+<li>[ ] 估算模型大小和推理时间</li>
+<li>[ ] 评估内存需求</li>
+<li>[ ] 确定目标硬件平台</li>
+</ul>
+<h3 id="_20">数据准备 ✓</h3>
+<ul>
+<li>[ ] <strong>数据收集</strong></li>
+<li>[ ] 遥操作系统就绪</li>
+<li>[ ] 多视角相机配置</li>
+<li>[ ] 传感器时间同步（&lt;10ms误差）</li>
+<li>
+<p>[ ] 安全边界设置</p>
+</li>
+<li>
+<p>[ ] <strong>数据质量</strong></p>
+</li>
+<li>[ ] 检查演示质量（成功率&gt;90%）</li>
+<li>[ ] 验证动作平滑性</li>
+<li>[ ] 确保模式多样性</li>
+<li>
+<p>[ ] 标注关键帧和失败案例</p>
+</li>
+<li>
+<p>[ ] <strong>数据处理</strong></p>
+</li>
+<li>[ ] 动作归一化策略确定</li>
+<li>[ ] 数据增强方案（颜色、裁剪、噪声）</li>
+<li>[ ] 训练/验证/测试集划分（70/15/15）</li>
+<li>[ ] 构建hard case测试集</li>
+</ul>
+<h3 id="_21">训练阶段 ✓</h3>
+<ul>
+<li>[ ] <strong>训练配置</strong></li>
+<li>[ ] 噪声调度选择（线性/余弦）</li>
+<li>[ ] 学习率调度（warmup + cosine decay）</li>
+<li>[ ] 批大小优化（内存vs收敛速度）</li>
+<li>
+<p>[ ] 梯度裁剪阈值（通常1.0）</p>
+</li>
+<li>
+<p>[ ] <strong>训练监控</strong></p>
+</li>
+<li>[ ] Loss曲线收敛性</li>
+<li>[ ] SNR分布合理性</li>
+<li>[ ] 验证集性能tracking</li>
+<li>
+<p>[ ] 生成样本定期可视化</p>
+</li>
+<li>
+<p>[ ] <strong>超参数调优</strong></p>
+</li>
+<li>[ ] 去噪步数T（训练100-1000）</li>
+<li>[ ] 网络深度和宽度</li>
+<li>[ ] Dropout和正则化</li>
+<li>[ ] 条件dropout概率（CFG训练）</li>
+</ul>
+<h3 id="_22">优化阶段 ✓</h3>
+<ul>
+<li>[ ] <strong>推理加速</strong></li>
+<li>[ ] DDIM步数优化（目标10-20步）</li>
+<li>[ ] 模型量化（FP16/INT8）</li>
+<li>[ ] 算子融合和图优化</li>
+<li>
+<p>[ ] 批处理并行化</p>
+</li>
+<li>
+<p>[ ] <strong>质量提升</strong></p>
+</li>
+<li>[ ] 引导权重调优（CFG w=1-3）</li>
+<li>[ ] 后处理滤波器设计</li>
+<li>[ ] 动作chunk重叠策略</li>
+<li>
+<p>[ ] 安全约束集成</p>
+</li>
+<li>
+<p>[ ] <strong>鲁棒性增强</strong></p>
+</li>
+<li>[ ] 异常检测机制</li>
+<li>[ ] Fallback策略准备</li>
+<li>[ ] 边界case处理</li>
+<li>[ ] 故障恢复流程</li>
+</ul>
+<h3 id="_23">部署阶段 ✓</h3>
+<ul>
+<li>[ ] <strong>系统集成</strong></li>
+<li>[ ] 实时控制循环实现</li>
+<li>[ ] 硬件驱动适配</li>
+<li>[ ] 通信协议优化（减少延迟）</li>
+<li>
+<p>[ ] 日志和监控系统</p>
+</li>
+<li>
+<p>[ ] <strong>安全保障</strong></p>
+</li>
+<li>[ ] 紧急停止机制</li>
+<li>[ ] 速度/加速度限制</li>
+<li>[ ] 碰撞检测集成</li>
+<li>
+<p>[ ] 人机协作安全</p>
+</li>
+<li>
+<p>[ ] <strong>性能验证</strong></p>
+</li>
+<li>[ ] 端到端延迟测试</li>
+<li>[ ] 长时间运行稳定性</li>
+<li>[ ] 不同场景泛化测试</li>
+<li>[ ] 压力测试和极限工况</li>
+</ul>
+<h3 id="_24">维护阶段 ✓</h3>
+<ul>
+<li>[ ] <strong>持续优化</strong></li>
+<li>[ ] 收集部署数据用于改进</li>
+<li>[ ] A/B测试新版本</li>
+<li>[ ] 增量学习机制</li>
+<li>
+<p>[ ] 性能指标tracking</p>
+</li>
+<li>
+<p>[ ] <strong>问题诊断</strong></p>
+</li>
+<li>[ ] 失败case分析流程</li>
+<li>[ ] 可视化调试工具</li>
+<li>[ ] 性能profiling</li>
+<li>
+<p>[ ] 回放和仿真测试</p>
+</li>
+<li>
+<p>[ ] <strong>文档更新</strong></p>
+</li>
+<li>[ ] API文档维护</li>
+<li>[ ] 部署指南更新</li>
+<li>[ ] 已知问题记录</li>
+<li>[ ] 最佳实践总结</li>
+</ul>
+<h3 id="_25">评估指标 ✓</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 关键性能指标(KPI)</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;task_success_rate&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;85%&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;inference_latency&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;50ms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;control_frequency&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;20Hz&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mode_coverage&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;80%&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;smoothness&quot;</span><span class="p">:</span> <span class="s2">&quot;jerk&lt;10m/s³&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;safety_violations&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;0.1%&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;memory_usage&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;4GB&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;training_time&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;24h&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;data_efficiency&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;1000 demos&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sim2real_gap&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;15</span><span class="si">% d</span><span class="s2">rop&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="_26">团队协作 ✓</h3>
+<ul>
+<li>[ ] <strong>角色分工</strong></li>
+<li>[ ] ML工程师：模型开发</li>
+<li>[ ] 机器人工程师：系统集成</li>
+<li>[ ] 数据工程师：数据pipeline</li>
+<li>
+<p>[ ] 测试工程师：验证评估</p>
+</li>
+<li>
+<p>[ ] <strong>代码规范</strong></p>
+</li>
+<li>[ ] 版本控制策略</li>
+<li>[ ] Code review流程</li>
+<li>[ ] 测试覆盖要求</li>
+<li>[ ] 部署流程标准化</li>
+</ul>
+<p>记住：扩散策略的成功部署需要跨学科协作，从理论到工程的每个环节都需要精心设计和验证。</p>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter15.html" class="nav-link prev">← 第15章：行为克隆与模仿学习</a><a href="chapter17.html" class="nav-link next">第17章：视觉-语言基础模型 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

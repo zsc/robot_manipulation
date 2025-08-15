@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第9章：全身控制与平衡</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="9">第9章：全身控制与平衡</h1>
+<h2 id="_1">开篇</h2>
+<p>轮足机械臂机器人的全身控制是实现复杂动态行为的核心技术。不同于传统的固定基座机械臂，移动机器人需要在执行任务的同时保持动态平衡，这要求我们在统一的优化框架下协调所有关节、轮子和接触力。本章将深入探讨从经典的ZMP理论到现代的QP优化方法，帮助读者掌握设计和实现鲁棒全身控制器的关键技术。我们将特别关注如何处理欠驱动系统、接触约束和实时计算要求之间的权衡。</p>
+<h2 id="91-zmp">9.1 ZMP与稳定性准则</h2>
+<h3 id="911-zmp">9.1.1 零力矩点(ZMP)理论基础</h3>
+<p>零力矩点是判断机器人动态稳定性的经典准则。ZMP定义为地面上一点，在该点处地面反作用力产生的净力矩在水平方向上为零。对于平坦地面，ZMP的位置可以通过以下公式计算：</p>
+<p>$$
+x_{zmp} = \frac{\sum_i m_i(x_i\ddot{z}_i - z_i\ddot{x}_i - g x_i)}{\sum_i m_i(\ddot{z}_i + g)}
+$$</p>
+<p>$$
+y_{zmp} = \frac{\sum_i m_i(y_i\ddot{z}_i - z_i\ddot{y}_i - g y_i)}{\sum_i m_i(\ddot{z}_i + g)}
+$$</p>
+<p>其中 $m_i$ 是第 $i$ 个质点的质量，$(x_i, y_i, z_i)$ 是其位置，$g$ 是重力加速度。</p>
+<h3 id="912">9.1.2 支撑多边形与稳定裕度</h3>
+<p>支撑多边形由所有接触点的凸包定义。稳定性判据要求ZMP必须位于支撑多边形内部：</p>
+<div class="codehilite"><pre><span></span><code>      支撑多边形示意图（俯视图）
+
+    FL ●━━━━━━━━━━━● FR
+       ┃            ┃
+       ┃     ZMP    ┃
+       ┃      ×     ┃
+       ┃            ┃
+    RL ●━━━━━━━━━━━● RR
+
+    FL: 前左轮  FR: 前右轮
+    RL: 后左轮  RR: 后右轮
+</code></pre></div>
+
+<p>稳定裕度定义为ZMP到支撑多边形边界的最小距离：</p>
+<p>$$
+\text{margin} = \min_{e \in \text{edges}} d(p_{zmp}, e)
+$$</p>
+<h3 id="913-com-zmp">9.1.3 CoM-ZMP动力学关系</h3>
+<p>质心(CoM)与ZMP之间的动力学关系可以简化为线性倒立摆模型(LIPM)：</p>
+<p>$$
+\ddot{x}_{com} = \omega^2(x_{com} - x_{zmp})
+$$</p>
+<p>其中 $\omega = \sqrt{g/z_{com}}$ 是自然频率，$z_{com}$ 是质心高度。这个简化模型在轨迹规划中极其有用。</p>
+<h3 id="914-zmp">9.1.4 ZMP的局限性与扩展</h3>
+<p>传统ZMP理论假设：</p>
+<ol>
+<li>地面平坦且水平</li>
+<li>无滑动（足够的摩擦力）</li>
+<li>点接触或平面接触</li>
+</ol>
+<p>对于轮足机器人，我们需要扩展ZMP概念：</p>
+<p><strong>虚拟ZMP (VZMP)</strong>：考虑轮子的滚动约束，将轮地接触力等效为支撑多边形内的虚拟点力。</p>
+<p><strong>摩擦修正ZMP</strong>：考虑有限摩擦系数 $\mu$ 时的稳定区域：</p>
+<p>$$
+|F_{tangential}| \leq \mu F_{normal}
+$$</p>
+<h2 id="92-qp">9.2 QP优化的全身控制</h2>
+<h3 id="921">9.2.1 全身动力学方程</h3>
+<p>轮足机械臂系统的完整动力学方程：</p>
+<p>$$
+M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = S^T\tau + J_c^T F_c
+$$</p>
+<p>其中：</p>
+<ul>
+<li>$M(q)$：质量矩阵</li>
+<li>$C(q,\dot{q})$：科氏力和离心力</li>
+<li>$G(q)$：重力项</li>
+<li>$S$：选择矩阵（区分驱动和欠驱动自由度）</li>
+<li>$\tau$：关节力矩</li>
+<li>$J_c$：接触雅可比</li>
+<li>$F_c$：接触力</li>
+</ul>
+<h3 id="922">9.2.2 任务空间控制目标</h3>
+<p>全身控制器通常需要同时追踪多个任务：</p>
+<ol>
+<li>
+<p><strong>质心任务</strong>：
+$$
+\ddot{x}_{com}^{des} = K_p^{com}(x_{com}^{ref} - x_{com}) + K_d^{com}(\dot{x}_{com}^{ref} - \dot{x}_{com}) + \ddot{x}_{com}^{ref}
+$$</p>
+</li>
+<li>
+<p><strong>末端执行器任务</strong>：
+$$
+\ddot{x}_{ee}^{des} = K_p^{ee}(x_{ee}^{ref} - x_{ee}) + K_d^{ee}(\dot{x}_{ee}^{ref} - \dot{x}_{ee}) + \ddot{x}_{ee}^{ref}
+$$</p>
+</li>
+<li>
+<p><strong>姿态任务</strong>：
+$$
+\alpha^{des} = K_p^{ori} \log(R^{ref} R^T) + K_d^{ori}(\omega^{ref} - \omega)
+$$</p>
+</li>
+</ol>
+<h3 id="923-qp">9.2.3 QP问题构建</h3>
+<p>标准QP形式：</p>
+<p>$$
+\begin{aligned}
+\min_{\ddot{q}, F_c, \tau} \quad &amp; \sum_i w_i ||A_i\ddot{q} + b_i||^2 + w_\tau ||\tau||^2 + w_F ||F_c||^2 \\
+\text{s.t.} \quad &amp; M\ddot{q} + h = S^T\tau + J_c^T F_c \\
+&amp; \underline{F}_c \leq F_c \leq \bar{F}_c \\
+&amp; \underline{\tau} \leq \tau \leq \bar{\tau} \\
+&amp; \underline{\ddot{q}} \leq \ddot{q} \leq \bar{\ddot{q}}
+\end{aligned}
+$$</p>
+<p>其中 $A_i\ddot{q} + b_i = 0$ 表示第 $i$ 个任务的加速度误差。</p>
+<h3 id="924">9.2.4 层级任务优化</h3>
+<p>处理任务冲突的层级方法：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 伪代码：层级QP求解</span>
+<span class="k">def</span> <span class="nf">hierarchical_qp</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">constraints</span><span class="p">):</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">accumulated_constraints</span> <span class="o">=</span> <span class="n">constraints</span>
+
+    <span class="k">for</span> <span class="n">priority_level</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="c1"># 构建当前层级的QP</span>
+        <span class="n">qp</span> <span class="o">=</span> <span class="n">build_qp</span><span class="p">(</span><span class="n">priority_level</span><span class="p">,</span> <span class="n">accumulated_constraints</span><span class="p">)</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">solve_qp</span><span class="p">(</span><span class="n">qp</span><span class="p">)</span>
+
+        <span class="c1"># 将解作为等式约束加入下一层级</span>
+        <span class="n">accumulated_constraints</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">task_jacobian</span> <span class="o">@</span> <span class="n">solution</span> <span class="o">==</span> <span class="n">task_acceleration</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">solution</span>
+</code></pre></div>
+
+<h3 id="925">9.2.5 实时求解策略</h3>
+<p>为满足1kHz控制频率要求：</p>
+<ol>
+<li><strong>热启动</strong>：使用上一时刻的解初始化</li>
+<li><strong>早停</strong>：限制迭代次数</li>
+<li><strong>稀疏性利用</strong>：利用问题结构的稀疏性</li>
+<li><strong>近似海塞矩阵</strong>：使用对角近似减少计算</li>
+</ol>
+<h2 id="93">9.3 接触力分配与摩擦锥约束</h2>
+<h3 id="931">9.3.1 接触模型</h3>
+<p>轮足机器人的接触可分为：</p>
+<ol>
+<li><strong>点接触</strong>：简化的轮地接触</li>
+<li><strong>线接触</strong>：轮子侧滑时</li>
+<li><strong>面接触</strong>：足式模式下的平面接触</li>
+</ol>
+<p>每种接触的力空间维度不同：</p>
+<ul>
+<li>点接触：3D力</li>
+<li>线接触：4D（3D力 + 1D力矩）</li>
+<li>面接触：6D（3D力 + 3D力矩）</li>
+</ul>
+<h3 id="932">9.3.2 摩擦锥线性化</h3>
+<p>库仑摩擦锥的非线性约束：</p>
+<p>$$
+\sqrt{f_x^2 + f_y^2} \leq \mu f_z
+$$</p>
+<p>线性化为金字塔约束（4面体）：</p>
+<p>$$
+\begin{aligned}
+|f_x| &amp;\leq \frac{\mu}{\sqrt{2}} f_z \\
+|f_y| &amp;\leq \frac{\mu}{\sqrt{2}} f_z
+\end{aligned}
+$$</p>
+<p>或使用8面体获得更好的近似：</p>
+<p>$$
+|f_x| + |f_y| \leq \mu f_z
+$$</p>
+<h3 id="933">9.3.3 接触力优化分配</h3>
+<p>给定期望的净力矩 $w^{des} = [f^{des}, \tau^{des}]^T$，分配到各接触点：</p>
+<p>$$
+\min_{F_c} \sum_i ||F_{c,i}||^2_Q + \lambda ||A_c F_c - w^{des}||^2
+$$</p>
+<p>其中 $A_c$ 是接触力到净力矩的映射矩阵：</p>
+<p>$$
+A_c = \begin{bmatrix}
+I_3 &amp; I_3 &amp; \cdots &amp; I_3 \\
+[p_1]_\times &amp; [p_2]_\times &amp; \cdots &amp; [p_n]_\times
+\end{bmatrix}
+$$</p>
+<h3 id="934">9.3.4 轮子特殊约束</h3>
+<p>轮子的滚动约束要求切向力与驱动力矩一致：</p>
+<p>$$
+f_{wheel,tangent} = \tau_{wheel} / r_{wheel}
+$$</p>
+<p>转向轮增加额外约束：</p>
+<p>$$
+f_{lateral} \cos(\delta) - f_{longitudinal} \sin(\delta) = 0
+$$</p>
+<p>其中 $\delta$ 是转向角。</p>
+<h3 id="935">9.3.5 接触状态切换</h3>
+<p>处理接触建立/断开的平滑过渡：</p>
+<div class="codehilite"><pre><span></span><code>接触力profile：
+
+Force
+  ▲
+  │     ___稳定接触___
+  │    /               \
+  │   /                 \
+  │  /建立              断开\
+  │ /                       \
+──┴─────────────────────────► Time
+  t0  t1              t2  t3
+</code></pre></div>
+
+<p>使用sigmoid函数平滑过渡：</p>
+<p>$$
+\gamma(t) = \frac{1}{1 + e^{-k(t - t_{switch})}}
+$$</p>
+<h2 id="94">9.4 动态平衡与步态转换</h2>
+<h3 id="941">9.4.1 动态行走的稳定性</h3>
+<p>与静态稳定不同，动态行走允许ZMP暂时离开支撑多边形，利用角动量维持平衡：</p>
+<p>$$
+\dot{L} = \sum_i (p_i - p_{com}) \times F_i + \tau_{external}
+$$</p>
+<p>捕获点(Capture Point)定义：</p>
+<p>$$
+\xi = x_{com} + \frac{\dot{x}_{com}}{\omega}
+$$</p>
+<p>稳定条件：捕获点必须在可达支撑区域内。</p>
+<h3 id="942">9.4.2 轮足模式切换策略</h3>
+<p>轮足机器人的独特优势在于可以根据地形和任务需求切换运动模式：</p>
+<ol>
+<li><strong>纯轮模式</strong>：高速、高效、平坦地形</li>
+<li><strong>轮足混合</strong>：中速、复杂地形</li>
+<li><strong>纯足模式</strong>：低速、极端地形（楼梯、碎石）</li>
+</ol>
+<p>模式切换状态机：</p>
+<div class="codehilite"><pre><span></span><code>    ┌─────────┐
+    │纯轮模式 │◄────────┐
+    └────┬────┘         │
+         │              │
+    v &gt; v_max      稳定性恢复
+         │              │
+         ▼              │
+    ┌─────────┐         │
+    │混合模式 │─────────┘
+    └────┬────┘    
+         │
+    地形复杂度 &gt; θ
+         │
+         ▼
+    ┌─────────┐
+    │纯足模式 │
+    └─────────┘
+</code></pre></div>
+
+<h3 id="943">9.4.3 步态生成与优化</h3>
+<p><strong>相位协调</strong>：使用中央模式发生器(CPG)或优化方法生成步态：</p>
+<p>$$
+\phi_i(t) = \omega t + \phi_{i,0} + \sum_j w_{ij} \sin(\phi_j - \phi_i)
+$$</p>
+<p><strong>占空比优化</strong>：根据速度和稳定性要求调整支撑相/摆动相比例：</p>
+<p>$$
+\text{duty factor} = \frac{T_{stance}}{T_{stance} + T_{swing}}
+$$</p>
+<p>典型值：</p>
+<ul>
+<li>Walk: 0.75</li>
+<li>Trot: 0.5</li>
+<li>Gallop: 0.4</li>
+</ul>
+<h3 id="944">9.4.4 角动量规划</h3>
+<p>全身角动量的主动调节用于动态平衡：</p>
+<p>$$
+L = \sum_i I_i \omega_i + \sum_i m_i (p_i - p_{com}) \times v_i
+$$</p>
+<p>通过优化问题规划角动量轨迹：</p>
+<p>$$
+\min \int_0^T ||\dot{L}(t) - \dot{L}^{ref}(t)||^2 dt
+$$</p>
+<p>约束于可行的接触力和关节限制。</p>
+<h3 id="945">9.4.5 推力恢复策略</h3>
+<p>受扰动后的平衡恢复策略层级：</p>
+<ol>
+<li><strong>踝策略</strong>：小扰动，调整CoP位置</li>
+<li><strong>髋策略</strong>：中等扰动，调整角动量</li>
+<li><strong>步进策略</strong>：大扰动，改变支撑位置</li>
+</ol>
+<p>决策阈值基于线性倒立摆的可行域：</p>
+<p>$$
+|\xi - p_{support}| &gt; d_{critical} \Rightarrow \text{需要步进}
+$$</p>
+<h2 id="atlas">案例研究：波士顿动力Atlas的动态平衡</h2>
+<h3 id="_2">背景</h3>
+<p>Atlas是波士顿动力开发的人形机器人，展示了卓越的动态运动能力，包括跑步、跳跃和后空翻。其全身控制系统是业界标杆。</p>
+<h3 id="_3">控制架构</h3>
+<p>Atlas采用三层控制架构：</p>
+<ol>
+<li>
+<p><strong>高层规划器</strong>（10-50Hz）
+   - 轨迹优化
+   - 步态规划
+   - 任务分解</p>
+</li>
+<li>
+<p><strong>中层控制器</strong>（200-500Hz）
+   - 全身QP控制
+   - 平衡控制
+   - 接触力分配</p>
+</li>
+<li>
+<p><strong>底层控制器</strong>（1-5kHz）
+   - 关节伺服
+   - 力/力矩控制
+   - 传感器融合</p>
+</li>
+</ol>
+<h3 id="_4">关键技术创新</h3>
+<ol>
+<li><strong>预测控制与MPC</strong></li>
+</ol>
+<p>Atlas使用模型预测控制处理动态运动：</p>
+<p>$$
+\min_{u_{0:N-1}} \sum_{k=0}^{N-1} ||x_k - x_k^{ref}||_Q + ||u_k||_R
+$$</p>
+<p>预测时域通常为1-2秒，允许机器人"预见"未来并提前调整。</p>
+<ol start="2">
+<li><strong>混合动力学建模</strong></li>
+</ol>
+<p>结合刚体动力学和简化模型：</p>
+<ul>
+<li>全身：30+ DoF刚体模型（精确但计算密集）</li>
+<li>规划：3D SLIP模型（简单但捕获主要动态）</li>
+</ul>
+<ol start="3">
+<li><strong>鲁棒接触检测</strong></li>
+</ol>
+<p>使用多传感器融合检测接触：</p>
+<ul>
+<li>力传感器：直接测量</li>
+<li>IMU + 运动学：间接推断</li>
+<li>视觉：预测接触</li>
+</ul>
+<p>接触置信度估计：</p>
+<p>$$
+p_{contact} = \sigma(w_f f_{measured} + w_a a_{residual} + w_v v_{predicted})
+$$</p>
+<h3 id="_5">性能指标</h3>
+<p>Atlas在各种任务中的表现：</p>
+<p>| 指标 | 数值 | 备注 |</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大步行速度</td>
+<td>2.5 m/s</td>
+<td>平坦地形</td>
+</tr>
+<tr>
+<td>跳跃高度</td>
+<td>0.5 m</td>
+<td>垂直跳跃</td>
+</tr>
+<tr>
+<td>平衡恢复</td>
+<td>30 cm</td>
+<td>最大推力恢复距离</td>
+</tr>
+<tr>
+<td>控制延迟</td>
+<td>&lt; 5 ms</td>
+<td>传感器到执行器</td>
+</tr>
+<tr>
+<td>能耗</td>
+<td>500 W</td>
+<td>步行时平均功率</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">经验教训</h3>
+<ol>
+<li><strong>计算资源权衡</strong>：复杂模型 vs 实时性能</li>
+<li><strong>传感器冗余</strong>：单一传感器故障不应导致失败  </li>
+<li><strong>平滑过渡</strong>：模式切换必须连续</li>
+<li><strong>学习组件</strong>：某些参数通过强化学习优化</li>
+</ol>
+<h2 id="centroidal">高级话题：Centroidal动力学与角动量规划</h2>
+<h3 id="centroidal_1">Centroidal动力学框架</h3>
+<p>Centroidal动力学将机器人简化为质心处的集总动量：</p>
+<p>$$
+\begin{bmatrix}
+m\ddot{c} \\
+\dot{L}
+\end{bmatrix} = 
+\begin{bmatrix}
+\sum_i f_i \\
+\sum_i (p_i - c) \times f_i + \tau_i
+\end{bmatrix} + 
+\begin{bmatrix}
+mg \\
+0
+\end{bmatrix}
+$$</p>
+<p>其中 $c$ 是质心位置，$L$ 是关于质心的角动量。</p>
+<h3 id="ccrbi">质心复合刚体惯量(CCRBI)</h3>
+<p>CCRBI定义了质心角动量与平均角速度的关系：</p>
+<p>$$
+L = I_G(\q) \omega_{avg}
+$$</p>
+<p>$I_G$ 是配置相关的3×3矩阵，可离线计算并存储。</p>
+<h3 id="_7">动量空间的凸优化</h3>
+<p>在动量空间中，动力学约束变为线性：</p>
+<p>$$
+\begin{aligned}
+\dot{h} &amp;= Ag + u \\
+y &amp;= Cx
+\end{aligned}
+$$</p>
+<p>其中 $h = [mc\dot{}, L]^T$ 是广义动量，$u$ 是控制输入。</p>
+<h3 id="_8">可达动量空间</h3>
+<p>给定接触配置，可达动量变化率形成凸多面体：</p>
+<p>$$
+\mathcal{U} = \{u | u = A_c f_c, f_c \in \mathcal{F}_c\}
+$$</p>
+<p>这允许快速验证动作可行性。</p>
+<h3 id="_9">角动量的最优分配</h3>
+<p>将期望角动量分配到各肢体：</p>
+<p>$$
+\min_{\dot{q}} ||\dot{q}||^2 \quad \text{s.t.} \quad L^{des} = \sum_i L_i(\q, \dot{q})
+$$</p>
+<p>使用伪逆或QP求解。</p>
+<h3 id="_10">实际应用考虑</h3>
+<ol>
+<li><strong>计算效率</strong>：Centroidal模型比全身模型快100倍</li>
+<li><strong>规划精度</strong>：足够用于轨迹规划，需要全身控制器跟踪</li>
+<li><strong>在线适应</strong>：可实时重规划以应对扰动</li>
+</ol>
+<h2 id="_11">本章小结</h2>
+<p>本章系统介绍了轮足机械臂机器人的全身控制与平衡技术。核心要点包括：</p>
+<h3 id="_12">关键概念</h3>
+<ol>
+<li><strong>ZMP理论</strong>：零力矩点提供了判断动态稳定性的直观准则，但需要根据轮足系统特点进行扩展</li>
+<li><strong>QP优化框架</strong>：将多任务控制问题转化为二次规划，实现实时全身协调</li>
+<li><strong>接触力分配</strong>：考虑摩擦锥约束的力优化分配是保证运动可行性的关键</li>
+<li><strong>动态平衡</strong>：利用角动量和捕获点概念扩展静态稳定性到动态场景</li>
+<li><strong>Centroidal动力学</strong>：提供计算高效的规划框架，将复杂动力学简化为质心动量演化</li>
+</ol>
+<h3 id="_13">关键公式回顾</h3>
+<p>| 概念 | 公式 | 用途 |</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>公式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZMP位置</td>
+<td>$x_{zmp} = \frac{\sum m_i(x_i\ddot{z}_i - z_i\ddot{x}_i - gx_i)}{\sum m_i(\ddot{z}_i + g)}$</td>
+<td>稳定性判断</td>
+</tr>
+<tr>
+<td>LIPM动力学</td>
+<td>$\ddot{x}_{com} = \omega^2(x_{com} - x_{zmp})$</td>
+<td>轨迹规划</td>
+</tr>
+<tr>
+<td>全身动力学</td>
+<td>$M\ddot{q} + h = S^T\tau + J_c^TF_c$</td>
+<td>QP约束</td>
+</tr>
+<tr>
+<td>摩擦锥</td>
+<td>$||f_t|| \leq \mu f_n$</td>
+<td>接触约束</td>
+</tr>
+<tr>
+<td>捕获点</td>
+<td>$\xi = x_{com} + \dot{x}_{com}/\omega$</td>
+<td>步进决策</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_14">设计要点</h3>
+<ul>
+<li>选择合适的模型复杂度：规划用简化模型，控制用详细模型</li>
+<li>实时性优先：宁可次优解也要保证控制频率</li>
+<li>传感器融合：多源信息提高鲁棒性</li>
+<li>平滑过渡：模式切换和接触状态变化需要连续性</li>
+</ul>
+<h2 id="_15">练习题</h2>
+<h3 id="_16">基础题</h3>
+<p><strong>题目1</strong>：给定一个四轮机器人，轮距为1m×0.6m（长×宽），质心高度0.5m，计算在质心横向加速度为2m/s²时的ZMP位置。</p>
+<details>
+<summary>答案</summary>
+<p>使用简化的LIPM模型：</p>
+<ul>
+<li>自然频率：$\omega = \sqrt{g/h} = \sqrt{9.8/0.5} = 4.43$ rad/s</li>
+<li>横向ZMP偏移：$y_{zmp} = y_{com} - \ddot{y}_{com}/\omega^2 = 0 - 2/19.6 = -0.102$ m</li>
+</ul>
+<p>ZMP向加速度相反方向偏移10.2cm，仍在支撑多边形内（宽度60cm），系统稳定。</p>
+</details>
+<p><strong>题目2</strong>：一个全身控制QP问题有3个任务：质心追踪（权重10）、手臂末端追踪（权重5）、姿态保持（权重1）。如果质心任务和手臂任务发生冲突，QP求解器会如何权衡？</p>
+<details>
+<summary>答案</summary>
+<p>QP求解器会根据权重比例分配误差：</p>
+<ul>
+<li>质心任务权重是手臂任务的2倍（10:5）</li>
+<li>在冲突时，求解器会优先满足质心任务，允许手臂任务有更大误差</li>
+<li>具体分配遵循：质心误差²×10 + 手臂误差²×5 最小化</li>
+<li>理论上，稳态时质心误差约为手臂误差的$\sqrt{5/10} = 0.707$倍</li>
+</ul>
+</details>
+<p><strong>题目3</strong>：摩擦系数μ=0.6的接触点，最大法向力100N，计算其摩擦锥允许的最大切向力。使用4面体和8面体线性化，分别计算最大值。</p>
+<details>
+<summary>答案</summary>
+<p>真实摩擦锥：$F_{t,max} = \mu F_n = 0.6 × 100 = 60$ N</p>
+<p>4面体线性化（保守）：</p>
+<ul>
+<li>单方向最大力：$F_{x,max} = \mu F_n / \sqrt{2} = 60/1.414 = 42.4$ N</li>
+<li>对角方向：$\sqrt{42.4^2 + 42.4^2} = 60$ N（恰好相切）</li>
+</ul>
+<p>8面体线性化：</p>
+<ul>
+<li>约束：$|F_x| + |F_y| \leq \mu F_n = 60$ N  </li>
+<li>单方向最大：60 N</li>
+<li>对角方向最大：$F_x = F_y = 30$ N，合力$42.4$ N（保守）</li>
+</ul>
+</details>
+<p><strong>题目4</strong>：机器人从轮式模式切换到足式模式，切换时间0.5秒，使用sigmoid函数$\gamma(t) = 1/(1+e^{-k(t-t_0)})$平滑过渡。要求在t=0.25s时达到50%切换，计算k值。</p>
+<details>
+<summary>答案</summary>
+<p>在$t = t_0$时，$\gamma(t_0) = 0.5$（sigmoid的中点）
+因此$t_0 = 0.25$秒</p>
+<p>要求0.5秒完成切换（从5%到95%），sigmoid函数性质：</p>
+<ul>
+<li>$\gamma(t_0 - 2/k) \approx 0.12$</li>
+<li>$\gamma(t_0 + 2/k) \approx 0.88$</li>
+</ul>
+<p>所以$4/k = 0.5$，得$k = 8$ s⁻¹</p>
+<p>验证：$\gamma(0) = 1/(1+e^{8×0.25}) = 0.12$，$\gamma(0.5) = 1/(1+e^{-8×0.25}) = 0.88$</p>
+</details>
+<h3 id="_17">挑战题</h3>
+<p><strong>题目5</strong>：设计一个简化的QP控制器，同时优化6个自由度机械臂的末端位置追踪和避奇异性。写出完整的QP问题formulation，包括目标函数和约束。</p>
+<details>
+<summary>提示与答案</summary>
+<p><strong>提示</strong>：考虑任务雅可比、奇异值分解、关节限位</p>
+<p><strong>答案</strong>：
+目标函数：
+$$\min_{\dot{q}} w_1||J\dot{q} - v_{des}||^2 + w_2||\dot{q}||^2 + w_3/\sigma_{min}^2$$
+约束：</p>
+<ol>
+<li>关节限位：$\dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}$</li>
+<li>关节位置限制：$(q_{min} - q)/\Delta t \leq \dot{q} \leq (q_{max} - q)/\Delta t$</li>
+<li>操作度保持：$\sigma_{min}(J) \geq \sigma_{threshold}$</li>
+</ol>
+<p>其中$\sigma_{min}$是雅可比最小奇异值，可通过增广目标函数或约束实现。</p>
+</details>
+<p><strong>题目6</strong>：轮足机器人在斜坡上（倾角15°）保持静止，四个轮子形成1m×0.6m矩形，质量50kg，质心高度0.4m。计算各轮所需的最小法向力，以及对摩擦系数的要求。</p>
+<details>
+<summary>提示与答案</summary>
+<p><strong>提示</strong>：建立坐标系，考虑重力分量，力矩平衡</p>
+<p><strong>答案</strong>：
+坐标系：x沿斜坡向上，z垂直斜坡向上</p>
+<p>重力分量：</p>
+<ul>
+<li>法向：$F_n = mg\cos(15°) = 50×9.8×0.966 = 473$ N</li>
+<li>切向：$F_t = mg\sin(15°) = 50×9.8×0.259 = 127$ N</li>
+</ul>
+<p>力矩平衡（防止后翻）：</p>
+<ul>
+<li>重心投影偏移：$\Delta x = h\sin(15°) = 0.4×0.259 = 0.104$ m</li>
+<li>前轮总法向力：$F_{front} = 473×(0.5+0.104)/1.0 = 286$ N</li>
+<li>后轮总法向力：$F_{rear} = 473×(0.5-0.104)/1.0 = 187$ N</li>
+</ul>
+<p>每个轮子：</p>
+<ul>
+<li>前轮：143 N（法向），31.75 N（切向）</li>
+<li>后轮：93.5 N（法向），31.75 N（切向）</li>
+</ul>
+<p>最小摩擦系数：$\mu_{min} = 31.75/93.5 = 0.34$（后轮最苛刻）</p>
+</details>
+<p><strong>题目7</strong>：实现一个基于Centroidal动力学的轨迹优化问题。机器人需要从静止跳跃0.3m高，优化起跳和落地过程的质心轨迹和角动量。列出优化变量、目标函数和约束。</p>
+<details>
+<summary>提示与答案</summary>
+<p><strong>提示</strong>：考虑飞行相位无接触力、角动量守恒、落地冲击</p>
+<p><strong>答案</strong>：
+优化变量：</p>
+<ul>
+<li>质心轨迹：$c(t), \dot{c}(t)$</li>
+<li>角动量轨迹：$L(t)$  </li>
+<li>接触力：$f_i(t)$（仅地面接触相）</li>
+<li>相位时间：$t_{takeoff}, t_{landing}$</li>
+</ul>
+<p>目标函数：
+$$\min \int_0^T (||f||^2 + w_L||\dot{L}||^2) dt + w_t T$$</p>
+<p>约束：</p>
+<ol>
+<li>
+<p>动力学（接触相）：
+   - $m\ddot{c} = \sum f_i - mg$
+   - $\dot{L} = \sum (p_i - c) × f_i$</p>
+</li>
+<li>
+<p>飞行相（$t \in [t_{takeoff}, t_{landing}]$）：
+   - $\ddot{c} = -g$（仅重力）
+   - $\dot{L} = 0$（角动量守恒）</p>
+</li>
+<li>
+<p>边界条件：
+   - $c(0) = c_0, \dot{c}(0) = 0$（静止开始）
+   - $c_z(t_{peak}) = 0.3$ m
+   - $\dot{c}(T) = 0$（静止结束）</p>
+</li>
+<li>
+<p>接触约束：
+   - 摩擦锥：$||f_{t,i}|| \leq \mu f_{n,i}$
+   - 单边接触：$f_{n,i} \geq 0$
+   - ZMP约束（接触相）</p>
+</li>
+<li>
+<p>物理限制：
+   - 最大地面反力：$f_{n,i} \leq f_{max}$
+   - 关节力矩限制（通过接触力雅可比映射）</p>
+</li>
+</ol>
+</details>
+<p><strong>题目8（开放题）</strong>：讨论如何将强化学习集成到全身控制框架中。考虑：哪些参数适合学习？如何保证安全性？sim-to-real的挑战？</p>
+<details>
+<summary>思考方向</summary>
+<p>可学习参数：</p>
+<ul>
+<li>QP任务权重的动态调整</li>
+<li>参考轨迹生成网络</li>
+<li>接触时序和步态参数</li>
+<li>扰动恢复策略选择</li>
+</ul>
+<p>安全保证：</p>
+<ul>
+<li>保留底层QP保证物理约束</li>
+<li>学习残差/修正项而非完整策略</li>
+<li>安全过滤器对RL输出进行约束</li>
+<li>课程学习从简单到复杂</li>
+</ul>
+<p>Sim-to-real：</p>
+<ul>
+<li>域随机化：摩擦、质量、延迟</li>
+<li>系统辨识优化仿真参数</li>
+<li>使用特权信息训练teacher</li>
+<li>适应层处理现实传感器噪声</li>
+</ul>
+<p>实际案例：</p>
+<ul>
+<li>Cassie：RL学习步态，QP保证平衡</li>
+<li>ANYmal：RL学习地形适应，MPC保证稳定</li>
+<li>Atlas：RL优化能耗，传统控制保证安全</li>
+</ul>
+</details>
+<h2 id="_18">常见陷阱与错误</h2>
+<h3 id="1-zmp">1. ZMP理解误区</h3>
+<ul>
+<li><strong>错误</strong>：认为ZMP必须始终在支撑多边形中心</li>
+<li><strong>正确</strong>：ZMP可以在多边形内任意位置，甚至短暂超出（动态运动）</li>
+</ul>
+<h3 id="2-qp">2. QP求解失败</h3>
+<ul>
+<li><strong>原因</strong>：约束矛盾、数值病态、初始化差</li>
+<li><strong>解决</strong>：层级化约束、正则化、热启动、约束松弛</li>
+</ul>
+<h3 id="3">3. 摩擦锥线性化过度保守</h3>
+<ul>
+<li><strong>问题</strong>：4面锥在对角方向损失40%可用摩擦力</li>
+<li><strong>改进</strong>：使用8面或16面锥，或二阶锥规划(SOCP)</li>
+</ul>
+<h3 id="4">4. 接触切换震荡</h3>
+<ul>
+<li><strong>现象</strong>：接触建立/断开时控制输出剧烈变化</li>
+<li><strong>预防</strong>：平滑切换函数、提前规划、阻抗控制过渡</li>
+</ul>
+<h3 id="5">5. 实时性能不足</h3>
+<ul>
+<li><strong>症状</strong>：控制延迟导致不稳定</li>
+<li><strong>优化</strong>：简化模型、并行计算、查找表、早停策略</li>
+</ul>
+<h3 id="6">6. 传感器噪声放大</h3>
+<ul>
+<li><strong>问题</strong>：微分项放大测量噪声</li>
+<li><strong>对策</strong>：低通滤波、状态估计器、鲁棒控制设计</li>
+</ul>
+<h3 id="_19">调试技巧</h3>
+<ol>
+<li><strong>可视化工具</strong>：实时显示ZMP、CoM、接触力</li>
+<li><strong>数据记录</strong>：高频记录所有状态用于事后分析</li>
+<li><strong>仿真验证</strong>：先在仿真中调试，注意sim-to-real差异</li>
+<li><strong>增量测试</strong>：从简单任务逐步增加复杂度</li>
+<li><strong>故障注入</strong>：主动测试传感器故障、通信延迟等</li>
+</ol>
+<h2 id="_20">最佳实践检查清单</h2>
+<h3 id="_21">设计阶段</h3>
+<ul>
+<li>[ ] 明确稳定性要求：静态 vs 动态</li>
+<li>[ ] 选择合适的控制架构：集中式 vs 分布式</li>
+<li>[ ] 确定控制频率：规划(10-50Hz)、控制(200-1000Hz)</li>
+<li>[ ] 设计冗余方案：传感器、执行器、算法</li>
+</ul>
+<h3 id="_22">实现阶段</h3>
+<ul>
+<li>[ ] QP问题良好条件数：检查海塞矩阵</li>
+<li>[ ] 约束优先级明确：硬约束 vs 软约束</li>
+<li>[ ] 数值稳定性：避免除零、奇异性</li>
+<li>[ ] 实时性验证：最坏情况执行时间</li>
+</ul>
+<h3 id="_23">测试阶段</h3>
+<ul>
+<li>[ ] 静态平衡测试：各种姿态、负载</li>
+<li>[ ] 动态平衡测试：推力恢复、外部扰动</li>
+<li>[ ] 模式切换测试：所有可能的转换</li>
+<li>[ ] 极限工况测试：最大速度、最大负载</li>
+<li>[ ] 长时间运行测试：内存泄漏、数值漂移</li>
+</ul>
+<h3 id="_24">优化阶段</h3>
+<ul>
+<li>[ ] 性能分析：瓶颈识别、热点优化</li>
+<li>[ ] 参数调优：系统辨识、自动调参</li>
+<li>[ ] 能耗优化：减少不必要的运动</li>
+<li>[ ] 鲁棒性提升：噪声注入、参数摄动</li>
+</ul>
+<h3 id="_25">维护阶段</h3>
+<ul>
+<li>[ ] 日志系统：关键事件、异常记录</li>
+<li>[ ] 性能监控：实时指标、趋势分析</li>
+<li>[ ] 故障诊断：自检程序、故障定位</li>
+<li>[ ] 更新机制：参数、固件、算法</li>
+</ul>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter8.html" class="nav-link prev">← 第8章：轨迹规划与优化</a><a href="chapter10.html" class="nav-link next">第10章：阻抗控制与力控制 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

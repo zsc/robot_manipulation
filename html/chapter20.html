@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第20章：基于模型的规划与控制</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">轮足机械臂机器人：从硬件制造到智能算法</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第1章：轮足机械臂架构概述</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第2章：执行器选择与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第3章：机械结构与刚度分析</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第4章：传感器系统与数据融合</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第5章：坐标系与姿态表示</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第6章：正逆运动学与工作空间</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第7章：动力学建模与参数辨识</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第8章：轨迹规划与优化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第9章：全身控制与平衡</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第10章：阻抗控制与力控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第11章：视觉感知基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第12章：3D感知与场景理解</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第13章：抓取理论与规划</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第14章：灵巧操作与双臂协调</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter15.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第15章：行为克隆与模仿学习</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter16.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第16章：扩散模型在机器人中的应用</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter17.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第17章：视觉-语言基础模型</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter18.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第18章：视觉-语言-动作模型(VLA)</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter19.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第19章：世界模型基础</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter20.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第20章：基于模型的规划与控制</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter21.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第21章：系统集成与部署</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter22.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第22章：计算平台与操作系统</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="20">第20章：基于模型的规划与控制</h1>
+<p>本章深入探讨如何将学习得到的世界模型用于机器人的规划与控制。我们将介绍模型预测控制(MPC)在学习系统中的应用，各种规划算法的原理与实现，Dreamer系列方法的演进历程，以及视频预测与动作规划的融合。通过本章学习，读者将掌握如何利用世界模型进行长期规划，实现样本高效的机器人控制。</p>
+<h2 id="201">20.1 模型预测控制在学习系统中的应用</h2>
+<h3 id="2011-mpc">20.1.1 MPC基础回顾</h3>
+<p>模型预测控制是一种基于模型的优化控制方法，其核心思想是利用系统的动力学模型预测未来状态，并通过求解有限时域优化问题得到控制序列。在每个时间步，MPC求解以下优化问题：</p>
+<p>$$\min_{u_{t:t+H-1}} \sum_{k=0}^{H-1} c(x_{t+k}, u_{t+k}) + c_f(x_{t+H})$$
+其中：</p>
+<ul>
+<li>$H$ 是预测时域</li>
+<li>$c(x, u)$ 是阶段成本函数</li>
+<li>$c_f(x)$ 是终端成本</li>
+<li>约束条件：$x_{t+k+1} = f(x_{t+k}, u_{t+k})$（动力学约束）</li>
+</ul>
+<h3 id="2012-mpc">20.1.2 学习型MPC的挑战</h3>
+<p>将MPC应用于学习系统面临独特挑战：</p>
+<ol>
+<li><strong>模型不确定性</strong>：学习得到的模型存在预测误差，尤其在数据稀疏区域</li>
+<li><strong>计算复杂度</strong>：神经网络模型的非凸性使优化求解困难</li>
+<li><strong>长期预测退化</strong>：误差随预测步数累积，导致长期规划不可靠</li>
+<li><strong>分布偏移</strong>：执行过程中可能遇到训练分布外的状态</li>
+</ol>
+<h3 id="2013-mpc">20.1.3 鲁棒MPC设计</h3>
+<p>为应对模型不确定性，鲁棒MPC引入了几种策略：</p>
+<ol>
+<li>
+<p><strong>管道MPC (Tube MPC)</strong>
+构建状态管道来包含所有可能的轨迹：
+$$\mathcal{X}_k = \{x : |x - \bar{x}_k| \leq \epsilon_k\}$$
+其中$\epsilon_k$根据模型不确定性估计确定。</p>
+</li>
+<li>
+<p><strong>随机MPC (Stochastic MPC)</strong>
+将不确定性建模为概率分布，优化期望成本：
+$$\min_{\pi} \mathbb{E}_{p(x_{t+1}|x_t,u_t)}\left[\sum_{k=0}^{H-1} c(x_{t+k}, \pi(x_{t+k}))\right]$$</p>
+</li>
+<li>
+<p><strong>分布鲁棒MPC</strong>
+考虑最坏情况下的分布：
+$$\min_{u} \max_{p \in \mathcal{P}} \mathbb{E}_p[J(x, u)]$$
+其中$\mathcal{P}$是包含真实分布的不确定集。</p>
+</li>
+</ol>
+<h3 id="2014-mpc">20.1.4 神经网络MPC实现</h3>
+<p>使用神经网络作为动力学模型时，MPC优化可通过以下方法求解：</p>
+<ol>
+<li><strong>基于梯度的优化</strong>
+利用自动微分计算成本对控制的梯度：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>for iteration in range(max_iters):
+    states = rollout(x0, controls, dynamics_model)
+    cost = compute_cost(states, controls)
+    grad = autograd(cost, controls)
+    controls = controls - lr * grad
+</code></pre></div>
+
+<ol start="2">
+<li><strong>采样优化方法</strong>
+- 交叉熵方法(CEM)：迭代采样和精英选择
+- MPPI：基于路径积分的重要性采样
+- 随机打靶法：并行评估多个轨迹</li>
+</ol>
+<h2 id="202">20.2 规划算法详解</h2>
+<h3 id="2021-cem">20.2.1 交叉熵方法(CEM)</h3>
+<p>CEM是一种基于采样的优化算法，特别适合处理非凸优化问题。算法流程：</p>
+<ol>
+<li><strong>初始化分布</strong>：$\mathcal{N}(\mu_0, \Sigma_0)$</li>
+<li><strong>采样动作序列</strong>：$U^{(i)} \sim \mathcal{N}(\mu, \Sigma)$</li>
+<li><strong>评估轨迹</strong>：计算每个样本的累积奖励</li>
+<li><strong>选择精英样本</strong>：保留top-K个最优轨迹</li>
+<li><strong>更新分布</strong>：
+$$\mu_{new} = \frac{1}{K}\sum_{i \in \text{elite}} U^{(i)}$$
+   $$\Sigma_{new} = \frac{1}{K}\sum_{i \in \text{elite}} (U^{(i)} - \mu_{new})(U^{(i)} - \mu_{new})^T$$
+<strong>CEM的关键超参数</strong>：</li>
+</ol>
+<ul>
+<li>样本数N：典型值100-1000</li>
+<li>精英比例：通常10-20%</li>
+<li>迭代次数：3-10次</li>
+<li>平滑系数：$\mu = \alpha \mu_{new} + (1-\alpha)\mu_{old}$</li>
+</ul>
+<h3 id="2022-mppi">20.2.2 模型预测路径积分控制(MPPI)</h3>
+<p>MPPI基于路径积分控制理论，将最优控制问题转化为期望估计：</p>
+<p><strong>理论基础</strong>：
+最优控制的路径积分表示：
+$$u^* = u_0 + \frac{\mathbb{E}[\epsilon e^{-\frac{1}{\lambda}S(\tau)}]}{\mathbb{E}[e^{-\frac{1}{\lambda}S(\tau)}]}$$
+其中：</p>
+<ul>
+<li>$\epsilon$是控制噪声</li>
+<li>$S(\tau)$是轨迹成本</li>
+<li>$\lambda$是温度参数</li>
+</ul>
+<p><strong>MPPI算法</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">1.</span><span class="w"> </span><span class="n">从当前控制序列添加噪声</span><span class="err">：</span><span class="n">u_k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u_nom</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ε_k</span>
+<span class="mf">2.</span><span class="w"> </span><span class="n">前向仿真N条轨迹</span>
+<span class="mf">3.</span><span class="w"> </span><span class="n">计算轨迹成本S_i</span>
+<span class="mf">4.</span><span class="w"> </span><span class="n">计算权重</span><span class="err">：</span><span class="n">w_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">S_i</span><span class="o">/</span><span class="n">λ</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Σ_j</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">S_j</span><span class="o">/</span><span class="n">λ</span><span class="p">)</span>
+<span class="mf">5.</span><span class="w"> </span><span class="n">更新控制</span><span class="err">：</span><span class="n">u_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Σ_i</span><span class="w"> </span><span class="n">w_i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u_i</span>
+</code></pre></div>
+
+<p><strong>MPPI vs CEM对比</strong>：</p>
+<ul>
+<li>MPPI保留所有样本信息，CEM只用精英样本</li>
+<li>MPPI适合连续控制，CEM更通用</li>
+<li>MPPI收敛更平滑，CEM可能更快找到局部最优</li>
+</ul>
+<h3 id="2023-ilqg">20.2.3 迭代线性二次高斯(iLQG)</h3>
+<p>iLQG通过局部线性化和二次近似求解非线性最优控制：</p>
+<p><strong>前向传播</strong>：
+沿着标称轨迹积分动力学：
+$$x_{k+1} = f(x_k, u_k)$$
+<strong>反向传播</strong>：
+计算值函数的二次近似：
+$$V(x) = \frac{1}{2}x^T V_{xx} x + V_x^T x + V_0$$
+<strong>动力学线性化</strong>：
+$$\delta x_{k+1} = A_k \delta x_k + B_k \delta u_k$$
+其中：
+$$A_k = \frac{\partial f}{\partial x}\bigg|_{x_k, u_k}, \quad B_k = \frac{\partial f}{\partial u}\bigg|_{x_k, u_k}$$
+<strong>控制更新</strong>：
+$$\delta u_k^* = -K_k \delta x_k - k_k$$
+其中：
+$$K_k = (Q_{uu} + B_k^T V_{xx}^{k+1} B_k)^{-1} B_k^T V_{xx}^{k+1} A_k$$
+$$k_k = (Q_{uu} + B_k^T V_{xx}^{k+1} B_k)^{-1}(Q_u + B_k^T V_x^{k+1})$$
+<strong>正则化技巧</strong>：</p>
+<ul>
+<li>Levenberg-Marquardt正则化：$Q_{uu} \leftarrow Q_{uu} + \mu I$</li>
+<li>线搜索：$u_{new} = u_{old} + \alpha \delta u$</li>
+<li>信赖域约束：$|\delta u| \leq \Delta$</li>
+</ul>
+<h2 id="203-dreamer">20.3 Dreamer系列方法演进</h2>
+<h3 id="2031-dreamer-v1">20.3.1 Dreamer v1：开创性架构</h3>
+<p>Dreamer v1引入了基于隐状态的世界模型学习：</p>
+<p><strong>核心组件</strong>：</p>
+<ol>
+<li><strong>表示模型</strong>：$p(s_t | s_{t-1}, a_{t-1}, o_t)$</li>
+<li><strong>转移模型</strong>：$p(s_t | s_{t-1}, a_{t-1})$</li>
+<li><strong>观测模型</strong>：$p(o_t | s_t)$</li>
+<li><strong>奖励模型</strong>：$p(r_t | s_t)$</li>
+</ol>
+<p><strong>训练目标</strong>：
+变分下界(ELBO)：
+$$\mathcal{L} = \sum_t \left( \mathbb{E}_q[\log p(o_t | s_t) + \log p(r_t | s_t)] - \beta \text{KL}[q(s_t | \cdot) | p(s_t | \cdot)] \right)$$
+<strong>策略学习</strong>：
+在想象轨迹上使用actor-critic：
+$$J(\pi) = \mathbb{E}_{\pi, p}\left[\sum_{t=0}^{H} \gamma^t r_t\right]$$</p>
+<h3 id="2032-dreamer-v2">20.3.2 Dreamer v2：关键改进</h3>
+<p><strong>主要创新</strong>：</p>
+<ol>
+<li><strong>离散隐状态</strong>：使用categorical分布代替高斯分布</li>
+<li><strong>KL平衡</strong>：动态调整KL项的梯度权重</li>
+<li><strong>改进的值函数学习</strong>：使用λ-return目标</li>
+</ol>
+<p><strong>离散表示的优势</strong>：</p>
+<ul>
+<li>更好的多模态建模能力</li>
+<li>防止后验崩塌</li>
+<li>更稳定的训练</li>
+</ul>
+<p><strong>KL平衡策略</strong>：
+$$\mathcal{L}_{KL} = \alpha \cdot \text{sg}(\text{KL}[q | p]) + (1-\alpha) \cdot \text{KL}[\text{sg}(q) | p]$$
+其中sg表示停止梯度，$\alpha$控制平衡。</p>
+<h3 id="2033-dreamer-v3">20.3.3 Dreamer v3：规模化与简化</h3>
+<p><strong>架构简化</strong>：</p>
+<ul>
+<li>统一的Transformer骨干网络</li>
+<li>Symlog变换处理不同尺度的奖励</li>
+<li>简化的超参数设置</li>
+</ul>
+<p><strong>Symlog变换</strong>：
+$$\text{symlog}(x) = \text{sign}(x) \cdot \ln(|x| + 1)$$
+这允许模型处理从Atari（奖励范围[-1, 1]）到DMLab（奖励范围可达数千）的不同环境。</p>
+<p><strong>关键改进</strong>：</p>
+<ol>
+<li><strong>自由比特</strong>：防止KL项过度正则化</li>
+<li><strong>层归一化</strong>：提高训练稳定性</li>
+<li><strong>EMA目标网络</strong>：稳定值函数学习</li>
+</ol>
+<p><strong>训练流程优化</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 并行数据收集与模型训练</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+    <span class="c1"># 环境交互（异步）</span>
+    <span class="k">with</span> <span class="n">env_workers</span><span class="p">:</span>
+        <span class="n">collect_experience</span><span class="p">()</span>
+
+    <span class="c1"># 模型训练</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">model_train_steps</span><span class="p">):</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">sample_batch</span><span class="p">()</span>
+        <span class="n">update_world_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="c1"># 策略改进</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">actor_train_steps</span><span class="p">):</span>
+        <span class="n">imagine_trajectories</span><span class="p">()</span>
+        <span class="n">update_actor_critic</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="204">20.4 视频预测与动作规划的结合</h2>
+<h3 id="2041">20.4.1 视频预测模型架构</h3>
+<p>视频预测为机器人提供了直观的未来状态表示。主要架构包括：</p>
+<ol>
+<li>
+<p><strong>确定性预测模型</strong>
+基于卷积LSTM或3D卷积的架构：
+$$\hat{I}_{t+1} = f_\theta(I_{t-k:t}, a_{t-k:t})$$</p>
+</li>
+<li>
+<p><strong>随机视频预测</strong>
+引入隐变量建模不确定性：
+$$p(I_{t+1} | I_{t}, a_t) = \int p(I_{t+1} | z_t, I_t, a_t) p(z_t | I_t) dz_t$$
+常用架构：</p>
+</li>
+</ol>
+<ul>
+<li>SV2P (Stochastic Variational Video Prediction)</li>
+<li>SVG (Stochastic Video Generation)</li>
+<li>SAVP (Stochastic Adversarial Video Prediction)</li>
+</ul>
+<h3 id="2042-mpc">20.4.2 像素级MPC</h3>
+<p>直接在像素空间进行规划的挑战与解决方案：</p>
+<p><strong>视觉前瞻控制(Visual Foresight)</strong>：</p>
+<ol>
+<li>使用视频预测模型预测未来帧序列</li>
+<li>定义像素级成本函数（如目标像素距离）</li>
+<li>使用CEM优化动作序列</li>
+</ol>
+<p><strong>成本函数设计</strong>：</p>
+<ul>
+<li>特征距离：$c = |\phi(I_{pred}) - \phi(I_{goal})|^2$</li>
+<li>关键点跟踪：$c = \sum_i |kp_i^{pred} - kp_i^{goal}|^2$</li>
+<li>学习型成本：$c = f_\psi(I_{pred}, I_{goal})$</li>
+</ul>
+<p><strong>计算优化技巧</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 批量视频预测</span>
+<span class="k">def</span> <span class="nf">batch_video_prediction</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">init_frames</span><span class="p">,</span> <span class="n">action_sequences</span><span class="p">):</span>
+    <span class="c1"># action_sequences: [N_samples, T, action_dim]</span>
+    <span class="c1"># 并行预测N个动作序列的结果</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
+        <span class="n">init_frames</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">action_sequences</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">predictions</span>  <span class="c1"># [N_samples, T, H, W, C]</span>
+</code></pre></div>
+
+<h3 id="2043">20.4.3 隐空间规划</h3>
+<p>在学习的隐表示中进行规划可以提高效率：</p>
+<p><strong>World Models架构</strong>：</p>
+<ol>
+<li><strong>视觉编码器</strong>：$z_t = \text{encode}(I_t)$</li>
+<li><strong>隐状态动力学</strong>：$h_{t+1} = f(h_t, z_t, a_t)$</li>
+<li><strong>解码器</strong>：$\hat{I}_t = \text{decode}(h_t, z_t)$</li>
+</ol>
+<p><strong>规划流程</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">1.</span><span class="w"> </span><span class="n">编码当前观测</span><span class="err">：</span><span class="n">z_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">encode</span><span class="p">(</span><span class="n">I_0</span><span class="p">)</span>
+<span class="mf">2.</span><span class="w"> </span><span class="n">在隐空间rollout</span><span class="err">：</span>
+<span class="w">   </span><span class="kr">for</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+<span class="w">       </span><span class="n">h_</span><span class="err">{</span><span class="n">t</span><span class="o">+</span><span class="mf">1</span><span class="err">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dynamics</span><span class="p">(</span><span class="n">h_t</span><span class="p">,</span><span class="w"> </span><span class="n">a_t</span><span class="p">)</span>
+<span class="w">       </span><span class="n">r_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reward_model</span><span class="p">(</span><span class="n">h_t</span><span class="p">)</span>
+
+<span class="mf">3.</span><span class="w"> </span><span class="n">优化动作序列最大化累积奖励</span>
+</code></pre></div>
+
+<p><strong>隐空间的优势</strong>：</p>
+<ul>
+<li>降维：从高维像素到紧凑表示</li>
+<li>平滑性：隐空间通常更平滑，利于优化</li>
+<li>语义性：学习的表示捕获任务相关特征</li>
+</ul>
+<h3 id="2044">20.4.4 层次化规划</h3>
+<p>结合高层符号规划和低层连续控制：</p>
+<p><strong>双层架构</strong>：</p>
+<div class="codehilite"><pre><span></span><code>高层规划器 (离散/符号)
+    ↓ 子目标
+低层控制器 (连续/反应式)
+    ↓ 动作
+机器人执行
+</code></pre></div>
+
+<p><strong>子目标生成方法</strong>：</p>
+<ol>
+<li><strong>关键帧提取</strong>：从演示中学习关键状态</li>
+<li><strong>可达性引导</strong>：基于学习的可达性模型</li>
+<li><strong>信息增益</strong>：选择最大化信息的中间目标</li>
+</ol>
+<p><strong>时间抽象</strong>：
+不同层次使用不同时间尺度：</p>
+<ul>
+<li>高层：每k步规划一次</li>
+<li>低层：每步执行</li>
+<li>优势：减少规划复杂度，提高长期规划能力</li>
+</ul>
+<h2 id="205">20.5 在线适应与元学习</h2>
+<h3 id="2051">20.5.1 模型适应策略</h3>
+<p>机器人部署时需要适应新环境和任务：</p>
+<ol>
+<li><strong>在线模型更新</strong>
+持续收集数据更新世界模型：
+$$\theta_{t+1} = \theta_t - \alpha \nabla_\theta \mathcal{L}(D_{new} \cup D_{replay})$$
+关键考虑：</li>
+</ol>
+<ul>
+<li>灾难性遗忘：使用经验回放或EWC</li>
+<li>分布偏移检测：监控预测误差</li>
+<li>选择性更新：只更新不确定的组件</li>
+</ul>
+<ol start="2">
+<li><strong>残差模型学习</strong>
+学习标称模型的修正项：
+$$f_{true}(x, u) = f_{nominal}(x, u) + f_{residual}(x, u)$$
+优势：</li>
+</ol>
+<ul>
+<li>保留先验知识</li>
+<li>快速适应局部变化</li>
+<li>稳定性更好</li>
+</ul>
+<h3 id="2052-maml">20.5.2 基于梯度的元学习(MAML)</h3>
+<p>使模型能够快速适应新任务：</p>
+<p><strong>MAML目标</strong>：
+$$\min_\theta \sum_{\mathcal{T}_i} \mathcal{L}_{\mathcal{T}_i}(\theta - \alpha \nabla_\theta \mathcal{L}_{\mathcal{T}_i}(\theta))$$
+<strong>机器人应用中的MAML</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">maml_update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">inner_lr</span><span class="p">,</span> <span class="n">outer_lr</span><span class="p">):</span>
+    <span class="n">meta_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="c1"># 内循环：任务特定适应</span>
+        <span class="n">task_model</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">inner_steps</span><span class="p">):</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">task_model</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">support_data</span><span class="p">)</span>
+            <span class="n">task_model</span> <span class="o">=</span> <span class="n">task_model</span> <span class="o">-</span> <span class="n">inner_lr</span> <span class="o">*</span> <span class="n">grad</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+        <span class="c1"># 外循环：元参数更新</span>
+        <span class="n">meta_loss</span> <span class="o">+=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">task_model</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">query_data</span><span class="p">)</span>
+
+    <span class="c1"># 更新元参数</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="o">-</span> <span class="n">outer_lr</span> <span class="o">*</span> <span class="n">grad</span><span class="p">(</span><span class="n">meta_loss</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</code></pre></div>
+
+<h3 id="2053">20.5.3 上下文条件模型</h3>
+<p>通过上下文编码实现快速适应：</p>
+<p><strong>架构设计</strong>：
+$$\pi(a|s) = f_\theta(s, c_\tau)$$
+其中上下文$c_\tau$编码任务特定信息：
+$$c_\tau = g_\phi(\{(s_i, a_i, r_i)\}_{i=1}^k)$$
+<strong>上下文推断方法</strong>：</p>
+<ol>
+<li><strong>递归编码</strong>：使用RNN处理历史轨迹</li>
+<li><strong>注意力聚合</strong>：Transformer编码交互历史</li>
+<li><strong>对比学习</strong>：学习任务判别性表示</li>
+</ol>
+<h3 id="2054-tta">20.5.4 测试时适应(TTA)</h3>
+<p>在部署时进行快速适应：</p>
+<p><strong>自监督适应</strong>：
+利用一致性损失适应新环境：
+$$\mathcal{L}_{consist} = |f(x) - f(\mathcal{A}(x))|^2$$
+其中$\mathcal{A}$是数据增强。</p>
+<p><strong>伪标签方法</strong>：</p>
+<ol>
+<li>使用当前模型生成预测</li>
+<li>选择高置信度预测作为伪标签</li>
+<li>在伪标签上微调模型</li>
+</ol>
+<p><strong>主动探索</strong>：
+设计探索策略收集信息丰富的数据：
+$$a^* = \arg\max_a \mathcal{I}(s_{t+1}; \theta | s_t, a)$$</p>
+<h2 id="206">20.6 高级主题：长期规划与组合泛化</h2>
+<h3 id="2061">20.6.1 分层世界模型</h3>
+<p>处理不同时间尺度的预测：</p>
+<p><strong>多尺度架构</strong>：</p>
+<ul>
+<li>低层：高频、局部动力学</li>
+<li>高层：低频、抽象转移
+$$
+\begin{aligned}
+h^{low}_{t+1} &amp;= f^{low}(h^{low}_t, a_t) \\
+h^{high}_{k+1} &amp;= f^{high}(h^{high}_k, h^{low}_{kT:(k+1)T})
+\end{aligned}
+$$</li>
+</ul>
+<h3 id="2062">20.6.2 组合式世界模型</h3>
+<p>通过组合基本模块实现泛化：</p>
+<p><strong>对象中心表示</strong>：
+将场景分解为对象及其关系：
+$$s_t = \{o_i^t\}_{i=1}^N, \quad o_i = [\text{pose}, \text{shape}, \text{material}]$$
+<strong>图神经网络动力学</strong>：
+$$o_i^{t+1} = f_{node}(o_i^t, \sum_{j \in \mathcal{N}(i)} f_{edge}(o_i^t, o_j^t, r_{ij}))$$</p>
+<h3 id="2063">20.6.3 因果推理与反事实</h3>
+<p><strong>结构化因果模型</strong>：
+显式建模因果关系：
+$$
+\begin{aligned}
+\text{gripper} &amp;\rightarrow \text{object_pose} \\
+\text{object_pose} &amp;\rightarrow \text{reward}
+\end{aligned}
+$$
+<strong>反事实推理</strong>：
+回答"如果...会怎样"的问题：</p>
+<ol>
+<li>腹部(Abduction)：推断隐变量</li>
+<li>行动(Action)：修改干预变量</li>
+<li>预测(Prediction)：前向推理结果</li>
+</ol>
+<h2 id="metajepa">案例研究：Meta的JEPA世界模型</h2>
+<h3 id="_1">背景与动机</h3>
+<p>Meta AI Research提出的Joint Embedding Predictive Architecture (JEPA)代表了世界模型的新范式。与传统的像素级预测不同，JEPA在抽象表示空间进行预测，避免了不必要的细节建模。</p>
+<h3 id="_2">架构设计</h3>
+<p><strong>核心组件</strong>：</p>
+<ol>
+<li><strong>编码器网络</strong>：$s_x = f_\theta(x)$，将观测映射到表示空间</li>
+<li><strong>预测器网络</strong>：$\hat{s}_y = g_\phi(s_x, z)$，预测未来表示</li>
+<li><strong>目标编码器</strong>：$s_y = f_{\bar{\theta}}(y)$，使用EMA更新</li>
+</ol>
+<p><strong>训练目标</strong>：
+$$\mathcal{L} = |s_y - \hat{s}_y|^2$$</p>
+<p>关键创新：</p>
+<ul>
+<li>不需要解码器重构像素</li>
+<li>预测抽象表示而非原始观测</li>
+<li>使用掩码策略增强泛化</li>
+</ul>
+<h3 id="_3">机器人应用实例</h3>
+<p><strong>任务设置</strong>：</p>
+<ul>
+<li>环境：真实厨房场景的物体操作</li>
+<li>观测：RGB-D图像</li>
+<li>动作：7自由度机械臂控制</li>
+</ul>
+<p><strong>实现细节</strong>：</p>
+<ol>
+<li>
+<p><strong>数据收集</strong>：
+   - 人类演示：1000条轨迹
+   - 自主探索：使用好奇心驱动收集5000条轨迹</p>
+</li>
+<li>
+<p><strong>模型训练</strong>：</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># JEPA训练循环</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+        <span class="c1"># 编码当前和未来观测</span>
+        <span class="n">s_current</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">current_obs</span><span class="p">)</span>
+        <span class="n">s_future</span> <span class="o">=</span> <span class="n">target_encoder</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">future_obs</span><span class="p">)</span>
+
+        <span class="c1"># 预测未来表示</span>
+        <span class="n">s_pred</span> <span class="o">=</span> <span class="n">predictor</span><span class="p">(</span><span class="n">s_current</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
+
+        <span class="c1"># 计算损失</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">mse_loss</span><span class="p">(</span><span class="n">s_pred</span><span class="p">,</span> <span class="n">s_future</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+
+        <span class="c1"># 更新参数</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+        <span class="c1"># EMA更新目标编码器</span>
+        <span class="n">update_target_encoder</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">target_encoder</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+</code></pre></div>
+
+<ol start="3">
+<li><strong>规划与控制</strong>：
+   - 使用CEM在表示空间优化动作序列
+   - 成本函数：与目标表示的距离
+   - 实时频率：30Hz控制循环</li>
+</ol>
+<h3 id="_4">实验结果</h3>
+<p><strong>定量评估</strong>：</p>
+<ul>
+<li>成功率：85%（vs 像素预测基线65%）</li>
+<li>样本效率：减少50%的演示数据需求</li>
+<li>泛化性：在新物体上成功率75%</li>
+</ul>
+<p><strong>关键发现</strong>：</p>
+<ol>
+<li>表示空间预测比像素预测更稳定</li>
+<li>掩码预训练显著提升少样本学习能力</li>
+<li>层次化表示自然涌现（物体级、场景级）</li>
+</ol>
+<h3 id="_5">经验教训</h3>
+<ol>
+<li><strong>表示学习的重要性</strong>：好的表示空间比精确的像素预测更有价值</li>
+<li><strong>自监督预训练</strong>：大规模无标签数据可以显著提升性能</li>
+<li><strong>计算效率</strong>：抽象表示的规划比像素级规划快10倍</li>
+</ol>
+<h2 id="_6">本章小结</h2>
+<p>本章系统介绍了基于模型的规划与控制方法，涵盖了从经典MPC到现代深度学习方法的完整谱系。关键要点包括：</p>
+<ol>
+<li><strong>MPC与学习的结合</strong>：通过神经网络模型增强MPC的表达能力，同时保留其优化框架</li>
+<li><strong>规划算法对比</strong>：CEM适合离散/混合空间，MPPI适合连续控制，iLQG提供局部最优保证</li>
+<li><strong>Dreamer演进</strong>：从连续到离散表示，从复杂到简化，展示了世界模型的发展趋势</li>
+<li><strong>视频预测的角色</strong>：提供直观的未来预测，但计算成本高，隐空间规划是平衡点</li>
+<li><strong>在线适应的必要性</strong>：实际部署需要快速适应，元学习和测试时适应是关键技术</li>
+</ol>
+<p><strong>核心公式回顾</strong>：</p>
+<ul>
+<li>MPC优化：$\min_{u} \sum_{t} c(x_t, u_t)$ s.t. $x_{t+1} = f(x_t, u_t)$</li>
+<li>MPPI更新：$u^* = \frac{\sum_i w_i u_i}{\sum_i w_i}$，$w_i = e^{-S_i/\lambda}$</li>
+<li>MAML目标：$\min_\theta \mathcal{L}(\theta - \alpha \nabla \mathcal{L}(\theta))$</li>
+</ul>
+<h2 id="_7">练习题</h2>
+<h3 id="_8">基础题</h3>
+<p><strong>练习20.1</strong>：推导CEM算法的收敛性条件
+<em>提示</em>：考虑精英样本的分布变化</p>
+<details>
+<summary>答案</summary>
+<p>CEM收敛需要：</p>
+<ol>
+<li>精英比例$\rho$满足：$\rho N &gt; d$（d为动作维度）</li>
+<li>成本函数有界且Lipschitz连续</li>
+<li>初始分布覆盖最优解邻域
+收敛速率：$O(1/\sqrt{N})$，其中N为样本数</li>
+</ol>
+</details>
+<p><strong>练习20.2</strong>：比较MPPI和CEM的计算复杂度
+<em>提示</em>：分析采样、评估和更新步骤</p>
+<details>
+<summary>答案</summary>
+<p>设N为样本数，H为时域，D为动作维度：</p>
+<ul>
+<li>CEM：$O(K \cdot N \cdot H \cdot C_{eval})$，K为迭代次数</li>
+<li>MPPI：$O(N \cdot H \cdot C_{eval})$，单次迭代
+MPPI通常更快但可能需要更多样本</li>
+</ul>
+</details>
+<p><strong>练习20.3</strong>：解释Dreamer中KL平衡的作用
+<em>提示</em>：考虑前向KL和反向KL的区别</p>
+<details>
+<summary>答案</summary>
+<p>KL平衡解决了VAE训练中的后验崩塌问题：</p>
+<ul>
+<li>前向KL：$D_{KL}[q||p]$鼓励q覆盖p的支撑</li>
+<li>反向KL：$D_{KL}[p||q]$鼓励p匹配q的模式
+平衡两者避免了过度正则化，保持表示的信息量</li>
+</ul>
+</details>
+<p><strong>练习20.4</strong>：设计隐空间规划的成本函数
+<em>提示</em>：考虑任务相关性和可微性</p>
+<details>
+<summary>答案</summary>
+<p>有效的成本函数设计：</p>
+<ol>
+<li>目标距离：$c = |h_t - h_{goal}|^2$</li>
+<li>任务特定特征：$c = -\phi_{task}(h_t)$</li>
+<li>学习型成本：$c = f_\psi(h_t, \text{task_embedding})$
+关键是保证可微且与下游任务对齐</li>
+</ol>
+</details>
+<h3 id="_9">挑战题</h3>
+<p><strong>练习20.5</strong>：设计处理部分可观测性的MPC方法
+<em>提示</em>：结合信念状态和鲁棒优化</p>
+<details>
+<summary>答案</summary>
+<p>部分可观测MPC设计：</p>
+<ol>
+<li>维护信念状态$b_t = p(s_t | o_{1:t}, a_{1:t-1})$</li>
+<li>使用粒子滤波或变分推断更新信念</li>
+<li>优化期望成本：$\min_u \mathbb{E}_{s \sim b}[\sum_t c(s_t, u_t)]$</li>
+<li>添加信息增益项鼓励探索：$c_{info} = -H(b_{t+1})$</li>
+<li>使用置信界优化worst-case性能</li>
+</ol>
+</details>
+<p><strong>练习20.6</strong>：分析层次化规划的最优性损失
+<em>提示</em>：考虑抽象导致的次优性</p>
+<details>
+<summary>答案</summary>
+<p>层次化规划的次优性来源：</p>
+<ol>
+<li>时间抽象：高层决策频率低，错过最优时机</li>
+<li>状态抽象：信息损失导致决策偏差</li>
+<li>动作抽象：低层控制器的限制</li>
+</ol>
+<p>界限分析：
+设$\epsilon_h$为高层抽象误差，$\epsilon_l$为低层跟踪误差
+总体次优性：$J^* - J^{hier} \leq H \cdot \epsilon_h + T \cdot \epsilon_l$
+其中H为高层规划时域，T为总时间步</p>
+</details>
+<p><strong>练习20.7</strong>：提出结合物理先验的世界模型架构
+<em>提示</em>：考虑归纳偏置和可解释性</p>
+<details>
+<summary>答案</summary>
+<p>物理信息神经网络(PINN)世界模型：</p>
+<ol>
+<li>结构：分离运动学和动力学模块</li>
+<li>约束：
+   - 能量守恒：$\frac{d}{dt}(T + V) = P_{external}$
+   - 动量守恒：在损失函数中添加软约束</li>
+<li>架构：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>观测 → 状态估计器 → [位置, 速度, 质量]
+      ↓
+拉格朗日神经网络 L(q, \dot{q})
+      ↓
+欧拉-拉格朗日方程 → 加速度
+      ↓
+积分器 → 下一状态
+</code></pre></div>
+
+<ol start="4">
+<li>优势：泛化性强，样本效率高，可解释</li>
+</ol>
+</details>
+<p><strong>练习20.8</strong>：设计在线元学习算法用于机器人适应
+<em>提示</em>：结合MAML和在线学习</p>
+<details>
+<summary>答案</summary>
+<p>在线元学习算法：</p>
+<ol>
+<li>维护任务缓冲区，存储最近K个任务经验</li>
+<li>交替执行：
+   - 适应步：使用当前数据微调
+   - 元更新：在缓冲区任务上执行MAML更新</li>
+<li>自适应内循环步数：
+   - 根据适应损失动态调整
+   - $n_{inner} = \min(n_{max}, \lceil \alpha \cdot \mathcal{L}_{adapt} \rceil)$</li>
+<li>防止遗忘：
+   - 使用EWC或梯度投影
+   - 保留关键任务的锚点参数</li>
+<li>实时性保证：
+   - 限制每个时间步的计算预算
+   - 使用近似二阶导数（如FOMAML）</li>
+</ol>
+</details>
+<h2 id="_10">常见陷阱与错误</h2>
+<h3 id="1">1. 模型偏差累积</h3>
+<p><strong>问题</strong>：长期预测中误差指数增长
+<strong>症状</strong>：规划时域超过10步后性能急剧下降
+<strong>解决方案</strong>：</p>
+<ul>
+<li>使用短时域MPC（H=5-10）</li>
+<li>引入模型不确定性估计</li>
+<li>采用鲁棒MPC方法</li>
+<li>定期重新规划</li>
+</ul>
+<h3 id="2">2. 分布偏移</h3>
+<p><strong>问题</strong>：执行时遇到训练分布外的状态
+<strong>症状</strong>：模型预测置信度低，控制不稳定
+<strong>解决方案</strong>：</p>
+<ul>
+<li>在线数据收集和模型更新</li>
+<li>域随机化训练</li>
+<li>使用ensemble模型检测OOD</li>
+<li>设计安全回退策略</li>
+</ul>
+<h3 id="3">3. 计算延迟</h3>
+<p><strong>问题</strong>：规划时间超过控制周期
+<strong>症状</strong>：控制频率低，响应滞后
+<strong>解决方案</strong>：</p>
+<ul>
+<li>使用GPU并行化采样</li>
+<li>预计算和缓存</li>
+<li>降低规划频率，使用反应式低层控制</li>
+<li>模型压缩和量化</li>
+</ul>
+<h3 id="4">4. 局部最优</h3>
+<p><strong>问题</strong>：优化陷入次优解
+<strong>症状</strong>：重复失败的动作模式
+<strong>解决方案</strong>：</p>
+<ul>
+<li>增加CEM/MPPI的样本数</li>
+<li>使用多起点优化</li>
+<li>添加探索噪声</li>
+<li>结合全局和局部规划</li>
+</ul>
+<h3 id="5">5. 超参数敏感性</h3>
+<p><strong>问题</strong>：性能对超参数极度敏感
+<strong>症状</strong>：微小调整导致性能巨变
+<strong>解决方案</strong>：</p>
+<ul>
+<li>使用自适应超参数</li>
+<li>网格搜索关键参数</li>
+<li>归一化奖励和成本</li>
+<li>使用相对而非绝对阈值</li>
+</ul>
+<h2 id="_11">最佳实践检查清单</h2>
+<h3 id="_12">模型设计</h3>
+<ul>
+<li>[ ] 选择合适的模型复杂度（避免过拟合）</li>
+<li>[ ] 包含不确定性估计（认知+偶然）</li>
+<li>[ ] 设计可解释的中间表示</li>
+<li>[ ] 验证模型的物理合理性</li>
+<li>[ ] 实现高效的推理pipeline</li>
+</ul>
+<h3 id="_13">规划算法</h3>
+<ul>
+<li>[ ] 根据问题特性选择算法（连续/离散，凸/非凸）</li>
+<li>[ ] 设置合理的规划时域（5-20步）</li>
+<li>[ ] 实现warm-start策略</li>
+<li>[ ] 添加安全约束和边界</li>
+<li>[ ] 监控优化收敛性</li>
+</ul>
+<h3 id="_14">在线学习</h3>
+<ul>
+<li>[ ] 设计增量学习策略</li>
+<li>[ ] 实现分布偏移检测</li>
+<li>[ ] 保护关键知识不被遗忘</li>
+<li>[ ] 限制更新速率避免不稳定</li>
+<li>[ ] 维护数据质量（去除异常值）</li>
+</ul>
+<h3 id="_15">系统集成</h3>
+<ul>
+<li>[ ] 确保实时性要求</li>
+<li>[ ] 实现优雅降级机制</li>
+<li>[ ] 添加性能监控和日志</li>
+<li>[ ] 设计模块化接口</li>
+<li>[ ] 准备故障恢复策略</li>
+</ul>
+<h3 id="_16">评估验证</h3>
+<ul>
+<li>[ ] 在多样化场景测试</li>
+<li>[ ] 评估长期性能稳定性</li>
+<li>[ ] 测试边界条件和异常情况</li>
+<li>[ ] 对比不同算法基线</li>
+<li>[ ] 记录失败案例并分析原因</li>
+</ul>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter19.html" class="nav-link prev">← 第19章：世界模型基础</a><a href="chapter21.html" class="nav-link next">第21章：系统集成与部署 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>
